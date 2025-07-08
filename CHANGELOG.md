@@ -1,4 +1,5 @@
 # CHANGELOG
+
 ## [2025-07-08]
 - 创建`Python/syntactic_sugar`文件夹，用于储存有关语法糖的笔记
 - 新增：f-字符串`Python/syntactic_sugar/f-字符串.md`介绍Python中有关f-字符串的内容
