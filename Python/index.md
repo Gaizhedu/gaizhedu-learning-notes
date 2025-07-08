@@ -9,7 +9,7 @@
 - [ ] [格式化文本](base/格式化文本.md)
 
 ## 语法糖（syntactic_sugar）
-- [ ] [f-字符串](syntactic_sugar/f-字符串.md)
+- [x] [f-字符串](syntactic_sugar/f-字符串.md)
 - [ ] [条件表达式](syntactic_sugar/条件表达式.md)
 - [ ] [for-else结构](syntactic_sugar/for-else结构.md)
 - [ ] [解包](syntactic_sugar/解包.md)
