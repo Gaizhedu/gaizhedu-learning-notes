@@ -3,6 +3,7 @@
 ## [2025-07-13]
 - 新增：demo`Python/demo`文件夹，用于存放笔记当中使用的示例
 - 新增：类`Python/begin/类.md`，介绍了Python中的类
+- 新增：元组`Python/begin/元组.md`，介绍了一些通用序列操作
 
 ## [2025-07-08]
 - 创建`Python/syntactic_sugar`文件夹，用于储存有关语法糖的笔记
