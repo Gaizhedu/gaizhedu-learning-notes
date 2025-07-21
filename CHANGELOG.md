@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-07-21]
+- 新增：《图灵完备》`turing-complete`的相关笔记，并添加了有关第一章中逻辑门`turing-complete/ch1-basic-logic-circuits.md`的笔记内容
+- 新增：函数`Python/begin/函数.md`笔记中有关默认参数陷阱和解包的内容
+
 ## [2025-07-20]
 - 新增：函数`Python/begin/函数.md`笔记中有关位置参数和关键词参数的内容
 
