@@ -1,7 +1,13 @@
 # CHANGELOG
 
+## [2025-07-24]
+- 新增：obsidian`obsidian`文件夹，用于储存一些其他内容的笔记
+- 修改：现在所有笔记的文件名统一为英文
+- 新增：函数`python/begin/functions.md`笔记中有关内置高阶函数以及具名函数和匿名函数的内容
+- 新增：常见谬误`obsidian/common_logical_fallacies.md`，介绍了一些常见的谬误
+  
 ## [2025-07-23]
-- 新增：函数`Python/begin/函数.md`笔记中有关返回一个函数、高阶函数和匿名函数的内容
+- 新增：函数`python/begin/functions.md`笔记中有关返回一个函数、高阶函数和匿名函数的内容
 
 ## [2025-07-22]
 - 新增：函数`Python/begin/函数.md`笔记中有关解包和高阶函数的内容
