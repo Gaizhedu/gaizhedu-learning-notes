@@ -2,13 +2,13 @@
 这里是导航页，可以直接到对应的笔记里面
 
 ## 入门（begin）
-- [ ] [常见术语](begin/常见术语.md)
+- [ ] [常见术语](begin/common_terms.md)
 
 ## 基础（base）
-- [ ] [格式化文本](base/格式化文本.md)
+- [ ] [格式化文本](base/string_formatting.md)
 
 ## 语法糖（syntactic_sugar）
-- [x] [f-字符串](syntactic_sugar/f-字符串.md)
+- [x] [f-字符串](syntactic_sugar/f_strings.md)
 - [ ] [条件表达式](syntactic_sugar/条件表达式.md)
 - [ ] [for-else结构](syntactic_sugar/for-else结构.md)
 - [ ] [解包](syntactic_sugar/解包.md)
