@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2025-07-26]
+- 新增：函数`python/begin/functions.md`笔记中有关高阶函数`filter()`和`reduce()`的内容，还有部分`sorted()`的内容
+
 ## [2025-07-25]
 - 新增：函数`python/begin/functions.md`笔记中有关高阶函数`map()`的内容，以及高阶函数`filter()`的内容
 
