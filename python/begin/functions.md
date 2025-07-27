@@ -800,6 +800,7 @@ def b_func(b):
 ---
 ### 常见内置高阶函数
 在Python中，有很多内置的高阶函数，接下来来逐一介绍
+
 #### map()
 map()函数的作用是返回一个迭代器，具体如下：`map(func, iterable)`
 接下来给出例子：
@@ -1046,9 +1047,92 @@ print(sorted(b))
 
 在说明一些例子后，来具体说明一下参数`key`
 
-`key`排序的规则有很多，可以使用长度`len`，绝对值`abs`
+`key`排序的规则有很多，可以使用长度`len`，绝对值`abs`或者自定义函数规则
 
+例子可以在上文看到，接下来来说明多级排序
 
+多级排序，顾名思义，可以按照多个规则排序
+``` Python
+a = (
+    {"name": "Emma", "age": 20},
+    {"name": "Liam", "age": 22},
+    {"name": "Olivia", "age": 19},
+    {"name": "Noah", "age": 24},
+    {"name": "Ava", "age": 21}
+)
+
+print(sorted(a ,key=lambda x:(x["name"],x["age"])))
+
+# 输出：[{'name': 'Ava', 'age': 21}, {'name': 'Emma', 'age': 20}, {'name': 'Liam', 'age': 22}, {'name': 'Noah', 'age': 24}, {'name': 'Olivia', 'age': 19}]
+```
+在上面这个例子中，排序的规则是先以名字首字母为排序标准，而后以年龄为排序标准
+
+若需要翻转排序，直接使用`reverse`会导致全部翻转，当需要指定一部分翻转的时候，可以如下操作：
+``` Python
+a = ([1, 9], [1, 6], [2, 5], [2, 7], [5, 9])
+print(sorted(a, key=lambda x: (x[0], -x[1])))
+
+# 输出：[[1, 9], [1, 6], [2, 7], [2, 5], [5, 9]]
+```
+可以看到，这里排序的结果是第一个元素按正序排列，而第二个元素按倒序的顺序排列
+
+排列规则还可以用出现的次数来排序：
+``` Python
+from collections import Counter
+
+a = ["air","air","ant", "ant", "banana","banana", "book", "book", "book", "bus", "cat", "car", "cake"]
+print(sorted(a, key=lambda x: (-Counter(a)[x],x)))
+
+# 输出：['book', 'book', 'book', 'air', 'air', 'ant', 'ant', 'banana', 'banana', 'bus', 'cake', 'car', 'cat']
+```
+这里用了`Counter()`来统计出现的频率，后面你的排序标准先按频率排序，如果频率相同就按出现的字母顺序排序
+
+---
+##### 注意事项
+使用`sorted()`排序的时候，要注意排序的对象不可以混合（例如数字列表里面带了字符串）、
+``` Python
+a = [5,3,8,2,"apple"]
+
+print(sorted(a))
+
+# 输出：TypeError: '<' not supported between instances of 'str' and 'int'
+```
+可以看到，这里的报错原因是**无法将字符串和整数类型比较**
+
+另外，`sorted()`排序字母的时候默认以大写字母优先：
+``` Python
+a = ["Apple","ant","Book","Bunny","Cherry","apple"]
+
+print(sorted(a))
+
+# 输出：['Apple', 'Book', 'Bunny', 'Cherry', 'ant', 'apple']
+```
+可以看到，下面输出的结果是优先排列大写字母
+
+那要怎么解决这个情况呢，很简单，排序的时候，在规则`key`填入将字符串全部转换为小写（.lower()）即可：
+``` Python
+a = ["Apple","ant","Book","Bunny","Cherry","apple"]
+
+print(sorted(a,key=lambda x:x.lower()))
+
+# 输出：['ant', 'Apple', 'apple', 'Book', 'Bunny', 'Cherry']
+```
+
+---
+#### max & min
+`max()`和`min()`语句关联性极高，使用方法完全一样，但是输出的结果相反，一个输出最大值，一个输出最小值
+
+具体语法如下：`max(iterable, *[, key, default])`
+
+照例依次解读：
+
+`iterable`需要比较的值
+
+后面的`*`同理，需要用关键词传递
+
+`key`代表比较的标准
+
+`default`指的是默认值，如果不填的话，传入的值如果是一个空值，则会导致报错，若填入，并且默认值有填，则返回的值为默认值，不会报错
 ## 匿名函数 Lambda
 Lambda的作用是创建一个一次性的简单函数，支持传入参数等操作
 
