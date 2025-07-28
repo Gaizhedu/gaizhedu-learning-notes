@@ -1220,6 +1220,71 @@ print(list(zip(name, age)))
 ```
 可以看到，这里输出的结果还是与上面一样，因为这里`age`只有三个值，所以自动舍弃掉`name`多出的值
 
+此外，`zip()`还可以用于解压数据，接下来给出例子说明：
+``` Python
+a = ["apple", "banana", "cherry"]
+
+price = [12, 3, 28]
+tuple_1 = list(zip(a,price))
+print(tuple_1)
+
+# 解压数据
+item_1 ,price_1 = zip(*tuple_1)
+print(item_1,price_1)
+
+# 输出：[('apple', 12), ('banana', 3), ('cherry', 28)]
+# ('apple', 'banana', 'cherry') (12, 3, 28)
+```
+在上面这个例子中，先用了`zip()`打包数据并转换成列表为变量`tuple_1`，之后再使用`zip(*tuple_1)`对`tuple_1`的数据进行解包，`item_1`和`tuple_1`分别是接受元素的变量
+
+此外，在循环中，还可以用`zip()`来遍历多个可迭代的对象：
+``` Python
+p = ["Alice","Ethan", "Chloe"]
+d = ["2025-07-23","2025-07-25","2025-07-27"]
+
+for pe,da in zip(p,d):
+    print(f"打卡记录：员工{pe}在{da}成功打卡！")
+    
+# 输出：打卡记录：员工Alice在2025-07-23成功打卡！
+# 打卡记录：员工Ethan在2025-07-25成功打卡！
+# 打卡记录：员工Chloe在2025-07-27成功打卡！
+```
+这里的原理是，每次for循环都会让变量`pe`和`da`分别接收`zip()`里的数据
+
+而后循环内依次对数据进行引用，引用结束后重新接收数据
+
+`zip()`还可以将两个列表合并成一个字典：
+``` Python
+th = ["name", "age"]
+td = ["Alice", "20"]
+print(dict(zip(th, td)))
+
+# 输出：{'name': 'Alice', 'age': '20'}
+```
+
+可以看到，这里输出的结果是一个字典，而这个字典的键就是传入的第一个列表，而对应的值就是第二个传入的列表
+
+##### 注意事项
+如果使用`zip()`遍历的对象是一个字典，此时返回的结果为这个字典的键，而不是值
+``` Python
+a = {"name":"Alice","age":23}
+b = {"name":"Aliya","age":19}
+
+print(list(zip(a,b)))
+
+# 输出：[('name', 'name'), ('age', 'age')]
+```
+若想要返回的结果为对应的值，则需要在对应的对象后面加上`.values()`：
+``` Python
+a = {"name":"Alice","age":23}
+b = {"name":"Aliya","age":19}
+
+print(list(zip(a.values(),b.values())))
+
+# 输出：[('Alice', 'Aliya'), (23, 19)]
+```
+可以看到，这里的结果就为对应的值了
+
 ## 匿名函数 Lambda
 Lambda的作用是创建一个一次性的简单函数，支持传入参数等操作
 
