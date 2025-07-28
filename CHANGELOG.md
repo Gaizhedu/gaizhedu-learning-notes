@@ -1,4 +1,10 @@
 # CHANGELOG
+
+## [2025-07-28]
+- 新增：函数`python/begin/functions.md`笔记中有关高阶函数`zip()`的内容，主要介绍了相关的语法和使用方式，还有使用时需要注意的内容和特性
+- 新增：函数`python/begin/functions.md`笔记中有关高阶函数`reversed()`的内容，主要介绍其定义，语法，还有在使用时的注意事项
+- 新增：函数`python/begin/functions.md`笔记中有关装饰器的基础内容
+
 ## [2025-07-27]
 - 新增：函数`python/begin/functions.md`笔记中有关高阶函数`sorted()`、`max()`的内容，同时添加了`zip()`的少部分内容
 
