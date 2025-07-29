@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2025-07-29]
+- 新增：函数`python/begin/functions.md`笔记中有关计时器装饰器的用法，内容，运行步骤等
+- 新增：函数`python/begin/functions.md`笔记中有关日志装饰器的用法等内容
+- 新增：计时器例子`python/demo/timer_deco_demo1.py`和`python/demo/timer_deco_demo2.py`，用于说明计时器装饰器的使用方法
+
 ## [2025-07-28]
 - 新增：函数`python/begin/functions.md`笔记中有关高阶函数`zip()`的内容，主要介绍了相关的语法和使用方式，还有使用时需要注意的内容和特性
 - 新增：函数`python/begin/functions.md`笔记中有关高阶函数`reversed()`的内容，主要介绍其定义，语法，还有在使用时的注意事项
