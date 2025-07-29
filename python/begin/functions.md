@@ -1521,3 +1521,60 @@ print(test1(3,5))
 这里需要另外补充的一点是`check(*args, **kwargs)`中`*args, **kwargs`的目的是为了传入所有的值，包括位置参数和关键字参数，这样就可以有效地避免了有参数没传进去，后面的`func(*args,**kwargs)`则是把传进的数据重新解包出来，然后再传进原函数`func()`
 
 而一开始的`@functools.wraps(func)`是为了保存原函数的元数据，也就是`test1()`的元数据，这里如果不这样做的话，那么使用`print(test1.__name__)`的结果为`check()`而不是原先的`test1()`
+
+#### 日志
+通过使用装饰器还可以实现日志的功能：
+``` Python
+import functools
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+def log(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        logging.info(f"调用函数{func.__name__}，参数：args = {args}和 kwargs = {kwargs}")
+        result = func(*args, **kwargs)
+        logging.info(f"函数返回值：{result}")
+        return result
+
+    return wrapper
+
+
+@log
+def a_func(a1, b1):
+    if a1 > b1:
+        return a1 + b1
+    else:
+        return a1 * b1
+
+
+list_1 = [(1, 3), (2, 6)]
+
+for a, b in list_1:
+    a_func(a, b)
+
+# 输出：2025-07-29 16:12:43,548 - INFO - 调用函数a_func，参数：args = (1, 3)和 kwargs = {}
+# 2025-07-29 16:12:43,548 - INFO - 函数返回值：3
+# 2025-07-29 16:12:43,548 - INFO - 调用函数a_func，参数：args = (2, 6)和 kwargs = {}
+# 2025-07-29 16:12:43,548 - INFO - 函数返回值：12
+```
+
+接下来来逐一讲解
+
+首先先讲讲`logging.basicConfig()`
+
+`level=logging.INFO`的作用的只让INFO及以上级别的日志能被输出，级别如下：`DEBUG < INFO < WARNING < ERROR < CRITICAL`
+
+接下来是`format='%(asctime)s - %(levelname)s - %(message)s'`
+
+这个指的是输出时的默认格式，分别是**时间**，**名称**，**具体内容**
+
+首先还是老样子，在函数定义的时候，`a_func(a, b)`将参数传给`log(func)`，并且`a_func()`变为`wrapper()`
+
+之后开始运行的时候，调用`wrapper()`，`*args`和`**kwargs`一开始定义的时候就被传进去了
+
+接下来来说说`wrapper()`里面的内容
+
+`logging.info`，的作用是输出一条`INFO`级别的信息
