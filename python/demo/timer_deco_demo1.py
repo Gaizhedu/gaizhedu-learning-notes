@@ -1,7 +1,8 @@
 import time
-
+import functools
 
 def timer(func):
+    @functools.wraps(func)
     def check(*args, **kwargs):
         start_time = time.time()
         result = func(*args, **kwargs)
@@ -18,6 +19,7 @@ def test1(a, b):
     return a + b
 
 
-test1(3,5)
+print(test1(3,5))
 
-# 输出：函数test1的执行时间为：0.5004s
+# 输出：函数test1的执行时间为：0.5001s
+# 8
