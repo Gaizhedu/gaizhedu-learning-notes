@@ -1477,3 +1477,47 @@ m_func = a_func(m_func)
 这里可能就有人要问了，诶，那我看`s_func()`里面有个外部参数`func()`啊，怎么没有传来呢？
 
 其实这里一开始就传进来了，我们可以看到这里，还记得一开始`m_func`是怎么变成`s_func`的吗？没错！`m_func = a_func(m_func)`，这里其实已经传进值了，并且由于内部函数`s_func()`是个闭包，这里的参数没有因为`return`而被销毁
+
+
+### 常见的装饰器
+接下来来讲讲Python中常见的装饰器，主要有`计时器`、`日志`、`权限验证`
+#### 计时器
+首先来讲讲计时器，计时器是装饰器的一个常见的用途，用于记录函数运行的时间，下面给出一个例子来说明：
+``` Python
+import time
+import functools
+
+def timer(func):
+    @functools.wraps(func)
+    def check(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"函数{func.__name__}的执行时间为：{end_time - start_time:.4f}s")
+        return result
+
+    return check
+
+
+@timer
+def test1(a, b):
+    time.sleep(0.5)  # 模拟耗时操作
+    return a + b
+ 
+
+print(test1(3,5))
+
+# 输出：函数test1的执行时间为：0.5001s
+# 8
+```
+接下来来逐一介绍其功能
+
+首先是照例，函数一开始的**定义阶段**，当执行`@timer`时（一开始的时候），`test1(3,5)`转换为`check()`，顺带把两个参数丢进去闭包里面，之后开始执行`check()`，所以此时执行的实际上是`check(3,5)`
+
+`check()`一开始先记录时间（`start_time`），之后开始执行函数`func()`（这里也就是`test1()`）在执行后便再次记录时间（`end_time`），这里两次计时是为了算出总执行时间
+
+最后打印结果：`func.__name__`为执行的函数的名字，后面的两个时间相减便是函数执行总耗时，`:.4f`则为精确到小数点后4位（不取小数点结果则为：0.5001778602600098s）
+
+这里需要另外补充的一点是`check(*args, **kwargs)`中`*args, **kwargs`的目的是为了传入所有的值，包括位置参数和关键字参数，这样就可以有效地避免了有参数没传进去，后面的`func(*args,**kwargs)`则是把传进的数据重新解包出来，然后再传进原函数`func()`
+
+而一开始的`@functools.wraps(func)`是为了保存原函数的元数据，也就是`test1()`的元数据，这里如果不这样做的话，那么使用`print(test1.__name__)`的结果为`check()`而不是原先的`test1()`
