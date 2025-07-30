@@ -1578,3 +1578,58 @@ for a, b in list_1:
 接下来来说说`wrapper()`里面的内容
 
 `logging.info`，的作用是输出一条`INFO`级别的信息
+
+### 带参数的装饰器
+接下来讲讲带参数的装饰器
+
+带参数的装饰器也叫做**装饰器工厂**，作用是通过传递参数来自定义装饰器的行为
+
+接下来来用一个例子来实际说明：
+``` Python
+import functools
+import time
+
+
+def timer(precision=2):
+    def decorate(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            print(f"参数：args ={args}，kwargs = {kwargs}")
+            start_time = time.perf_counter()
+            result = func(*args, **kwargs)
+            end_time = time.perf_counter()
+            print(f"函数{func.__name__}，运行时间：{end_time - start_time:.{precision}f}s")
+            return result
+
+        return wrapper
+
+    return decorate
+
+
+l = range(1, 200)
+
+
+@timer(precision=6)
+def add_6(n):
+    a = [i ** 2 for i in n]
+    return a
+
+
+@timer(precision=3)
+def add_4(a, b):
+    return (a + b) ** 2
+
+
+add_4(10, 2)
+add_6(l)
+```
+
+可以看到，这里有两个装饰器，并且装饰器带有参数
+
+接下来来简单讲解一下，因为带了参数的装饰器本质上就比普通装饰器多了一层传进参数
+
+首先第一步定义函数阶段：在定义的时候（也就是`@timer(precision=3)`的时候），会调用`timer(precision=3)`把参数传进去，之后返回函数`decorate()`
+
+接下来返回之后，`decorate()`会接收原函数`add_4()`，同时将`add_4()`替换为`decorate(add_4)`的返回值，也就是`wrapper()`。其实这一部分是跟一般的装饰器是一样的
+
+之后运行的时候，调用`add_4(10, 2)`实际上相当于`wrapper(10, 2)`
