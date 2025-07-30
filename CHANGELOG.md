@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-07-30]
+- 新增：函数`python/begin/functions.md`笔记中有关带参数的装饰器的内容，主要介绍其用法
+- 新增：函数`python/begin/functions.md`笔记中有关类装饰器的内容，介绍了其基础用法
+
 ## [2025-07-29]
 - 新增：函数`python/begin/functions.md`笔记中有关计时器装饰器的用法，内容，运行步骤等
 - 新增：函数`python/begin/functions.md`笔记中有关日志装饰器的用法等内容
