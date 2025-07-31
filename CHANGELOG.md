@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2025-07-31]
+- 新增：函数`python/begin/functions.md`笔记中有关生成器的内容，主要介绍了生成器的基础内容，还有生成器表达式，以及生成器表达式与列表推导式的区别
+- 新增：十进制转二进制转换器`python/demo/decimal_to_binary.py`，作为递归函数的例子
+- 新增：函数`python/begin/functions.md`笔记中有关递归函数的基础内容，主要介绍了基础用法
+
 ## [2025-07-30]
 - 新增：函数`python/begin/functions.md`笔记中有关带参数的装饰器的内容，主要介绍其用法
 - 新增：函数`python/begin/functions.md`笔记中有关类装饰器的内容，介绍了其基础用法
