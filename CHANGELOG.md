@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2025-08-01]
+- 新增：十进制转十六进制转换器`python/demo/decimal_to_hexadecimal.py`，作为练习的示例
+- 新增：斐波那契数列`python/demo/fibonacci.py`，作为递归函数练习的示例
+- 新增：函数`python/begin/functions.md`笔记中有关尾递归优化的内容
+- 新增：函数`python/begin/functions.md`笔记中有关函数式编程的内容，主要包括了纯函数、不可变参数等内容
+
 ## [2025-07-31]
 - 新增：函数`python/begin/functions.md`笔记中有关生成器的内容，主要介绍了生成器的基础内容，还有生成器表达式，以及生成器表达式与列表推导式的区别
 - 新增：十进制转二进制转换器`python/demo/decimal_to_binary.py`，作为递归函数的例子
