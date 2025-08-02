@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-08-02]
+- 新增：函数`python/begin/functions.md`笔记中有关魔术方法的内容
+- 新增：基于魔术方法的斐波那契数列`python/demo/fibonacci_dunder.py`，使用了`__add__`实现了斐波那契数列的效果
+
 ## [2025-08-01]
 - 新增：十进制转十六进制转换器`python/demo/decimal_to_hexadecimal.py`，作为练习的示例
 - 新增：斐波那契数列`python/demo/fibonacci.py`，作为递归函数练习的示例
