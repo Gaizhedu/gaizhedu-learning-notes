@@ -806,20 +806,20 @@ map()函数的作用是返回一个迭代器，具体如下：`map(func, iterabl
 接下来给出例子：
 ``` Python
 s = [1,2,3,4,5]
-list_1 = map(lambda x,:x ** 2, s)
+list_1 = map(lambda x:x ** 2, s)
 print(list(list_1))
 
 # 输出：[1, 4, 9, 16, 25]
 ```
 接下来来逐一解析一下这个语法
 
-首先看一下最主要的函数内容，也就是`map(lambda x,:x ** 2, s)`
+首先看一下最主要的函数内容，也就是`map(lambda x:x ** 2, s)`
 
-按照之前map函数的说明，我们可以看到这里的`lambda x,:x ** 2`是这里的`func`
+按照之前map函数的说明，我们可以看到这里的`lambda x:x ** 2`是这里的`func`
 
 而后面的列表s也就是`iterable`的内容
 
-这里的`map(lambda x,:x ** 2, s)`也就是将列表s里面的值逐一传入前面的匿名函数，并收集函数的返回值，形成一个迭代器
+这里的`map(lambda x:x ** 2, s)`也就是将列表s里面的值逐一传入前面的匿名函数，并收集函数的返回值，形成一个迭代器
 
 但如果直接`print(list_1)`就只会得到一个标识信息，用于显示迭代器（也就是map）对象，但不是一个具体的信息
 
@@ -1985,4 +1985,35 @@ print(cm_1)
 当然，Python中的魔术方法还有很多，接下来列出一些常用的
 
 [TODO]
+
+### 上下文管理器
+接下来来讲讲上下文管理器，也就是`__enter__`和`__exit__`
+
+其中`__enter__`的作用是 进入`with`代码块的时候自动调用，并且返回的对象会被`as`吸收
+
+而`__exit__`则是在退出`with`代码块的时候自动调用，即使是发生异常也照样调用，主要用于关闭文件、释放资源等操作
+
+接下来举个例子来说明实际用法
+``` Python
+import time
+
+
+class Timer:
+    def __enter__(self):
+        self.start_time = time.time()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.end_time = time.time()
+        print(f"运行时间：{self.end_time - self.start_time:.4f}s")
+
+
+with Timer() as t:
+    time.sleep(0.5)
+
+```
+
+接下来来逐一讲解。首先是`with语句`，执行的时候便触发`__enter__`开始计时，之后执行其内部的内容，也就是`time.sleep(0.5)`
+
+在执行后，`with语句`结束，执行`__exit__`，结束计时，并且输出运行时间
 
