@@ -2077,3 +2077,49 @@ print(pell_list(0, 1, 10))
 `:rtype:`用于说明返回值的类型
 
 需要注意的一点是，函数文档字符串可以通过`help()`访问，并且函数文档字符串会存储在`__doc__`里面
+
+接下来展示另外两种风格：
+
+首先是`Google 风格`
+``` Python
+def a_func(a):
+    """
+    Args:
+        a(int): 传入的数据，平方的底数
+        b(int): 平方计算的结果
+
+    Returns:
+        int: 平方计算的结果
+    """
+    b = a ** 2
+    return b
+
+a_func(3)
+```
+
+在`Google 风格`中，使用`Args:`标出变量的作用，使用`Returns:`标出返回值的作用，使用`Raises:`说明报错的触发条件
+
+接下来是`NumPy/SciPy 风格`，这个风格的一大特点就是**标准化**，因为会使用到缩进和分割线来划分区域
+
+``` Python
+def a_func(a):
+    """
+
+    Parameter
+    ---------
+    a : int
+        传入的数据，平方的底数
+    b : int
+        平方计算的结果
+
+    Returns
+    -------
+    int
+        平方计算的结果
+    """
+    b = a ** 2
+    return b
+
+a_func(3)
+```
+可以看到，在这种风格中，`Parameter`用来说明变量对应的作用，同时在下一行用分割线划分区域，而`Returns`则用来说明返回的结果
