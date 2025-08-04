@@ -2017,3 +2017,63 @@ with Timer() as t:
 
 在执行后，`with语句`结束，执行`__exit__`，结束计时，并且输出运行时间
 
+## 调试与测试
+### 函数文档字符串
+接下来来讲讲函数文档字符串，这个字符串是一个特殊的字符串，用于注明函数内的内容，也就是解释函数中的功能，参数等关键信息
+
+函数文档字符串有多种风格，比如说：`Google 风格`，`NumPy/SciPy 风格`和`reStructuredText 风格`
+
+由于Pycharm会默认使用`reStructuredText 风格`，所以这里将使用这个风格来说明
+
+接下来通过一个例子来说明：
+``` Python
+def pell_list(a, b, n):
+    """
+
+    :param a: 数列的第一项
+    :type a: int
+    :param b: 数列的第二项
+    :type b: int
+    :param n: 数列的总项数
+    :type n: int
+    :return: 一个包含 n 项的佩尔数列
+    :rtype:list
+    """
+
+    def wrapper(j, k, c, seq):
+        """
+
+        :param j: 数列的第一项
+        :type j: int
+        :param k: 数列的第二项
+        :type k: int
+        :param c: 一开始的次数
+        :type c: int
+        :param seq: 空白数列，用于存储生成项的列表
+        :type seq: list
+        :return: 一个完整的佩尔数列
+        :rtype: list
+        """
+        if c == n:
+            return seq
+        seq.append(j)
+        j, k = k, k * 2 + j
+        c += 1
+        return wrapper(j, k, c, seq)
+
+    return wrapper(a, b, 0, [])
+
+
+print(pell_list(0, 1, 10))
+```
+接下来来说明每个属性的内容：
+
+`:param + 变量名:`用于说明变量的作用
+
+`:type + 变量名:`用于说明变量的类型
+
+`:return + 变量名:`用于说明返回的作用
+
+`:rtype:`用于说明返回值的类型
+
+需要注意的一点是，函数文档字符串可以通过`help()`访问，并且函数文档字符串会存储在`__doc__`里面
