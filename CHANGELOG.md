@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-08-04]
+- 新增：函数`python/begin/functions.md`笔记中有关函数文档字符串的内容
+- 新增：函数`python/begin/functions.md`笔记中有关类型注解的内容
+
 ## [2025-08-03]
 - 新增：佩尔数列的几种实现方式`obsidian\pell_sequence.md`，利用几种方法实现了佩尔数列
 - 新增：函数`python/begin/functions.md`笔记中有关上下文管理器的内容
