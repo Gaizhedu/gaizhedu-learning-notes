@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2025-08-05]
+- 新增：函数`python/begin/functions.md`笔记中有关单元测试基础中除测试套件的内容
+
 ## [2025-08-04]
 - 新增：函数`python/begin/functions.md`笔记中有关函数文档字符串的内容
 - 新增：函数`python/begin/functions.md`笔记中有关类型注解的内容
