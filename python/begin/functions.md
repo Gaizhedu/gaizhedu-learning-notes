@@ -2017,6 +2017,7 @@ with Timer() as t:
 
 在执行后，`with语句`结束，执行`__exit__`，结束计时，并且输出运行时间
 
+---
 ## 调试与测试
 ### 函数文档字符串
 接下来来讲讲函数文档字符串，这个字符串是一个特殊的字符串，用于注明函数内的内容，也就是解释函数中的功能，参数等关键信息
@@ -2138,3 +2139,271 @@ a_func(3)
 可以看到，这里变量`a`和`b`后面都注明了相应的类型
 
 可以观察到，在函数后面有一个小箭头指着`int`，这是说明返回的类型是`int`
+
+### 单元测试基础
+接下来介绍单元测试基础，目的是测试代码能否正常工作，其核心为Python中的`unittest`库
+
+在使用这个库的时候，我们会用到里面的这些东西：
+
+`TestCase 类`：用于定义一个测试的方法，测试的主要步骤存放在这个类里面
+
+`测试方法`：测试方法是一系列以`test_`开头的方法，相应的测试方式便存放在这里面
+
+这里需要注意的是，测试方法的命名**必须以test_开头**，否则无法识别
+
+这是因为`unittest`通过`TestLoader`类自动发现测试用例，其默认逻辑是：在继承`TestCase`的类中，只识别名称以`test_`开头的方法作为测试方法。
+
+这样做的原因是为了使测试方法与一般的方法区分来开，如果全部都执行的话，可能会造成一些问题
+
+`断言方法`：断言方法的作用是验证实际的结果与预计的结果是否一致（相当于`if语句`判断）
+
+`测试套件`：测试套件的作用是让指定的测试文件批量执行，做到批量测试的效果，在大规模测试中可以一次性执行所有测试，不需要一次一次的执行测试文件
+
+接下来举个例子来说明其使用方法
+
+假设你有一个文件`math_add.py`，其代码如下：
+``` Python
+def add(a, b):
+    return a + b
+
+```
+
+这时候你想测试这个代码，于是你新建了一个测试文件`math_add_test.py`
+
+首先需要导入`unittest`这个库
+``` Python
+import unittest
+```
+
+同时又因为你需要测试的方法来自`math_add.py`里面，所以还需要导入这个文件的方法到这里面
+``` Python
+from math_add import add
+```
+
+在完成以上的导入步骤后，接下来就是写这个测试文件的核心内容了
+
+首先是继承`unittest.TestCase`方法，先写一个类，之后在这里类的类名后面写上要继承的方法即可：
+``` Python
+class TestMathAdd(unittest.TestCase):
+```
+
+接下来是写类里面的测试方法：
+
+由于这里是为了验证加法的结果是否正确，我们需要用到的断言方法是`assertEqual(a, b)`
+
+这个断言方法的作用是判断`a`和`b`是否相等
+
+这里由于`add`（要测试的方法）返回的结果就是两个参数之和，所以这里就直接填入即可
+``` Python
+class TestMathAdd(unittest.TestCase):
+    def test_add(self):
+        self.assertEqual(add(1, 2), 3)
+```
+
+这里还可以多加几次验证，最后的结果如下：
+``` Python
+class TestMathAdd(unittest.TestCase):
+    def test_add(self):
+        self.assertEqual(add(1, 3), 4)
+        self.assertEqual(add(1, -3), -2)
+```
+
+那么要怎么运行测试呢？只需要在外部作用域加上`unittest.main()`即可开始测试
+
+上文也提及到了，`unittest.main()`只会运行那些变量名为`test_`开头的方法
+
+最后完整代码如下：
+``` Python
+import unittest
+from math_add import add
+
+
+class TestMathAdd(unittest.TestCase):
+    def test_add(self):
+        self.assertEqual(add(1, 3), 4)
+        self.assertEqual(add(1, -3), -2)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+```
+
+运行后输出如下：
+``` Python
+Ran 1 test in 0.001s
+
+OK
+```
+
+#### 断言方法
+在介绍完基础的测试例子后，接下来来讲讲断言方法，上文例子中使用的为`self.assertEqual(a, b)`，此外还有很多
+
+需要提示的一点是，下文方法中出现的`msg`对应的是验证不通过后的文本显示
+<table>
+    <thead>
+        <tr>
+            <th>断言方法</th>
+            <th>作用</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>assertEqual(a, b, msg=None)</td>
+            <td>用于验证a == b（a等于b）</td>    
+        </tr>
+        <tr>
+            <td>assertNotEqual(a, b, msg=None)</td>
+            <td>用于验证a != b（a不等于b）</td>    
+        </tr>
+        <tr>
+            <td>assertTrue(x, msg=None)</td>
+            <td>用于验证x是否为<strong>True</strong></td>    
+        </tr>
+        <tr>
+            <td>assertFalse(x, msg=None)</td>
+            <td>用于验证x是否为<strong>False</strong></td>    
+        </tr>
+        <tr>
+            <td>assertIs(a, b, msg=None)</td>
+            <td>用于验证a和b是否为用一个对象（这里不是单单指两者的值相等，例如a = 1，b = 1是不同的对象）</td>    
+        </tr>
+        <tr>
+            <td>assertIsNot(a, b, msg=None)	</td>
+            <td>用于验证a和b是否为不同对象</td>    
+        </tr>
+        <tr>
+            <td>assertIsNone(x, msg=None)</td>
+            <td>用于验证x是否为空值</td>    
+        </tr>
+        <tr>
+            <td>assertIsNotNone(x, msg=None)</td>
+            <td>用于验证x是否不为空值</td>    
+        </tr>
+        <tr>
+            <td>assertGreater(a, b, msg=None)</td>
+            <td>用于验证a是否大于b（a > b）</td>    
+        </tr>
+        <tr>
+            <td>assertGreaterEqual(a, b, msg=None)</td>
+            <td>用于验证a是否大于等于b（a >= b）</td>    
+        </tr>
+        <tr>
+            <td>assertLess(a, b, msg=None)</td>
+            <td>用于验证a是否小于b（a < b）</td>    
+        </tr>
+        <tr>
+            <td>assertLessEqual(a, b, msg=None)</td>
+            <td>用于验证a是否小于等于b（a <= b）</td>    
+        </tr>
+        <tr>
+            <td>assertIn(a, b, msg=None)</td>
+            <td>用于验证a是否为b的元素（a in b）</td>    
+        </tr>
+        <tr>
+            <td>assertNotIn(a, b, msg=None)</td>
+            <td>用于验证a是否不为b的元素（a not in b）</td>    
+        </tr>
+        <tr>
+            <td>assertSetEqual(a, b, msg=None)</td>
+            <td>用于验证集合a和集合b是否相等</td>    
+        </tr>
+        <tr>
+            <td>assertListEqual(a, b, msg=None)</td>
+            <td>用于验证列表a与列表b是否相等（顺序相等）</td>    
+        </tr>
+        <tr>
+            <td>assertDictEqual(a, b, msg=None)</td>
+            <td>用于验证字典a和字典b是否相等</td>    
+        </tr>
+        <tr>
+            <td>assertMultiLineEqual(a, b, msg=None)/td>
+            <td>用于验证多行字符串是否相等，a和b都是多行的字符串</td>    
+        </tr>
+        <tr>
+            <td>assertRegex(s, regex, msg=None)</td>
+            <td>用于验证字符串s是否匹配正则表达式regex</td>    
+        </tr>
+        <tr>
+            <td>assertNotRegex(s, regex, msg=None)</td>
+            <td>用于验证字符串s是否不匹配正则表达式regex</td>    
+        </tr>
+        <tr>
+            <td>assertAlmostEqual(a, b, places=7, msg=None)</td>
+            <td>用于验证a和b的差是否在10^(-places)范围内，这里places默认为7（需要这个的原因是判断浮点数的时候assertEqual可能不准，例如0.1 + 0.2 实际为0.30000000000000004，这里如果用assertEqual是不通过验证的）</td>    
+        </tr>
+        <tr>
+            <td>assertRaises(exception, callable, *args, **kwargs)</td>
+            <td>用于验证调用callable(*args, **kwargs)的时候是否会出现exception的异常（举个例子：self.assertRaises(ValueError, int, "abc")，这里会报错ValueError，所以通过验证）</td>    
+        </tr>
+        <tr>
+            <td>assertRaisesRegex(exception, regex, callable, *args, **kwargs)</td>
+            <td>用于验证抛出的错误是否匹配正则表达式regex</td>    
+        </tr>
+        <tr>
+            <td>assertIsInstance(a, b, msg=None)</td>
+            <td>用于验证a是否为类型b</td>    
+        </tr>
+        <tr>
+            <td>assertNotIsInstance(a, b, msg=None)</td>
+            <td>用于验证a是否不为类型b</td>    
+        </tr>
+    </tbody>
+</table>
+
+#### 测试套件
+测试套件是用来管理和组织多个测试用例（TestCase）的容器。可以组合测试用例，从而实现批量测试的结果
+
+接下来开始一点一点说明如何操作
+
+首先我们还是一样，选择要验证的文件
+``` Python
+def add(a, b):
+    return a + b
+
+
+def multiply(a, b):
+    return a * b
+
+```
+
+这里的文件名为`math_add_mul.py`
+
+接下来还是照样，导入模块和继承方法
+``` Python
+import unittest
+from math_add_mul import add, multiply
+
+
+class TestAdd(unittest.TestCase):
+```
+
+这里由于需要演示测试套件，所以用了两个`TestCase`
+
+完整的如下：
+``` Python
+import unittest
+from math_add_mul import add, multiply
+
+
+class TestAdd(unittest.TestCase):
+    def test_add(self):
+        self.assertEqual(add(1, 2), 3)
+
+    def test_add_negative(self):
+        self.assertEqual(add(-2, 3), 1)
+
+    def test_add_float(self):
+        self.assertAlmostEqual(add(0.1, 0.6), 0.7, places=7)
+
+
+class TestMul(unittest.TestCase):
+    def test_mul(self):
+        self.assertEqual(multiply(5, 6), 30)
+
+    def test_mul_negative_1(self):
+        self.assertEqual(multiply(5, -6), -30)
+
+    def test_mul_negative_2(self):
+        self.assertEqual(multiply(-5, -6), 30)
+```
