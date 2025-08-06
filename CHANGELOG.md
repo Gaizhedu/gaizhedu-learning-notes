@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2025-08-06]
+- 新增：函数`python/begin/functions.md`笔记中有关单元测试基础中测试套件的内容
+- 新增：函数`python/begin/functions.md`笔记中有关缓存的内容
+- 修改：文件`classes.md`、`functions.md`和`tuples.md`末尾的返回导航页的地址
+
 ## [2025-08-05]
 - 新增：函数`python/begin/functions.md`笔记中有关单元测试基础中除测试套件的内容
 
