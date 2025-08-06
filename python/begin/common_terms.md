@@ -4,4 +4,4 @@
 - [x] [元组](tuples.md)
 - [ ] [集合](集合.md)
 - [x] [类](classes.md)
-- [ ] [函数](functions.md)
+- [x] [函数](functions.md)
