@@ -2520,3 +2520,214 @@ if __name__ == "__main__":
     run_test.run(create_suite())
 
 ```
+
+---
+## 高级特性
+### 偏函数
+偏函数是`functools`模块中的一个功能，其主要作用是固定原函数的部分参数，而后生成一个新的函数
+
+利用偏函数可以简化函数调用时的参数传递
+
+首先需要导入这个模块：
+``` Python
+from functools import partial
+```
+上面这个例子是导入了`functools`中的`partial`方法，也是偏函数的基础
+
+接下来让我们从一个例子开始逐步讲解偏函数的使用：
+
+首先我们这里假设个场景：要求对输入的数字进行加法运算
+
+``` Python
+# 需要运算的数字如下1,3,3 2,3,5 5,3,7
+
+def a_func(a,b,c):
+    return a + b + c
+
+print(a_func(1,3,3))
+print(a_func(2,3,5))
+print(a_func(5,3,7))
+
+# 输出：7
+# 10
+# 15
+```
+
+我们可以发现，在上面给的例子中，第二个数始终为`3`，这时候我们可以将`3`用偏函数固定，只输入`a`和`c`的值
+
+``` Python
+# 需要运算的数字如下1,3,3 2,3,5 5,3,7
+
+from functools import partial
+
+def a_func(a,b,c):
+    return a + b + c
+
+a_func_pa = partial(a_func,b = 3)
+print(a_func_pa(1,c = 3))
+print(a_func_pa(2,c = 5))
+print(a_func_pa(5,c = 7))
+
+# 输出：7
+# 10
+# 15
+```
+接下来开始逐一解释
+
+这里`partial(a_func,b = 3)`是偏函数的核心所在，第一个参数填的是函数名称，也就是要调用的函数，而第二个参数填的是要固定的参数名和对应的参数值
+
+这里偏函数被赋值给了变量`a_func_pa`，在变量后面的是剩余未被固定的参数`a`和`c`
+
+由于固定的参数是在中间的`b`，这里如果`c`不加关键字参数，那么函数会找不到参数。这里必须为关键字参数的原因是函数参数传递是按顺序的，而中间`b`函数无法直接跳过，所以只能用关键字参数传递
+
+接下来再提供一个例子：二进制转为十六进制
+``` Python
+from functools import partial
+
+binary_l = ["101000011", "111011110", "111011000"]
+
+binary_pa = partial(int, base=2)
+for i in binary_l:
+    print(binary_pa(i))
+
+# 输出：323
+# 478
+# 472
+
+```
+可以看到，这里将`int()`中的参数`base`固定为2，此时后面在输出十进制的时候便不需要再次说明`base`的值
+
+---
+### 缓存
+缓存是Python中一个十分好用的装饰器，可以提高反复调用的函数的执行效率，主要使用到`functools`中的`lru_cache` 
+
+接下来通过一个例子来说明该如何使用
+
+首先需要导入这个方法：
+``` Python
+from functools import lru_cache
+```
+
+在导入后，我们需要把函数放到这个装饰器下：
+``` Python
+@lru_cache(maxsize=128)
+def pell(n):
+    if n <= 1:
+        return n
+    return pell(n-1) * 2 + pell(n-2)
+```
+这里装饰器括号内指的是缓存数量，超过这个数量就会删除旧的缓存同时生成新的缓存
+
+之后便可以正常调用函数运行
+
+接下来给出没有缓存和缓存的对比：
+``` Python
+import time
+from functools import lru_cache
+
+
+def timer(func):
+    def wrapper(n):
+        start_time = time.time()
+        result = func(n)
+        end_time = time.time()
+        print(f"运行时间为：{end_time - start_time:.10f}")
+        return result
+
+    return wrapper
+
+
+@timer
+@lru_cache(maxsize=128)
+def pell(n):
+    if n <= 1:
+        return n
+    return pell(n-1) * 2 + pell(n-2)
+
+print(pell(10))
+
+# 输出：
+# 无缓存：运行时间为：0.0016508102
+# 2378
+#
+# 有缓存：运行时间为：0.0000865459
+# 2378
+```
+
+可以看到，有缓存时，运行时间大大提高了
+
+#### 缓存存储
+被`lru_cache`装饰的函数会新增两个方法`cache_info()`和`cache_clear()`
+
+接下来分别来介绍如何使用
+
+**cache_info()**
+`cache_info`的作用是返回缓存的统计信息，其中包含四个部分：`hits`、`misses`、`maxsize`和`currsize`
+
+- `hits`：缓存命中次数（直接返回缓存结果的次数）
+- `misses`：缓存未命中次数（首次计算并缓存的次数）
+- `maxsize`：缓存最大容量
+- `currsize`：当前缓存条目数
+
+接下来给出例子：
+
+以上面的例子作为示例
+
+``` Python
+import time
+from functools import lru_cache
+
+
+def timer(func):
+    def wrapper(n):
+        start_time = time.time()
+        result = func(n)
+        end_time = time.time()
+        print(f"运行时间为：{end_time - start_time:.10f}")
+
+        return result
+    wrapper.cache_info = func.cache_info
+    return wrapper
+
+
+@timer
+@lru_cache(maxsize=128)
+def pell(n):
+    if n <= 1:
+        return n
+    return pell(n-1) * 2 + pell(n-2)
+
+print(pell(10))
+info = pell.cache_info()
+print(info)
+```
+这里函数`wrapper()`新增了一行`wrapper.cache_info = func.cache_info`
+
+说明一下为什么要加这个
+
+由于这里`pell()`套了两个装饰器，分别是`@timer`和`@lru_cache`
+
+而这里真正返回变量的是外层`@timer`中的`wrapper()`，但是`wrapper()`只是一个普通的函数，没有`cache_info`
+
+而加这一行的作用是把`func`（也就是`pell()`）的`cache_info`传给`wrapper()`，这样的话`wrapper()`就有了`cache_info`
+
+也就可以通过`cache_info()`调出缓存信息
+
+而调出缓存的方法也很简单，具体为`函数名.cache_info()`
+
+**cache_clear**
+`cache_clear`的作用为清空缓存
+
+使用方法同上：`函数名.cache_clear`：
+
+##### 需要注意的几个点
+由于缓存本质上是用字典来储存的，所以函数的参数必须为**可哈希**
+
+不可以用列表和字典
+
+此外，如果函数的结果依赖于外部状态（如当前时间），缓存会导致返回过期结果。
+
+说的直白一点就是数据不再更新
+
+---
+[返回导航页](常见术语.md)
