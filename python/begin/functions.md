@@ -2407,3 +2407,116 @@ class TestMul(unittest.TestCase):
     def test_mul_negative_2(self):
         self.assertEqual(multiply(-5, -6), 30)
 ```
+接下来是创建一个测试套件，也就是`unittest.TestSuite()`
+
+这个套件的作用是可以往里面添加测试，之后运行这个套件，可以实现一次性执行多个测试的效果
+
+``` Python
+def create_suite():
+    suite = unittest.TestSuite()
+```
+
+接下来是往这个套件里面添加测试，将会用到这个方法：`addTest()`
+
+``` Python
+suite.addTest(TestAdd('test_add'))
+```
+在上面这个例子中，`addTest`里面填写的是类`TestAdd`，而类的里面填写的是要执行的测试
+
+也就是这个：
+
+``` Python
+class TestAdd(unittest.TestCase):
+    def test_add(self):
+        self.assertEqual(add(1, 2), 3)
+```
+
+当然，这样一个一个添加还是太慢了，还可以用一个可迭代对象（比如列表）来添加
+
+但需要注意的一点是这里用的不再是`addTest()`，而是**addTests**（注意末尾多了个**s**）
+``` Python
+suite.addTests([TestAdd('test_add'),TestAdd('test_add_negative')])
+```
+
+如果一个类里面有几百条测试，这样加还是有点慢，那有没有更快的方法呢？
+
+当然有，你还可以把整个类添加进去，这里需要用到的还是`addTest()`方法，而在括号里面，需要用到另一个方法`makeSuite()`
+
+这个方法的作用是测试指定类中的所有测试，同时把这些测试组装成一个`TestSuite`
+
+``` Python
+    suite.addTest(unittest.makeSuite(TestMul))
+```
+在上面这个例子中，便是测试了类`TestMul`中的所有测试
+
+相较于一个一个加测试，使用这种方法在大规模测试中会更加方便
+
+完整的代码如下：
+``` Python
+def create_suite():
+    suite = unittest.TestSuite()
+    suite.addTests([TestAdd('test_add'), TestAdd('test_add_negative')])
+    suite.addTest(unittest.makeSuite(TestMul))
+    return suite
+```
+
+接下来是执行的部分
+
+首先你需要创建一个实例用来测试：
+``` Python
+runner = unittest.TextTestRunner(verbosity=2)
+```
+这里的`verbosity = 2`代表着详细输出，`verbosity = 1`代表了简略输出（用`.`表示通过，`F`表示失败）
+
+此外还有`stream`参数，这个参数的作用是**指定输出流**，默认是`sys.stdout`（也就是控制台），可以自己重定向到文件中，这样就可以实现保存测试结果
+
+另外一个参数为`descriptions`作用是是否显示测试方法中的文档字符串（Docstring），默认为`True`
+
+在完成设置后，就得开始执行测试了，需要用到这个方法`run()`
+
+``` Python
+run_test.run(create_suite())
+```
+
+这里括号内的`create_suite()`便是之前定义的测试套件
+
+最后完整代码如下：
+``` Python
+import unittest
+from math_add_mul import add, multiply
+
+
+class TestAdd(unittest.TestCase):
+    def test_add(self):
+        self.assertEqual(add(1, 2), 3)
+
+    def test_add_negative(self):
+        self.assertEqual(add(-2, 3), 1)
+
+    def test_add_float(self):
+        self.assertAlmostEqual(add(0.1, 0.6), 0.7, places=7)
+
+
+class TestMul(unittest.TestCase):
+    def test_mul(self):
+        self.assertEqual(multiply(5, 6), 30)
+
+    def test_mul_negative_1(self):
+        self.assertEqual(multiply(5, -6), -30)
+
+    def test_mul_negative_2(self):
+        self.assertEqual(multiply(-5, -6), 30)
+
+
+def create_suite():
+    suite = unittest.TestSuite()
+    suite.addTests([TestAdd('test_add'), TestAdd('test_add_negative')])
+    suite.addTest(unittest.makeSuite(TestMul))
+    return suite
+
+
+if __name__ == "__main__":
+    run_test = unittest.TextTestRunner(verbosity=2)
+    run_test.run(create_suite())
+
+```
