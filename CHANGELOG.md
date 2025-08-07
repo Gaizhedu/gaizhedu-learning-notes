@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2025-08-07]
+- 新增：大O表示法`python\IntroConcepts\big_o_notation.md`中的部分内容
+
 ## [2025-08-06]
 - 新增：函数`python/CoreBasics/functions.md`笔记中有关单元测试基础中测试套件的内容
 - 新增：函数`python/CoreBasics/functions.md`笔记中有关缓存的内容
