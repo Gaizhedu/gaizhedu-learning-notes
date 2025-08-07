@@ -1,99 +1,99 @@
 # CHANGELOG
 
 ## [2025-08-06]
-- 新增：函数`python/begin/functions.md`笔记中有关单元测试基础中测试套件的内容
-- 新增：函数`python/begin/functions.md`笔记中有关缓存的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关单元测试基础中测试套件的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关缓存的内容
 - 修改：文件`classes.md`、`functions.md`和`tuples.md`末尾的返回导航页的地址
 
 ## [2025-08-05]
-- 新增：函数`python/begin/functions.md`笔记中有关单元测试基础中除测试套件的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关单元测试基础中除测试套件的内容
 
 ## [2025-08-04]
-- 新增：函数`python/begin/functions.md`笔记中有关函数文档字符串的内容
-- 新增：函数`python/begin/functions.md`笔记中有关类型注解的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关函数文档字符串的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关类型注解的内容
 
 ## [2025-08-03]
 - 新增：佩尔数列的几种实现方式`obsidian\pell_sequence.md`，利用几种方法实现了佩尔数列
-- 新增：函数`python/begin/functions.md`笔记中有关上下文管理器的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关上下文管理器的内容
 
 ## [2025-08-02]
-- 新增：函数`python/begin/functions.md`笔记中有关魔术方法的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关魔术方法的内容
 - 新增：基于魔术方法的斐波那契数列`python/demo/fibonacci_dunder.py`，使用了`__add__`实现了斐波那契数列的效果
 
 ## [2025-08-01]
 - 新增：十进制转十六进制转换器`python/demo/decimal_to_hexadecimal.py`，作为练习的示例
 - 新增：斐波那契数列`python/demo/fibonacci.py`，作为递归函数练习的示例
-- 新增：函数`python/begin/functions.md`笔记中有关尾递归优化的内容
-- 新增：函数`python/begin/functions.md`笔记中有关函数式编程的内容，主要包括了纯函数、不可变参数等内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关尾递归优化的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关函数式编程的内容，主要包括了纯函数、不可变参数等内容
 
 ## [2025-07-31]
-- 新增：函数`python/begin/functions.md`笔记中有关生成器的内容，主要介绍了生成器的基础内容，还有生成器表达式，以及生成器表达式与列表推导式的区别
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关生成器的内容，主要介绍了生成器的基础内容，还有生成器表达式，以及生成器表达式与列表推导式的区别
 - 新增：十进制转二进制转换器`python/demo/decimal_to_binary.py`，作为递归函数的例子
-- 新增：函数`python/begin/functions.md`笔记中有关递归函数的基础内容，主要介绍了基础用法
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关递归函数的基础内容，主要介绍了基础用法
 
 ## [2025-07-30]
-- 新增：函数`python/begin/functions.md`笔记中有关带参数的装饰器的内容，主要介绍其用法
-- 新增：函数`python/begin/functions.md`笔记中有关类装饰器的内容，介绍了其基础用法
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关带参数的装饰器的内容，主要介绍其用法
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关类装饰器的内容，介绍了其基础用法
 
 ## [2025-07-29]
-- 新增：函数`python/begin/functions.md`笔记中有关计时器装饰器的用法，内容，运行步骤等
-- 新增：函数`python/begin/functions.md`笔记中有关日志装饰器的用法等内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关计时器装饰器的用法，内容，运行步骤等
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关日志装饰器的用法等内容
 - 新增：计时器例子`python/demo/timer_deco_demo1.py`和`python/demo/timer_deco_demo2.py`，用于说明计时器装饰器的使用方法
 
 ## [2025-07-28]
-- 新增：函数`python/begin/functions.md`笔记中有关高阶函数`zip()`的内容，主要介绍了相关的语法和使用方式，还有使用时需要注意的内容和特性
-- 新增：函数`python/begin/functions.md`笔记中有关高阶函数`reversed()`的内容，主要介绍其定义，语法，还有在使用时的注意事项
-- 新增：函数`python/begin/functions.md`笔记中有关装饰器的基础内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关高阶函数`zip()`的内容，主要介绍了相关的语法和使用方式，还有使用时需要注意的内容和特性
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关高阶函数`reversed()`的内容，主要介绍其定义，语法，还有在使用时的注意事项
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关装饰器的基础内容
 
 ## [2025-07-27]
-- 新增：函数`python/begin/functions.md`笔记中有关高阶函数`sorted()`、`max()`的内容，同时添加了`zip()`的少部分内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关高阶函数`sorted()`、`max()`的内容，同时添加了`zip()`的少部分内容
 
 ## [2025-07-26]
-- 新增：函数`python/begin/functions.md`笔记中有关高阶函数`filter()`和`reduce()`的内容，还有部分`sorted()`的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关高阶函数`filter()`和`reduce()`的内容，还有部分`sorted()`的内容
 
 ## [2025-07-25]
-- 新增：函数`python/begin/functions.md`笔记中有关高阶函数`map()`的内容，以及高阶函数`filter()`的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关高阶函数`map()`的内容，以及高阶函数`filter()`的内容
 
 ## [2025-07-24]
 - 新增：obsidian`obsidian`文件夹，用于储存一些其他内容的笔记
 - 修改：现在所有笔记的文件名统一为英文
-- 新增：函数`python/begin/functions.md`笔记中有关内置高阶函数以及具名函数和匿名函数的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关内置高阶函数以及具名函数和匿名函数的内容
 - 新增：常见谬误`obsidian/common_logical_fallacies.md`，介绍了一些常见的谬误
   
 ## [2025-07-23]
-- 新增：函数`python/begin/functions.md`笔记中有关返回一个函数、高阶函数和匿名函数的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关返回一个函数、高阶函数和匿名函数的内容
 
 ## [2025-07-22]
-- 新增：函数`python/begin/functions.md`笔记中有关解包和高阶函数的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关解包和高阶函数的内容
 
 ## [2025-07-21]
 - 新增：《图灵完备》`turing-complete`的相关笔记，并添加了有关第一章中逻辑门`turing-complete/ch1-basic-logic-circuits.md`的笔记内容
-- 新增：函数`python/begin/functions.md`笔记中有关默认参数陷阱和解包的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关默认参数陷阱和解包的内容
 
 ## [2025-07-20]
-- 新增：函数`python/begin/functions.md`笔记中有关位置参数和关键字参数的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关位置参数和关键字参数的内容
 
 ## [2025-07-19]
-- 新增：函数`python/begin/functions.md`笔记中有关作用域的内容
-- 新增：函数`python/begin/functions.md`笔记中有关闭包的少部分内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关作用域的内容
+- 新增：函数`python/CoreBasics/functions.md`笔记中有关闭包的少部分内容
 
 ## [2025-07-18]
-- 新增：函数`python/begin/functions.md`笔记中的可变参数，以及return语句的使用
+- 新增：函数`python/CoreBasics/functions.md`笔记中的可变参数，以及return语句的使用
 
 ## [2025-07-17]
-- 新增：函数`python/begin/functions.md`，简单介绍了函数的创建，传参等内容
+- 新增：函数`python/CoreBasics/functions.md`，简单介绍了函数的创建，传参等内容
 
 ## [2025-07-16]
-- 新增：元组`python/begin/tuples.md`，介绍了元组中的相关知识点
-- 新增：常见术语`python/begin/common_terms.md`中新增了函数的目录
+- 新增：元组`python/CoreBasics/tuples.md`，介绍了元组中的相关知识点
+- 新增：常见术语`python/CoreBasics/common_terms.md`中新增了函数的目录
 
 ## [2025-07-15]
-- 新增：元组`python/begin/tuples.md`的部分笔记，介绍了元组中的基本操作，包括合并元组，对元组进行切片等
+- 新增：元组`python/CoreBasics/tuples.md`的部分笔记，介绍了元组中的基本操作，包括合并元组，对元组进行切片等
 
 ## [2025-07-13]
 - 新增：demo`python/demo`文件夹，用于存放笔记当中使用的示例
-- 新增：类`python/begin/classes.md`，介绍了python中的类
-- 新增：元组`python/begin/tuples.md`，介绍了一些通用序列操作
+- 新增：类`python/CoreBasics/classes.md`，介绍了python中的类
+- 新增：元组`python/CoreBasics/tuples.md`，介绍了一些通用序列操作
 
 ## [2025-07-08]
 - 创建`python/syntactic_sugar`文件夹，用于储存有关语法糖的笔记
