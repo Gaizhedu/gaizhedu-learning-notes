@@ -2,15 +2,14 @@
 这里是导航页，可以直接到对应的笔记里面
 
 ## Python
-### 入门（begin）
-- [常见术语](begin/common_terms.md)
-  - [x] [元组](tuples.md)
-  - [ ] [集合](集合.md)
-  - [x] [类](classes.md)
-  - [ ] [函数](functions.md)
+### 入门概念（IntroConcepts）
+- [x] [元组](IntroConcepts/tuples.md)
+- [ ] [集合](集合.md)
+- [x] [类](IntroConcepts/classes.md)
+- [x] [函数](IntroConcepts/functions.md)
 
-### 基础（base）
-- [ ] [格式化文本](base/string_formatting.md)
+### 基础（CoreBasics）
+- [ ] [格式化文本](CoreBasics/string_formatting.md)
 
 ### 语法糖（syntactic_sugar）
 - [x] [f-字符串](syntactic_sugar/f_strings.md)
