@@ -84,3 +84,29 @@ for i in l:
 ``` Python
 
 ```
+
+### 平方时间
+平方时间指的是O(n$^2$)
+
+特点是执行时间与n成正比，一般会在嵌套循环的时候出现
+
+接下来举一个冒泡排序的例子
+``` Python
+def bub(acc):
+    n = len(acc) - 1
+    a_list = acc
+    for i in range(n):
+        for o in range(n - i):
+            if a_list[o] > a_list[o + 1]:
+                a_list[o], a_list[o + 1] = a_list[o + 1], a_list[o]
+    return a_list
+
+
+ra_list = [4, 3, 5, 2, 6, 1]
+print(bub(ra_list))
+```
+
+这里由于执行次数为：`(n - 1) + (n - 2) + (n - 3) ...`
+
+表现为一个等差数列，其求和便存在n$^2$，所以时间复杂度为O(n$^2$)（(n$^2$ + n) / 2）
+
