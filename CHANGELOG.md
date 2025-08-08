@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-08-08]
+- 新增：冒泡排序`python\Notes\bubble_sort.md`的对应笔记，介绍了其实现的方法，运行过程等内容
+- 新增：大O表示法`python\IntroConcepts\big_o_notation.md`中平方时间的内容
+
 ## [2025-08-07]
 - 新增：大O表示法`python\IntroConcepts\big_o_notation.md`中的部分内容
 
