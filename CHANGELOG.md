@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-08-10]
+- 新增：Leetcode题目`python\LeetCode`用于记录刷题时的代码记录
+- 新增：colorsys`python\Notes\colorsys.md`，介绍了有关Python中这一模块的内容
+
 ## [2025-08-09]
 - 新增：大O表示法`python\IntroConcepts\big_o_notation.md`中指数时间的部分
 
