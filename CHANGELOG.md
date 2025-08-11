@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2025-08-11]
+- 新增：colorsys`python\Notes\colorsys.md`中有关RGB转换成YIQ和HSL的内容
+
 ## [2025-08-10]
 - 新增：Leetcode题目`python\LeetCode`用于记录刷题时的代码记录
 - 新增：colorsys`python\Notes\colorsys.md`，介绍了有关Python中这一模块的内容
