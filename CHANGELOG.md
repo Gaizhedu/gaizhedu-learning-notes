@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2025-08-12]
+- 新增：C程序设计语言`C_Language`文件夹，用于存放有关C语言的内容
+- 新增：k&r_1-3以及k&r_1-4`C_Language\Demo`记录了《C程序设计语言》中练习1-3和练习1-4的内容
+- 新增：k&r_ch1`C_Language\Notes\k&r_ch1.md`，介绍了有关《C程序设计语言》中第一章的笔记内容
+
 ## [2025-08-11]
 - 新增：colorsys`python\Notes\colorsys.md`中有关RGB转换成YIQ和HSL的内容
 
