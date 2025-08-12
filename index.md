@@ -1,6 +1,9 @@
 # 导航页
 这里是导航页，可以直接到对应的笔记里面
 
+## C
+- [ ] [第一章](C_Language/Notes/k&r_ch1.md)
+
 ## Python
 ### 入门概念（IntroConcepts）
 - [x] [元组](IntroConcepts/tuples.md)
@@ -25,4 +28,5 @@
 - [ ] [第一章](turing-complete/ch1-basic-logic-circuits.md)
 
 ## Obsidian
-- [ ] [常见谬误](obsidian/常见谬误.md)
+- [x] [常见谬误](obsidian/common_logical_fallacies.md)
+- [x] [佩尔数列的实现方法](obsidian/pell_sequence.md)
