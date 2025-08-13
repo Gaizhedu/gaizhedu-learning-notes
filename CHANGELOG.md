@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2025-08-13]
+- 新增：k&r_1-5`C_Language\Demo\k&r_1-5.c`记录了《C程序设计语言》中练习1-5的内容
+- 新增：k&r_ch1`C_Language\Notes\k&r_ch1.md`，介绍了For语句的内容，以及符号常量的的内容
+- 新增：k&r_1-6`C_Language\Demo\k&r_1-6.c`记录了《C程序设计语言》中练习1-6的内容
+- 新增：k&r_1-7`C_Language\Demo\k&r_1-7.c`记录了《C程序设计语言》中练习1-7的内容
+- 新增：k&r_ch1`C_Language\Notes\k&r_ch1.md`中有关于文件复制的内容，对应《C程序设计语言》中的1.5.1 文件复制
+
 ## [2025-08-12]
 - 新增：C程序设计语言`C_Language`文件夹，用于存放有关C语言的内容
 - 新增：k&r_1-3以及k&r_1-4`C_Language\Demo`记录了《C程序设计语言》中练习1-3和练习1-4的内容
