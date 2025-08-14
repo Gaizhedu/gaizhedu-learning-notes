@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-08-14]
+- 新增：快速排序`python\demo\quick_sort.py`，介绍了一种快速排序（非原地排序）的方法
+- 新增：快速排序的笔记`python\Notes\quick_sort.md`，主要讲解快速排序这种方式
+
 ## [2025-08-13]
 - 新增：k&r_1-5`C_Language\Demo\k&r_1-5.c`记录了《C程序设计语言》中练习1-5的内容
 - 新增：k&r_ch1`C_Language\Notes\k&r_ch1.md`，介绍了For语句的内容，以及符号常量的的内容
