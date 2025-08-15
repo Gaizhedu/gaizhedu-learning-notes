@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2025-08-15]
+- 新增：Leetcode题目11《盛最多水的容器》`python\LeetCode\top-100-like-11.py`的解法
+- 新增：k&r_ch1`C_Language\Notes\k&r_ch1.md`中有关字符计数的内容
+- 新增：回文检测`python\demo\palindrome.py`的代码例子，实现了检测是否为回文的功能
+
 ## [2025-08-14]
 - 新增：快速排序`python\demo\quick_sort.py`，介绍了一种快速排序（非原地排序）的方法
 - 新增：快速排序的笔记`python\Notes\quick_sort.md`，主要讲解快速排序这种方式
