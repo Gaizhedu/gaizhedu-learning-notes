@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2025-08-17]
+- 新增：k&r_1-8`C_Language\Demo\k&r_1-8.c`记录了《C程序设计语言》中练习1-8的内容
+- 新增：k&r_1-9`C_Language\Demo\k&r_1-8.c`记录了《C程序设计语言》中练习1-9的内容
+- 新增：k&r_ch1`C_Language\Notes\k&r_ch1.md`中有关单词计数的部分内容
+
 ## [2025-08-16]
 - 新增：Leetcode题目11《盛最多水的容器》`python\LeetCode\top-100-like-11-standard.py`的标准解法
 
