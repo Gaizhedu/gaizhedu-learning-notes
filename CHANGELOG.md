@@ -1,8 +1,14 @@
 # CHANGELOG
 
+## [2025-08-18]
+- 新增：k&r_1-12`C_Language\Demo\k&r_1-12.c`记录了《C程序设计语言》中练习1-12的内容
+- 新增：k&r_1-13`C_Language\Demo\k&r_1-13.c`记录了《C程序设计语言》中练习1-13的内容
+- 新增：k&r_1-14`C_Language\Demo\k&r_1-14.c`记录了《C程序设计语言》中练习1-14的内容
+- 新增：《C程序设计语言》第一章笔记`C_Language\Notes\k&r_ch1.md`中有关1.6数组的内容
+
 ## [2025-08-17]
 - 新增：k&r_1-8`C_Language\Demo\k&r_1-8.c`记录了《C程序设计语言》中练习1-8的内容
-- 新增：k&r_1-9`C_Language\Demo\k&r_1-8.c`记录了《C程序设计语言》中练习1-9的内容
+- 新增：k&r_1-9`C_Language\Demo\k&r_1-9.c`记录了《C程序设计语言》中练习1-9的内容
 - 新增：k&r_ch1`C_Language\Notes\k&r_ch1.md`中有关单词计数的部分内容
 
 ## [2025-08-16]
