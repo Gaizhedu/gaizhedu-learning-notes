@@ -1139,4 +1139,169 @@ void copy(char to[], char from[])
 extern 变量类型 变量名
 ```
 
-接下来是上下文隐式声明
+由于C语言在C99标准后废除了隐式声明，所以这里不再提及
+
+需要说明一点的是，在一些情况下可以省略`extern声明`，如果在源文件中，外部变量的定义出现在他的函数之前，那么在那个函数中便可以不使用`extern声明`
+
+一般来说，所有的外部变量的定义都放在最开头，这样就可以省略掉`extern声明`
+
+---
+接下来讲讲多个文件的情况
+
+如果你的一个变量位于文件A，而你在文件B使用到了这个变量，那么则需要使用`extern声明`
+
+通常的做法是，把变量和函数的extern声明放到一个单独的文件中（一般称为`头文件`）
+
+并在每个文件的开头使用`#include`语句把要用的这些头文件包含进来
+
+而后缀`.h`是约定为头文件名的扩展名
+
+接下来看看之前的程序有什么地方可以用到外部变量吧
+
+### 使用外部变量
+
+首先我们可以先看看`getline()`函数
+
+首先由`main()`可以得知，最大范围是由参数传给函数的，而这里的最大参数便可以使用`MAXLINE`来代替原有的`lim`参数
+
+接下来可以发现，原来的程序使用了一个参数`line`来储存句子
+
+而这个由于这个句子使用了`for循环`使得每次调用的时候位置都是会重新计算（i = 0）的
+
+这就导致了这里无论调用多少次，开始存储的位置还是一样的，所以这里的第一个参数也可以换成外部变量
+
+最后的`getline函数`如下
+
+``` C
+int getline(void)
+{
+	int c, i;
+	extern char line[];
+
+	for (i = 0;
+		i < MAXLINE - 1 && (c = getchar()) != EOF && c != '\n';
+		++i
+		)
+	{
+		line[i] = c;
+	}
+	if (c == '\n')
+	{
+		line[i] = c;
+		++i;
+	}
+	line[i] = '\0';
+	return i;
+}
+```
+可以看到这里使用了外部变量`line[]`
+
+而`MAXLINE`在开头的`#define`就定义过了，编译的时候会自动替换成后面的`1000`
+
+这里需要注意的一点是，`getline()`的括号内部写的是`void`
+
+这是因为在 `ANSI C`中，如果要声明空参数表，则必须使用关键字`void`进行显式声明
+
+接下来是`copy()`
+``` C
+void copy(void)
+{
+	int i;
+	extern char line[], longest[];
+
+	i = 0;
+	while ((longest[i] = line[i]) != '\0')
+		++i;
+}
+```
+通过观察`main()`可以知道，原先的原先数组`from[]`实际可以替换为`line[]`，而输出的数组可以用到`longest[]`
+
+`longest[]`是在一开始就定义的外部变量，可以不借助参数而选择直接写入函数内部
+
+最后是完整的代码：
+``` C
+#define MAXLINE 1000
+
+int max;
+int getline(void);
+void copy(void);
+char line[MAXLINE];
+char longest[MAXLINE];
+
+int main() {
+	int len;
+	extern int max;
+	extern char longest[MAXLINE];
+
+	max = 0;
+	while ((len = getline()) > 0)
+		if (len > max)
+		{
+			max = len;
+			copy();
+		}
+	if (max > 0)
+	{
+		printf("%s", longest);
+	}
+	return 0;
+}
+
+int getline(void)
+{
+	int c, i;
+	extern char line[];
+
+	for (i = 0;
+		i < MAXLINE - 1 && (c = getchar()) != EOF && c != '\n';
+		++i
+		)
+	{
+		line[i] = c;
+	}
+	if (c == '\n')
+	{
+		line[i] = c;
+		++i;
+	}
+	line[i] = '\0';
+	return i;
+}
+
+void copy(void)
+{
+	int i;
+	extern char line[], longest[];
+
+	i = 0;
+	while ((longest[i] = line[i]) != '\0')
+		++i;
+}
+```
+需要说明的一点是，虽然外部变量很好用，但是如果过度使用的可能会导致数据之间的关系变得不清，并且如果将外部变量写入程序内部，会不传入参数进函数而导致函数失去了通用性
+
+### 补充内容
+接下来补充几个小点
+
+上文在讲自动变量的时候提及了以下内容：
+> 如果自动变量没有赋值，那么其中存放的就是无效值
+而如果外部变量没有初始化的话，那么编译器会**自动初始化为0**
+
+此外还有有关`定义`和`声明`的区别
+
+定义指的是：表示创建变量或者分配存储单元
+
+而声明指的是：说明变量的性质，但并不分配存储单元
+
+举个例子：
+
+在外部变量中，定义如下：
+``` C
+int max;
+```
+
+而声明如下：
+``` C
+extern int max;
+```
+定义只能定义一次，而声明可以声明无限次
