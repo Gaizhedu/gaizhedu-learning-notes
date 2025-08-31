@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2025-08-31]
+- 新增：《C程序设计语言》第二章笔记`C_Language\Notes\k&r_ch2.md`中有关2.10赋值运算符与表达式的内容，介绍了赋值表达式的用法和缩写前实际的内容，此外还解析了K&R中bitcount的相关内容，补充了逻辑右移和算数右移的相关内容
+- 新增：k&r_2-9`C_Language\Demo\k&r_2-9.c`记录了《C程序设计语言》中练习2-9的内容
+- 新增：practice文件夹`C_Language\Notes\practice`用于存放《C程序设计语言》中练习的笔记
+- 新增：k&r_2-9_solution`C_Language\Notes\practice\k&r_2-9_solution.md`，解析了练习2-9的代码内容
+
 ## [2025-08-30]
 - 新增：《C程序设计语言》第二章笔记`C_Language\Notes\k&r_ch2.md`中有关2.9位运算符的内容，介绍了六种运算符的使用方法，以及一些使用的实际场景
 
