@@ -288,3 +288,61 @@ else{
 这样的话如果数量一多，那么将会十分难以阅读
 
 所以这也是为什么`else-if`语句是语法糖的原因
+
+## switch语句
+接下来讲一下`switch语句`，`switch语句`的作用是实现多路判定
+
+这个表达式可以测试是否与一些常量值的某一个值匹配，如果匹配的话就执行相应的分支动作
+
+这一点如果仔细观察的话就很像之前的`if语句`
+
+具体的结构如下：
+``` C
+switch(判断内容){
+    case 常量表达式: 语句序列
+    case 常量表达式: 语句序列
+    default: 语句序列
+}
+```
+每一个分支都可以用多个常量来标记，如果都没有的话就执行`default语句`
+
+与之前的if语句一样，这里的`default`也是可以省略的（等价于`else`）
+
+与if语句不同，`switch语句`中`case`的顺序是部分先后的，因为是查找是否一一对应
+
+如果需要在执行后立刻退出判断，可以使用`break`语句直接退出判断
+
+接下来我们用一个例子来说明这个用法
+
+在之前我们有写过一个统计输入的程序，当时是选择使用if...else的结构来实现，这次我们用switch语句实现
+
+``` C
+int main() {
+    int i, c ,nums_white = 0, nums_other = 0,nums_digit[10];
+    for (i = 0;i < 10;i++) {
+        // 初始化计数器
+        nums_digit[i] = 0;
+    }
+    while ((c = getchar()) != EOF) {
+        switch (c) {
+            case '1': case '2': case '3': case '4': case '5':
+            case '6': case '7': case '8': case '9': case '0':
+                ++nums_digit[c - '0'];
+                break;
+            case ' ': case '\n' : case '\t':
+                ++nums_white;
+                break;
+            default:
+                ++nums_other;
+                break;
+        }
+    }
+    for (i = 0; i < 10;++i)
+        printf("%d",nums_digit[i]);
+    printf("white = %d,other = %d",nums_white,nums_other);
+    return 0;
+}
+```
+这里直接看到`switch语句`这里，可以列出了0~9的所有情况作为覆盖，只要有一个情况对得上就自动执行语句
+
+其他的也是相同的道理
