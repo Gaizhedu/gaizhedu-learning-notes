@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-09-04]
+- 新增：k&r_3-1`C_Language\Demo\k&r_3-1.c`记录了《C程序设计语言》中练习3-1的内容
+- 新增：《C程序设计语言》第三章笔记`C_Language\Notes\k&r_ch3.md`中有关3.4switch语句的内容，主要讲解了switch语句的功能，以及作用
+
 ## [2025-09-03]
 - 新增：《C程序设计语言》第三章笔记`C_Language\Notes\k&r_ch3.md`中有关3.3else-if语句的内容，主要讲解了else-if语句的结构，以及实际例子二分法的实现，同时补充了语法糖的内容
 
