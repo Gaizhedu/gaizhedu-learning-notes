@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2025-09-06]
+- 新增：《C程序设计语言》第三章笔记`C_Language\Notes\k&r_ch3.md`中有关3.5 while循环和for循环的内容，介绍了这两个循环的基本结构
+
 ## [2025-09-04]
 - 新增：k&r_3-1`C_Language\Demo\k&r_3-1.c`记录了《C程序设计语言》中练习3-1的内容
 - 新增：《C程序设计语言》第三章笔记`C_Language\Notes\k&r_ch3.md`中有关3.4switch语句的内容，主要讲解了switch语句的功能，以及作用
