@@ -4,6 +4,7 @@
 - 新增：《C程序设计语言》第三章笔记`C_Language\Notes\k&r_ch3.md`中有关3.5 while循环和for循环中的逗号运算符的相关内容
 - 新增：k&r_1-19`C_Language\Demo\k&r_1-19.c`记录了《C程序设计语言》中练习1-19的内容，主要实现了`reversed()函数`的功能
 - 新增：k&r_3-3`C_Language\Demo\k&r_3-3.c`记录了《C程序设计语言》中练习3-3的内容，主要实现了`expend()函数`的功能
+- 新增：《C程序设计语言》第三章笔记`C_Language\Notes\k&r_ch3.md`中有关3.6 do-while循环的相关内容，主要介绍了这个循环的作用和使用方法
 
 ## [2025-09-06]
 - 新增：《C程序设计语言》第三章笔记`C_Language\Notes\k&r_ch3.md`中有关3.5 while循环和for循环的内容，介绍了这两个循环的基本结构
