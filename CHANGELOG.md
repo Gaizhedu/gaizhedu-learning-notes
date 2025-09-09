@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2025-09-09]
+- 新增：《C程序设计语言》第四章笔记`C_Language\Notes\k&r_ch4.md`中有关4.1 函数的基本知识的相应内容
+
 ## [2025-09-08]
 - 新增：《C程序设计语言》第三章笔记`C_Language\Notes\k&r_ch3.md`中有关3.6 break语句与continue语句的相应内容，主要介绍了这两个语句的作用，以及在while循环和for循环中的区别
 - 新增：《C程序设计语言》第三章笔记`C_Language\Notes\k&r_ch3.md`中有关3.7 goto语句与标号的内容，主要介绍了goto语句的相关内容以及如何定义一个标号
