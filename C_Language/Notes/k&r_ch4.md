@@ -31,3 +31,103 @@
 首先主要的逻辑便是检测行中是否有这一串字符串，如果匹配的话就返回第一个字符的位置
 
 一开始的逻辑便是建立一个循环，如果当前这个字符串符合对应字符串，则继续检测下去；如果字符串不相同，则选择结束检测，跳转到下一个字符
+
+### 具体代码
+接下来给出核心的代码：
+
+``` C
+int strindex(const char s[],const char target[]) {
+    int i;
+
+    for (i = 0;s[i] != '\0';++i) {
+        int n = 0;
+        for (int o = i;s[o] == target[n] && target[n] != '\0';++o,++n) {
+            ;
+        }
+        if (target[n] == '\0') {
+            return i + 1;
+        }
+    }
+    return -1;
+}
+```
+接下来开始分析这一块代码，其核心便是嵌套的**for循环**，第一个for循环的作用是逐个检查字符
+
+而第二个for循环的作用是检查是否有跟目标语句相匹配的字符，如果第一个字符匹配，则继续检查下一个字符是否匹配，如果匹配则继续，如果不是则结束
+
+这个思路有点类似于**双指针**的思路，指针A用于遍历整个数组，而指针B用于检查第一个字符相同后其他字符是否相同
+
+这样做的好处是第一个指针永远不会被破坏，也就是说检查的顺序是不会被改变的，第一个指针永远按顺序检查，不会跳过任何一个元素
+
+这里的**i**代表的是符合的第一个字母的位置
+
+完整代码如下：
+``` C
+#define MAXLINE 1000
+char s[MAXLINE];
+
+char target[] = "ould";
+
+int getline1(char s[],int lim);
+int strindex(const char s[],const char target[]);
+
+int main() {
+   while (getline1(s,MAXLINE) > 0) {
+        int n = strindex(s,target);
+        if (n > 0) {
+            printf("%d",n);
+        }
+        else {
+            printf("error");
+        }
+   }
+}
+
+int getline1(char s[],int lim) {
+    int i,c = 0;
+
+    for (i = 0;--lim > 0 && (c = getchar()) != EOF;++i) {
+        s[i] = c;
+    }
+    return i;
+}
+
+int strindex(const char s[],const char target[]) {
+    int i;
+
+    for (i = 0;s[i] != '\0';++i) {
+        int n = 0;
+        for (int o = i;s[o] == target[n] && target[n] != '\0';++o,++n) {
+            ;
+        }
+        if (target[n] == '\0') {
+            return i + 1;
+        }
+    }
+    return -1;
+}
+```
+
+### 定义函数
+在上面的代码中，我们使用了函数来简化整个程序，通过一定的分割，现在程序变得更加简洁和更容易明白
+
+接下来我们讲讲如何定义一个函数：
+``` C
+返回值的类型 函数名称(参数声明表)
+    声明和语句
+```
+在一些情况下，甚至可以省略成这样：
+
+``` C
+dummy(){}
+```
+这个函数不执行任何的操作（因为花括号内没有任何的语句），同时不返回任何值（因为花括号内部没有任何可以返回值的语句）
+
+并且，这个函数也没有声明返回值的类型，在这种情况下，返回的值的类型为int
+
+---
+如果想要向调用者返回值，那么只需要通过return语句即可
+
+例如：`return 表达式;`，结果就是返回表达式
+
+如果return后面没有跟着表达式，那么就不返回值。在一些必要的时候，表达式会加上括号（可选）
