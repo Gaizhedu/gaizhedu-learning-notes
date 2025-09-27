@@ -239,3 +239,71 @@ for (*pn = 0 ; isdigit(c) ; c = getch()) {
 在完成计算数字之后，我们便要判断是否为正负数了
 
 也就是使用到我们之前判断是否为正负数的这个变量`sign`
+
+``` C
+*pn *= sign;
+```
+
+最后返回对应的结果
+
+完整代码如下：
+``` C
+#define SIZE 1000
+int getch(void);
+void ungetch(int c);
+int nums = 0;
+
+int getint(int *pn);
+
+
+int main() {
+    int n ,array[SIZE];
+    for (n = 0 ;n < SIZE && getint(&array[n]) != EOF;n++) {
+        ;
+    }
+    for (int i = 0;i < n;++i) {
+        printf("%d\n",array[i]);
+    }
+}
+
+int getint(int *pn) {
+    int c,sign;
+
+    while (isspace(c = getch())) {
+        ;// 依旧跳过空白行
+    }
+    if (!isdigit(c) && c != EOF && c != '+' && c != '-') {
+        ungetch(c);
+        return 0;
+    }
+    sign = (c == '-') ? -1 : 1;// 依旧检查符号
+
+    if (c == '+'|| c == '-') {
+        c = getch();
+    }
+    for (*pn = 0 ; isdigit(c) ; c = getch()) {
+        *pn = 10 * *pn + (c - '0');
+    }
+    *pn *= sign;
+    if (c != EOF) {
+        ungetch(c);
+    }
+    return c;
+}
+
+int bufp = 0;
+#define BUFMAX 100
+char buf[BUFMAX];
+
+int getch() {
+    return (bufp > 0) ? buf[--bufp] : getchar();
+}
+
+void ungetch(int c) {
+    if (bufp >= BUFMAX) {
+        printf("ERROR:TO MANY CHAR");
+    } else {
+        buf[bufp++] = c;
+    }
+}
+```
