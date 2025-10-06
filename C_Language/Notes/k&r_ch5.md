@@ -793,3 +793,18 @@ int readlines(char *lineptr[],int maxlines)
 接下来是最后的`lineptr[nlines++] = p;`
 
 前文得知，这里的`p`是一个内存地址，所以不难推断，此处的数组`lineptr[]`便是存储着每个被分割的字符数组的内存地址
+
+在完成输入之后，接下来是输出部分：
+
+输出部分也很简单，只需要用循环输出排列好的指针数组既可
+
+``` C
+void writelines(char *lineptr[],int nlines){
+    int i;
+
+    for(i = 0 ;i < nlines; i++){
+        printf("%s\n",lineptr[i]);
+    }
+}
+```
+这里需要注意的一点就是lineptr这个数组存储的是我们所有的内存地址
