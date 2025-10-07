@@ -808,3 +808,55 @@ void writelines(char *lineptr[],int nlines){
 }
 ```
 这里需要注意的一点就是lineptr这个数组存储的是我们所有的内存地址
+
+当然，与之前的例子是一致的，这里的函数也可以写为指针的形式
+
+``` C
+void writelines(char *lineptr[], int nlines){
+    while (nlines-- > 0){
+        printf("%s\n",*lineptr++);
+    }
+}
+```
+
+这里的检测标准为代表文本数量的`nlines`，每次执行的时候进行自减来进行输出，这样可以使得所有内容被正确输出
+
+在这里需要知道一个点，由于这里输入的内容大部分为指针，也就是说在这之中使用过的一些之前出现过的函数，需要进行一些调整：
+``` C
+void qsort(char *v[],int left,int right){
+    int i, last;
+    void swap(char *v[],int i ,int j);
+    if (left >= right){
+        return;
+    }
+    swap(v,left ,(left + right)/2);
+    last = left;
+    for (i left + 1;i <= right ;i++){
+        if (strcmp(v[i],v[left])<0){
+            swap(v ,++last,i);
+        }
+    swap(v,last,last);
+    qsort(v,left,last-1);
+    qsort(v,last+1,right);
+    }
+}
+```
+在这里，快排的核心逻辑并没有发生改变，但是有些细节的部分发生了变化
+
+比如说传入的第一个参数变成了一个指针，还有下面的有关交换的判定部分
+
+在原先的代码，这里是如果前一项大于后一项，那么两者交换
+
+而这里的逻辑是，如果两个指针是不同的，那么就进行交换
+
+同样，负责交换的`swap()`函数也需要进行改动
+``` C
+void swap(char *v[],int i,int j){
+    cahr *temp;
+
+    temp = v[i];
+    v[i] = v[j];
+    v[j] = temp;
+}
+```
+这里的改动主要在传入参数这里，同样是使用了指针的格式
