@@ -1010,3 +1010,21 @@ func(int (*daytab)[13])
 ```
 
 这种声明是指针的声明，指向一个具有13个元素的一维数组，由于方括号的优先级大于*，所以这里需要先加上圆括号
+
+## 指针数组的初始化
+接下来来讲这部分的内容
+
+首先我们不妨来编写一个函数，这个函数会返回一个指向第n个月名字的字符串的指针
+
+``` C
+char *month_name(int n){
+    static char *name[] = {
+        "Illegal month", "January","February","March","April","May","June","Jule","August","September","October","November","December"
+    };
+
+    return (n < 1 || n > 12) ? name[0] : name[n];
+}
+```
+这个数组`name`是一个私有的字符串数组，当他被调用的时候会返回一个指向正确元素的指针
+
+需要注意的一点是这个声明并没有致命数组name的长度，所以，编译器在编译的时候对初值个数进行统计，然后填入数组的长度
