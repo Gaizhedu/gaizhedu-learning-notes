@@ -1278,7 +1278,49 @@ argv[2] = "[参数2]"
 那么这个程序要怎么写呢？
 
 ``` C
+#define MAXLINE 1000
 
+int getline_1(char *line, int max);
+
+int main(int argc, char *argv[]){
+    char line[MAXLINE];
+    long lineno = 0;
+    int c,except = 0, number = 0,found = 0;
+
+    while(--argc > 0&& (*++argv)[0] == '-'){
+        while (c = *++argv[0]){
+            switch(c){
+                case 'x':
+                    except = 1;
+                    break;
+                case 'n':
+                    number = 1;
+                    break;
+                default:
+                    printf("find: illegal option %c\n", c);
+                    argc = 0;
+                    found = -1;
+                    break;
+            }
+        }
+    }
+    if (argc != 1) {
+        printf("Usage: find -x -n pattern\n");
+    }
+        else{
+        while (getline_1(line, MAXLINE) > 0){
+            lineno++;
+            if ((strstr(line, *argv) != NULL) != except){
+                if(number){
+                    printf("&ld:", lineno);
+                }
+                printf("%s", line);
+                found++;
+            }
+        }
+    }
+    return found;
+}
 ```
 
 我们可以看到这里面一个核心的地方为中间的循环部分，这里的意思是，先自减argc检测是否大于0，并且(*++argv)[0]是否等于代表参数的`-`
@@ -1294,3 +1336,31 @@ argv[2] = "[参数2]"
 由上文对find的解析可以知道，这里一开始的时候指代的是`argv[0]`，也就是find
 
 这里自增使得变成了第二项，也就是参数项
+
+在将检测的对象（变量）设置为数字参数后，就进入到了下面的switch语句检测
+
+如果检测到c为字符x的话，那么状态机except为1，此时触发模式x，同理，当检测到参数n的时候，状态机number变为1，将在之后的对应环节进行检测
+
+那么接下来是核心部分
+
+首先，假设检测完发现依旧有参数（即无效参数），则会返回正确的格式（此时计数器argc由于没有跑满次数，导致不为1）
+
+假设都满足，则进入到打印的环节
+
+通过getline返回次数，之后lineno自增来计数输入的行数
+
+接下来是判断部分，这里的这个语句：`(strstr(line, *argv) != NULL) != except`
+
+首先我们需要知道的是，最后一个except为模式x的一个状态机，假设模式x未开启，此时except为初始值0，意味着想要执行就必须要满足前面的函数`strstr`返回的指针不为空
+
+如果不为空，则意味着匹配，顺理成章的打印出匹配的行
+
+如果x模式启动，那么此时这个程序会运行的条件为前面返回的指针为空，也就是不匹配的意思，根据参数x的意思，开启该模式的时候会打印出不匹配的行
+
+这样，就成功实现了x参数
+
+接下来-n同理
+
+当每次运行一次的时候，会自动让计数器found自增
+
+在最后会返回所打印的次数
