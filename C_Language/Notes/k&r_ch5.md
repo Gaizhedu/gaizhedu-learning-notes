@@ -1399,5 +1399,123 @@ int numcmp(char *s1, char *s2){
     }
 }
 ```
-可以看到，这里如果条件满足的花，则会返回状态机，这样，就可以把处理结果的步骤放到外面，减少不必要的功能，使得程序更加灵活
+可以看到，这里如果条件满足的话，则会返回状态机，这样，就可以把处理结果的步骤放到外面，减少不必要的功能，使得程序更加灵活
 
+接下来看看改进后的代码：
+
+``` C
+#define MAXLINE 1000
+char *lineptr[MAXLINE];
+
+int readlines(char *lineptr[], int nlines);
+void writelines(char *lineptr[], int nlines)
+
+void qsort(void *lineptr[],
+            int left,
+            int right,
+            int (*comp)(void *, void *));
+int numcmp(char *, char *);
+
+main(int argc, char *argv[]){
+    int nlines;
+    int numeric = 0;
+
+    if (argc > 1 && strcmp(argv[1], "-n") == 0){
+        numeric = 1;
+    }
+    if ((nlines = readlines(lineptr,MAXLINES) >= 0)){
+        qsort((void **) lineptr,0,nlines - 1,
+        (int (*)(void*, void*))(numeric ? numcmp : strcmp));
+        writelines(lineptr, nlines);
+        return 0;
+    }
+    else {
+        printf("input too big sort\n")
+        return 1;
+    }
+}
+```
+
+接下来依次介绍这里的代码：
+
+首先，我们在要求中有提到一点，假设我们需要对不同的参数使用不同的排列模式（如用数组大小排序）
+
+那么便可以使用参数`-n`
+
+这里要实现这样的效果可以在加一个判断语句，如果判断结果为真，那么则令一个参数转变为1，而后在后面的语句中使用这个参数即可
+
+这里实现判断的语句为：
+``` C
+if (argc > 1 && strcmp(argv[1], "-n") == 0){
+    numeric = 1;
+}
+```
+
+依旧，在检测到带有参数（argc > 1），并且参数的第一个不为`-n`（argv[1] != "-n'）时，参数numeric转变为1
+
+这里将会影响到后面传入qsort的参数：`numeric ? numcmp : strcmp`
+
+如果为真（也就是没有参数-n），那么则使用numcmp，反之，如果无参数，此时numeric为0，则使用strcmp
+
+接下来的writelines则是将排序好的数组输出
+
+### qsort
+接下来让我们看看修改后的快速排序代码
+
+首先先看到括号内的参数：
+``` C
+void qsort(void *lineptr[],
+            int left,
+            int right,
+            int (*comp)(void *, void *));
+```
+可以看到，相较于之前用数组下标表示的快排，这里的快速排序使用了四个参数
+
+并且，可以注意到最后一个参数是一个指向函数的指针
+
+由于函数在C语言中不是一等公民，所以没办法直接用于参数
+
+但是可以通过指针来实现这样的效果，这里也就是使用到了这一点
+
+---
+接下来看看四个参数分别是什么
+
+首先，第一个参数是一个数组，这里指的是要进行排序的数组，特别注意到的一点是这里类型为`void`
+
+`void *`为通用指针类型，任何类型的指针都可以转换为void *类，并且在转换回原来类型的时候不会**丢失信息**，所以，这里也就是为什么要选择这个类型的原因
+
+快排的核心代码没有多大改变，唯一有改动的是比较的部分：
+
+``` C
+if ((*comp)(v[i], v[left]) < 0){
+    swap(v, ++last, i);
+}
+```
+原先的代码为前一项与后一项比较，而这里由于使用了比较的函数strcmp和numcmp，所以相应的也要进行改变
+
+### 补充内容
+这里补充一些有关这段代码的一些东西：
+
+主要的补充地方依旧在快排这里：
+
+``` C
+qsort((void **) lineptr,
+        0,
+        nlines - 1,
+        (int (*)(void*, void*))(numeric ? numcmp : strcmp));
+```
+首先是第一个部分，第一个参数的写法
+
+我们可以看到，这里使用了`(void **)`
+
+这里是什么意思呢？这里指的是指向指针的指针
+
+lineptr是一个char数组，里面的每一个元素都对应一个字符串
+
+而在前文初始化的时候是这样的：
+
+``` C
+char *lineptr[MAXLINE];
+```
+
+这意味了什么，意味着lineptr的实际类型为`char **`
