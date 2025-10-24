@@ -139,3 +139,124 @@ int main() {
 而在后面我们声明了一个`struct rect`类型的变量`screen`
 
 在声明之后，便可以使用`screen.ppx.px`来调用`point`的成员了
+
+### 需要提到的一些点
+这里需要注意的一点是
+
+> 此处struct rect有少许调整，里面声明的两个point的成员变为pt1和pt2
+
+假设我们新建了两个`struct rect`的成员，分别为`test1`和`test2`
+
+那么每个成员便都可以使用`struct point pt1`以及`struct point pt2`
+
+但是需要注意的一点是，这里的两个成员对应的`point` 成员是不相同的
+
+假设我们新建一个方法`makepoint`
+
+这个方法的具体代码如下
+
+``` C
+struct point makepoint(int x, int y){
+    struct point temp;
+    temp.x = x;
+    temp.y = y;
+    return temp;
+}
+```
+
+而此时如果我们使用
+
+``` C
+test1.pt1 = makepoint(0,1);
+test2.pt1 = makepoint(2,1);
+```
+那么这两个成员的pt1是不同的
+
+第一个test1的pt1为`0,1`，而第二个test2的pt1为`2,1`
+
+## 结构与函数
+接下来将讲讲结构与函数这一节的内容
+
+首先我们需要明白对结构而言，什么操作是合法的
+
+对于结构的合法操作只有这几种：
+
+1. 作为一个整体复制和赋值
+2. 通过&运算符取地址
+3. 访问其成员
+
+而在这些之中，复制和赋值包括向函数传递参数，或者函数返回值
+
+特别提醒的一点是结构之间**不可以进行比较**
+
+接下来我们来编写三个函数，这三个函数都与点和矩形的操作有关
+
+首先第一个函数为`makepoint`
+
+这个函数的作用是传入两个坐标的x和y，之后返回一个point类型的结构
+
+``` C
+struct point makepoint(int x,int y){
+    struct point temp;
+
+    temp.x = x;
+    temp.y = y;
+
+    return = temp;
+}
+```
+
+这里我们可以举一个例子来说明这个函数是怎么用的
+
+我们的基本框架如下：
+``` C
+/* 
+创建结构point，其中有两个普通变量，分别为x，y，和一个成员middle
+其中，middle代表两个点的中点
+*/
+struct point {
+    int x;
+    int y;
+}middle;
+
+
+/* 
+创建结构rect，并在其中定义了两个point类型的成员：pt1和pt2
+同时还有一个成员screen
+*/
+struct rect {
+    struct point pt1;
+    struct point pt2;
+}screen;
+
+struct point makepoint(int x, int y) {
+    struct point temp;
+    temp.x = x;
+    temp.y = y;
+    return temp;
+}
+```
+
+接下来我们要创建两个点：
+
+``` C
+screen.pt1 = makepoint(0,0);
+screen.pt2 = makepoint(100,100);
+```
+可以看到，我们使用了`makepoint()`函数成功创建了两个点，一个为`0,0`另一个为`100,100`
+
+接下来我们想要获取这两个点的中点，我们便可以这样做：
+
+``` C
+middle = makepoint((screen.pt1.x + screen.pt2.x)/2 + (screen.pt1.y+screen.pt2.y)/2);
+```
+
+接下来来说明一下：
+
+首先，结构point里面声明了两个普通变量，分别为x和y
+
+而结构的成员是可以使用这个结构的普通变量的
+
+在rect里面我们定义了两个point结构的成员，这两个成员对于结构rect来说，跟point里面的x和y是一致的
+
+这也就是为什么后面定义的rect的成员可以使用`screen.pt1.x`来使用结构point中x的原因
