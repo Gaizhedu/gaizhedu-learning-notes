@@ -243,7 +243,7 @@ List<String> list = Collections.synchronizedList(new ArrayList<>());
 
 使用集成工具类中的`synchronizedList`方法，便可以解决多线程的问题
 
-> 当然这里也可以直接使用CopyOnWriteArrayList，不过这个是属于Set接口的内容，这里讲的是ArrayList
+> 当然这里也可以直接使用CopyOnWriteArrayList
 
 #### 使用方法
 这里将接下ArrayList的一些具体使用方法
@@ -438,7 +438,7 @@ private void fastRemove(Object[] es, int i) {
 **size()**
 接下来是`size()`
 
-size()的作用是返回底层数组的长度
+size()的作用是返回底层数组所拥有元素的数量
 
 ``` Java
 ArrayList<String> list = new ArrayList<>();
