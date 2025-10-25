@@ -245,3 +245,207 @@ List<String> list = Collections.synchronizedList(new ArrayList<>());
 
 > 当然这里也可以直接使用CopyOnWriteArrayList，不过这个是属于Set接口的内容，这里讲的是ArrayList
 
+#### 使用方法
+这里将接下ArrayList的一些具体使用方法
+
+> 由于这些方法基本上是通用的，所以在这里讲过一次后，接下来的实现类便不会再讲
+ArrayList包括了List接口的所有方法
+
+**add()**
+`add()`方法用于往数组末尾添加元素
+
+``` Java
+ArrayList<String> list = new ArrayList<>();
+list.add("往末尾添加第一个新元素");
+System.out.printf("当前列表长度为：%d，添加的元素为：%s\n",list.size(),list.getLast());
+list.add("往末尾添加第二个新元素");
+System.out.printf("当前列表长度为：%d，添加的元素为：%s\n",list.size(),list.getLast());
+
+// 输出：
+// 当前列表长度为：1，添加的元素为：往末尾添加第一个新元素
+// 当前列表长度为：2，添加的元素为：往末尾添加第二个新元素
+```
+
+如果在添加元素的时候发现数组不够用了，那么会先扩容在添加
+
+此外，`add()`还可以指定插入的位置
+
+假设我们想要插入的位置为第二项，那么只需要这样填写参数即可
+
+``` Java
+list.add(1,"插入第二项")
+```
+第一个参数为插入的位置，由于数组计数从零开始，所以这里得填写1来代表第二项
+
+而第二个参数代表插入的内容
+
+**get()**
+`get()`为返回指定索引位置的元素
+
+需要注意的一点是，这里返回的内容其实为底层数组`elementData[index]`
+
+##### 什么是elementData
+这里可能就有人要问了，诶，那什么是elementData呢？
+
+在ArrayList.java里面是这样写的：
+
+``` Java
+private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
+
+...
+
+public ArrayList() {
+   this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
+}
+```
+可以基本理解，这个`elementData`便是ArrayList底层的数组，平时丢进去的元素都会存放在这里面
+
+---
+接下来回到正题，get()通过访问底层数组`elementData`来获取到指定位置的元素
+
+假设此时索引的范围超过底层数组（也就是越界），或者数组的这个位置没有任何元素，那么会抛出这个错误：
+
+``` Java
+ArrayList<String> list = new ArrayList<>();
+list.add("往末尾添加第一个新元素");
+System.out.printf("当前列表长度为：%d，添加的元素为：%s\n",list.size(),list.getLast());
+// 数组只有一个元素，索引第二个元素（get(1)）会导致报错
+System.out.printf("%s",list.get(1));
+
+// 输出：
+// 当前列表长度为：1，添加的元素为：往末尾添加第一个新元素
+// Exception in thread "main" java.lang.IndexOutOfBoundsException
+```
+
+---
+**set()**
+接下来是`set()`
+
+这个方法的作用是替换指定位置的元素为新的元素
+
+这个方法具有两个参数：
+
+第一个参数为替换的位置，而第二个参数为想要替换的新元素
+
+与上文的`get()`同理，这里本质也是对底层的数组`elementData`进行修改
+
+此处也需要先检查是否越界，如果越界一样会报错
+
+``` Java
+ArrayList<String> list = new ArrayList<>();
+list.add("往末尾添加第一个新元素");
+list.add("往末尾添加第二个新元素");
+System.out.printf("未替换的元素为：%s\n",list.get(1));
+list.set(1,"新元素");
+System.out.printf("替换的元素为：%s\n", list.get(1));
+
+// 输出：
+// 未替换的元素为：往末尾添加第二个新元素
+// 替换的元素为：新元素
+```
+
+此处为什么不写成这样呢？
+``` Java
+ArrayList<String> list = new ArrayList<>();
+list.add("往末尾添加第一个新元素");
+list.add("往末尾添加第二个新元素");
+System.out.printf("未替换的元素为：%s\n",list.get(1));
+System.out.printf("替换的元素为：%s\n", list.set(1,"新元素"););
+```
+
+这是由于在`ArrayList.java`中，`set()`的实现代码为：
+``` Java
+public E set(int index, E element) {
+   Objects.checkIndex(index, size);
+   E oldValue = elementData(index);
+   elementData[index] = element;
+   return oldValue;
+}
+```
+可以看到，这里现将变量`oldValue`赋值为旧的值`elementData(index)`
+
+而后才替换为新的值`elementData[index] = element;`
+
+而返回的值为`oldValue`，这意味着返回的结果为替换前的值
+
+**remove()**
+``` Java
+ArrayList<String> list = new ArrayList<>();
+list.add("往末尾添加第一个新元素");
+System.out.printf("当前列表长度为：%d，添加的元素为：%s\n",list.size(),list.getLast());
+System.out.printf("%s",list.remove(1));
+
+// 输出：
+// 当前列表长度为：1，添加的元素为：往末尾添加第一个新元素
+// Exception in thread "main" java.lang.IndexOutOfBoundsException
+```
+如果当前位置有元素，那么会返回这个删除的元素：
+
+``` Java
+ArrayList<String> list = new ArrayList<>();
+list.add("往末尾添加第一个新元素");
+list.add("往末尾添加第二个新元素");
+System.out.printf("删除的元素为：%s\n",list.remove(1));
+
+// 输出：
+// 删除的元素为：往末尾添加第二个新元素
+```
+
+诶，在之前也有提到一个点：
+> 假设需要往这个数组中间插入或者删除元素，那么其时间复杂度为：O(n)
+> 
+> 这是因为每次从其中删除或者添加元素的时候需要将这个元素后面的元素移动一个单位
+
+这里的意思是，在删除一个中间元素后会将后面的所有元素向前移动一个单位，说白了就是将后面的元素复制一遍
+
+从底层代码我们也可以看到这一点：
+``` Java
+public E remove(int index) {
+   Objects.checkIndex(index, size);
+   final Object[] es = elementData;
+
+   @SuppressWarnings("unchecked") E oldValue = (E) es[index];
+   fastRemove(es, index);
+
+   return oldValue;
+}
+
+private void fastRemove(Object[] es, int i) {
+   modCount++;
+   final int newSize;
+   if ((newSize = size - 1) > i)
+      System.arraycopy(es, i + 1, es, i, newSize - i);
+   es[size = newSize] = null;
+}
+```
+
+通过观察这段代码，我们也可以发现一个很有意思的点
+
+`remove()`移除指定位置的底层实现，其实是**覆盖**，也就是先将这个元素后面的所有元素移动前一位，而后将原本的最后一位设定为null
+
+为什么要设定为null呢？这里其实在帮助GC回收
+
+举个具体例子
+
+假设我们有个数组为100位
+
+我想要删除第50位，那么底层的实现是这样的：
+
+先复制51~100位的元素到50~99位，之后设定100位为`null`
+
+之后返回替换前的50位
+
+**size()**
+接下来是`size()`
+
+size()的作用是返回底层数组的长度
+
+``` Java
+ArrayList<String> list = new ArrayList<>();
+list.add("往末尾添加第一个新元素");
+list.add("往末尾添加第二个新元素");
+System.out.printf("数组长度为：%s",list.size());
+
+// 输出：
+// 数组长度为：2
+```
