@@ -195,3 +195,53 @@ System.out.println(list.get(0));
 
 #### 特点
 那么有什么特点呢？首先第一个就是ArrayList是一个动态数组，也就是说，其可以自动的扩容
+
+假设我们一开始的长度为10，将这个10个大小全部用完后，这个数组会自动扩容，默认扩容大小为原大小的1.5倍
+
+为什么是1.5倍呢？如果倍率太小，那么扩容的空间太小，扩容的次数便会大大增加，这意味着会频繁的复制元素
+
+但是复制元素是耗时的，所以倍率太小会导致浪费一些时间
+
+既然这样，那为什么不要选择大一点的倍率呢？
+
+这是因为如果倍率太大，可能会导致占用过多的内存
+
+权衡之下，选择1.5倍是最好的选择
+
+---
+ArrayList还有一些特性
+
+作为一种动态数组，ArrayList支持存放相同元素
+
+ArrayList可以存放`null`：
+
+``` Java
+ArrayList<String> list = new ArrayList<>();
+list.add(null);
+System.out.println(list.get(0));
+
+// 输出：
+// null
+```
+ArrayList具有有序性，意味着元素的插入顺序和访问顺序是一致的
+
+在访问ArrayList的元素的时候，通过索引`get(int index)`可以很快地找到元素
+
+其时间复杂度为：**O(1)**
+
+假设需要往这个数组中间插入或者删除元素，那么其时间复杂度为：O(n)
+
+这是因为每次从其中删除或者添加元素的时候需要将这个元素后面的元素移动一个单位
+
+此外，由于ArrayList的所有方法都是没有同步锁的，这就导致了多线程操作的时候可能会出现并发的问题
+
+如果需要线程安全，那么可以使用：
+
+``` Java
+List<String> list = Collections.synchronizedList(new ArrayList<>());
+```
+
+使用集成工具类中的`synchronizedList`方法，便可以解决多线程的问题
+
+> 当然这里也可以直接使用CopyOnWriteArrayList，不过这个是属于Set接口的内容，这里讲的是ArrayList
+
