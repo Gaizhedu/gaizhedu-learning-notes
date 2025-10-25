@@ -120,5 +120,78 @@ System.out.println(newObject.getObjectName());
 ```
 这里便可以不用手动强制类型转换，大大减少了问题的出现
 
+接下来是后面的创建内容，首先是尖括号里面的内容
+
+第一个部分是ArrayList后面跟着的尖括号`<>`，这个尖括号主要是起到泛型的作用，在尖括号里面填入指定的类型可以起到限定此类才可以传入的效果
+
+不过由于版本更替，如果你在类型实参中已经有填写，那么其实是没必要在后面的尖括号里面填写的
+
+``` Java
+// 指定类型为String
+ArrayList<String> list = new ArrayList<String>();
+list.add("Hello");
+System.out.println(list.get(0));
+
+// 输出：
+// Hello
+```
+
+这里其实把泛型的内容省略的，在Java 7+后，编译器会自动匹配
+``` Java
+// 这里泛型没有填写，因为编译器会自己自动匹配
+ArrayList<String> list = new ArrayList<>();
+list.add("Hello");
+System.out.println(list.get(0));
+```
+
+###### 特别注意
+如果你需要指定泛型为整数类，或者是浮点数类
+
+必须要使用其包装类，而不能使用基本数据类型：
+
+``` Java
+ArrayList<int> list = new ArrayList<int>();// 错误，不应该使用基本数据类型
+ArrayList<int> list = new ArrayList<Integer>();// 正确，使用了整数类型的包装类
+```
+
+---
+接下来讲讲圆括号内的内容
+
+圆括号主要是调用构造方法，你可以在这里面指定默认的大小，或者是复制一个集合到这里面去
+
+如果你在圆括号里面填写一个数字，便可以直接指定这个集合的默认大小
+
+``` Java
+ArrayList<String> list = new ArrayList<>(10);
+```
+
+在上面的例子中，我们将这个集合的默认大小指定为10个元素
+
+如果你选择不填写（也就是默认），那么这个集合的长度将会设定为10个的大小
+
+接下来是另一个，复制集合
+
+假设我们之前已经创建过一个集合，并且往这个集合里面填写了元素
+
+``` Java
+ArrayList<String> source = new ArrayList<>();
+source.add("New Collection");
+```
+
+那么我们便可以在新的集合的圆括号里面填写这个集合的名字（例如这里是source）
+
+这样便可以把旧集合的元素复制到新的集合里面
+
+``` Java
+ArrayList<String> source = new ArrayList<>();
+source.add("New Collection");
+
+ArrayList<String> list = new ArrayList<>(source);
+System.out.println(list.get(0));
+
+// 输出：
+// New Collection
+```
+
 #### 特点
-那么有什么特点呢？首先第一个就是
+那么有什么特点呢？首先第一个就是ArrayList是一个动态数组，也就是说，其可以自动的扩容
