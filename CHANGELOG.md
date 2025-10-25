@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-10-25]
+- 新增：有关ArrayList的相关内容
+  * 介绍了有关ArrayList的方法
+
 ## [2025-10-24]
 - 新增：结构与函数的相关内容
 - 新增：Java中Collection接口的内容
