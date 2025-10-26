@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-10-26]
+- 新增：有关LinkedList的相关内容
+  * 介绍了LinkedList的相关方法
+
 ## [2025-10-25]
 - 新增：有关ArrayList的相关内容
   * 介绍了有关ArrayList的方法
