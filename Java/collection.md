@@ -1,7 +1,7 @@
 
 [TODO]
 1. List接口
-   - [ ] ArrayList
+   - [x] ArrayList
    - [ ] LinkedList
    - [ ] （拓展）Vector
    - [ ] （拓展）Stack
@@ -431,7 +431,7 @@ private void fastRemove(Object[] es, int i) {
 
 我想要删除第50位，那么底层的实现是这样的：
 
-先复制51~100位的元素到50~99位，之后设定100位为`null`
+先复制51\~100位的元素到50\~99位，之后设定100位为`null`
 
 之后返回替换前的50位
 
@@ -448,4 +448,343 @@ System.out.printf("数组长度为：%s",list.size());
 
 // 输出：
 // 数组长度为：2
+```
+
+---
+### LinkedList
+接下来讲讲LinkedList
+
+LinkedList是一个双向链表，那么什么是双向链表呢
+
+**双向列表**
+简单来讲，双向链表是一种线性数据结构，特点是链表中的每个元素都包含**两个指针**
+
+这两个指针分别指着什么呢？一个指针指向前一个节点，而第二个指针指向后一个节点
+
+这样做的好处是各个元素之间紧密相连
+
+而这意味着什么？以往的单向链表只有一个后驱指针，意味着如果想要查询上一个元素，**必须要把整个链表遍历一遍**，这大大影响了运行效率
+
+双向链表由于带两个指针，所以在查询上一个元素时会快很多
+
+
+#### 特性 / 优点
+接下来讲讲有关LinkedList的一些特性
+
+在上文也提及到了其作为双向列表，所以其可以快速查询上一个元素的特性有什么作用呢？
+
+由于这个特点，LinkedList在插入元素的效率是**很快**的
+
+我们可以举个例子：
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+Instant arrayStartTime = Instant.now();
+for(int i = 0;i < 1000000; ++i){
+   arrayList.add("Hello");
+}
+Instant arrayEndTime = Instant.now();
+System.out.printf("ArrayList插入元素时间为：%s\n",Duration.between(arrayStartTime,arrayEndTime).toMillis());
+```
+在上面这个例子中，我们使用了计时器计时插入1000000个元素的时间
+
+ArrayList花费的时间大概为11毫秒左右
+
+那么LinkedList呢？
+
+``` Java
+LinkedList<String> linkedList = new LinkedList<>();
+Instant linkedStartTime = Instant.now();
+for(int i = 0;i < 100000; ++i){
+   linkedList.add("Hello");
+}
+Instant linkedEndTime = Instant.now();
+System.out.printf("LinkedList插入元素时间为：%s\n",Duration.between(linkedStartTime,linkedEndTime).toMillis());
+```
+这里同样计时了1000000个元素插入所需要的时间
+
+不同的是，这里使用的是LinkedList，花费的时间大概为**4毫秒**
+
+在插入元素方面，LinkedList的效率要**远快于**ArrayList！
+
+#### 具体用法
+在讲完LinkedList的一些特点之后，便可以开始介绍其具体的用法了
+
+由于LinkedList本质还是属于`Link接口`，所以很多方法还是通用的（比如说`add()`、`get()`）
+
+接下来主要介绍那些特有的方法
+
+**offer()**
+offer()是一个用于插入元素的方法，具体实现效果跟add()差不多
+
+举个例子：
+``` Java
+LinkedList<String> linkedList = new LinkedList<>();
+LinkedList<String> linkedList1 = new LinkedList<>();
+linkedList.add("Hello,this is add()");
+linkedList1.offer("Hello,this is offer()");
+System.out.println(linkedList.getFirst());
+System.out.println(linkedList1.getFirst());
+
+// 输出：
+// Hello,this is add()
+// Hello,this is offer()
+```
+可以看到，这两个方法都可以实现插入的效果
+
+offer()拥有与add()一样的两个方法，首位插入和末尾插入：`offerFirst()`、`offerLast()`
+
+##### add()与offer()
+诶，这里可能就有人要说了，那这样算不算一种设计冗余呢？
+
+其实不然
+
+在LinkedList中，offer()方法实现的是Deque接口 / Queue接口
+
+而add()方法实现了List接口，两者虽然效果上是相等的，但是并不属于同一个接口
+
+那么还有什么区别呢？
+
+首先，add方法一般是作为列表的插入操作，而offer一般用于队列
+
+假设我们现在想要插入一个满空间的列表，使用add方法会导致抛出报错`IllegalStateException`
+
+但是，offer方法不会抛出报错，只会返回`false`
+
+> 不过由于LinkedList是无界的，所以不存在空间不够的情况~~（当然内存不够依旧会报错）~~
+
+说的直白一点就是：**add()是不成功就报错，而offer()是不成功就返回false**
+
+---
+**poll()**
+接下来讲的方法是poll()，与前文的offer()一样，这个方法归属于Deque接口 / Queue接口
+
+所以，在List接口中等价的方法为：`remove()`
+
+以下是其基本的使用方法
+
+``` Java
+LinkedList<String> linkedList = new LinkedList<>();
+for (int i = 0; i <100; ++i){
+   linkedList.add("Hello,this is poll() _"+(i+1));
+}
+for (int i = 0; i < 3 ;++i){
+   System.out.println(linkedList.poll());
+}
+
+// 输出：
+// Hello,this is poll() _1
+// Hello,this is poll() _2
+// Hello,this is poll() _3
+```
+poll()的返回值为其删除的元素，这一点与remove()是一致的
+
+同remove()一致，poll()也有用于移除首尾项的方法：`pollFirst()`、以及`pollLast()`
+
+##### poll()与remove()
+接下来讲讲这两者的区别
+
+由于这两个功能上基本一致，所以差异的地方只有一些细节的点
+
+假设现在LinkedList是一个空的链表，那么此时使用remove会抛出一个叫做`NoSuchElementException`的报错
+
+``` Java
+LinkedList<String> linkedList = new LinkedList<>();
+System.out.println("文件正常编译");
+System.out.println(linkedList.remove());
+
+// 输出：
+// 文件正常编译
+// Exception in thread "main" java.util.NoSuchElementException
+```
+
+> 在IntelliJ IDEA中，如果使用该操作，则会有一个警告：对空集合 'linkedList' 进行的更新操作无效
+
+但如果选择poll()来删除元素，那么就大不相同了：
+
+``` Java
+LinkedList<String> linkedList = new LinkedList<>();
+System.out.println("文件正常编译");
+System.out.println(linkedList.poll());
+
+// 输出：
+// 文件正常编译
+// null
+```
+可以看到，这里并没有报错，而是选择了返回一个`null`
+
+从`LinkedList.java`观察两者的源代码可以发现这一点：
+
+``` Java
+// 这里是poll()的实现代码
+// 可以发现如果为空则返回null
+public E poll() {
+   final Node<E> f = first;
+   return (f == null) ? null : unlinkFirst(f);
+}
+```
+
+接下来是`remove()`
+
+由于remove()的实现方法稍微有点抽象，这里把两个方法都展示出来
+``` Java
+public E remove() {
+   return removeFirst();
+}
+
+public E removeFirst() {
+   final Node<E> f = first;
+   if (f == null)
+      throw new NoSuchElementException();
+   return unlinkFirst(f);
+}
+```
+对比两者可以发现，两者的逻辑是一致的（一个用三元表达式一个用if语句），只是一个选择返回null，而另一个选择抛出异常`NoSuchElementException`
+
+---
+**peek()**
+接下来介绍的方法是peek()
+
+这个方法的作用是返回头部元素的值：
+``` Java
+LinkedList<String> list = new LinkedList<>();
+list.offer("Hello! Nice to meet you");
+list.offer("Hello! How are you?");
+System.out.println(list.peek());
+
+// 输出：
+// Hello! Nice to meet you
+```
+可以看到，这个方法成功返回了我们的第一项元素
+
+这里可能有人就会想到一个方法了：`get()`
+
+但与之前的两个方法不同的是，这个方法并不与`get()`方法类似
+
+`get()`可以返回指定的索引，而`peek()`却只能固定返回一个位置的索引
+
+---
+接下来是`peek()`的两个额外的方法，分别是返回头部元素的`peekFirst()`、和返回尾部元素的`peekLast()`
+
+通过一个简单的例子来说明这两个方法的实际用途：
+``` Java
+LinkedList<String> list = new LinkedList<>();
+for(int i = 0 ;i < 100 ; ++i){
+   list.offer("Hello!This is Number "+ (i+1));
+}
+System.out.printf("第一个元素为：%s\n",list.peekFirst());
+System.out.printf("最后一个元素为：%s",list.peekLast());
+
+// 输出：
+// 第一个元素为：Hello!This is Number 1
+// 最后一个元素为：Hello!This is Number 100
+```
+
+##### 一些补充的话
+由于`LinkedList`实现了Deque接口以及Queue接口这些ArrayList没有的接口，所以此处会补充这部分的内容
+
+#### 补充用法
+接下来将补充一些Queue和Deque接口有的方法：
+
+一些基本的（如getFirst()，getLast()）就不再说明
+
+**push()**
+`push()`方法来源于Deque接口
+
+这个方法等价于`addFirst()`
+
+``` Java
+LinkedList<String> list = new LinkedList<>();
+list.push("使用push方法添加元素\n");
+list.addFirst("使用addFirst方法添加元素\n");
+System.out.printf(list.getFirst());
+System.out.printf(list.getLast());
+
+// 输出：
+// 使用addFirst方法添加元素
+// 使用push方法添加元素
+```
+从输出结果来看，这两个方法的结果是完全一致的，那么，这两个方法有没有什么不同呢？
+
+其实是几乎没有的，我们不妨看看这两个方法的源代码：
+
+``` Java
+public void addFirst(E e) {
+   linkFirst(e);
+}
+
+public void push(E e) {
+   addFirst(e);
+}
+```
+可以看到，push方法的实现其实也就是调用了addFirst方法
+
+但一般而言，如果将LinkedList当做栈使用，则会使用push（代表压入栈顶）
+
+这样可以使得代码更加明确
+
+**removeFirstOccurrence**
+这个方法有另外一个版本：`removeLastOccurrence`
+
+不过核心功能大同小异，主要是索引方向不同
+
+这个方法的作用为从首项开始搜寻是否有存在目标项，如果存在，则移除并返回`true`
+
+接下来是具体的例子
+
+``` Java
+LinkedList<String> list = new LinkedList<>();
+for (int i = 0 ;i <100 ; ++ i){
+   list.offer("Hello" + i);
+}
+System.out.printf(String.valueOf(list.removeFirstOccurrence("Hello2")));
+
+// 输出：
+// true
+```
+我们不妨看看他的源代码是如何实现的：
+``` Java
+public boolean removeFirstOccurrence(Object o) {
+   return remove(o);
+}
+
+public boolean remove(Object o) {
+if (o == null) {
+   for (Node<E> x = first; x != null; x = x.next) {
+         if (x.item == null) {
+            unlink(x);
+            return true;
+         }
+   }
+} else {
+   for (Node<E> x = first; x != null; x = x.next) {
+         if (o.equals(x.item)) {
+            unlink(x);
+            return true;
+         }
+   }
+}
+return false;
+}
+```
+可以看到，这里`removeFirstOccurrence()`其实也就是调用了`remove()`这个方法
+
+**descendingIterator**
+接下来将说明一下这个方法
+
+这个方法的作用是将当前数组反向
+
+在反向的时候需要新创建一个迭代器对象才可以起到效果：
+
+``` Java
+LinkedList<String> list = new LinkedList<>();
+for (int i = 0 ;i <100 ; ++ i){
+   list.offer("Hello" + i);
+}
+System.out.printf("未使用降序迭代器的首项：%s\n",list.peek());
+Iterator<String>lst =  list.descendingIterator();
+System.out.printf("使用降序迭代器后的首项：%s\n",lst.next());
+
+// 输出：
+// 未使用降序迭代器的首项：Hello0
+// 使用降序迭代器后的首项：Hello99
 ```
