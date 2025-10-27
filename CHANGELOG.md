@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-10-27]
+- 新增：HashSet的相关内容
+  * 介绍了有关HashSet的特点
+
 ## [2025-10-26]
 - 新增：有关LinkedList的相关内容
   * 介绍了LinkedList的相关方法
