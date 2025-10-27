@@ -2,6 +2,20 @@
 [TODO]
 1. List接口
    - [x] ArrayList
+     - [ ] TODO clear()方法
+     - [ ] TODO isEmply()方法
+     - [ ] TODO contains()方法
+     - [ ] TODO retainAll()方法
+     - [ ] TODO toArray()方法
+     - [ ] TODO spliterator()方法
+     - [ ] TODO forEach()方法
+     - [ ] TODO removeIf()方法
+     - [ ] TODO stream()方法
+     - [ ] TODO parallelStream()方法
+     - [ ] TODO equals()方法
+     - [ ] TODO hashCode()方法
+     - [ ] TODO clone()方法
+     - [ ] TODO toString()方法
    - [ ] LinkedList
    - [ ] （拓展）Vector
    - [ ] （拓展）Stack
@@ -787,4 +801,103 @@ System.out.printf("使用降序迭代器后的首项：%s\n",lst.next());
 // 输出：
 // 未使用降序迭代器的首项：Hello0
 // 使用降序迭代器后的首项：Hello99
+```
+
+## Set接口
+Set接口是另一个常见的接口，主要分为以下几个实现类：
+``` Java
+HashSet：基于哈希表的实现类，可以存储不重复元素，查询效率高（时间复杂度O(1)）
+TreeSet：基于红黑树的实现类，可以存储不重复元素，可以用于排序
+LinkedHashSet：基于哈希表和链表的实现类，存储不重复元素并且保持插入顺序（链表特性）
+ConcurrentSkipListSet：基于跳表，支持并发操作（线程安全），同时可以保持元素排序
+CopyOnWriteArraySet：基于CopyOnWriteArrayList，由于边写边复制所以线程安全，可以存储不重复元素
+```
+那么接下来将依次介绍这些实现类
+
+### HashSet
+首先第一个是HashSet
+
+HashSet是一个经典的实现类，其底层为HashMap，这个实现类支持哈希表，由于这个原因，HashSet查找元素时平均时间复杂度为`O(1)`
+
+#### 特性
+接下来讲讲HashSet的一些特性：
+
+首先第一个便是Set接口的通性：**不允许存放相同元素**
+
+第二个特性是无序性，简单来说就是传入的顺序与输出的顺序是不同的
+
+举个简单例子：
+``` Java
+HashSet<String> list = new HashSet<>();
+for(int i = 0; i < 5; ++i){
+   list.add("Hello" + i);
+}
+for(String num : list){
+   System.out.println(num);
+}
+
+// 输出：
+// Hello0
+// Hello1
+// Hello4
+// Hello2
+// Hello3
+```
+通过这个例子可以充分体现出其无序性，这一点与链表相分开
+
+此外，HashSet是允许`null`元素的
+
+``` Java
+HashSet<String> list = new HashSet<>();
+list.add(null);
+for(String num : list){
+   System.out.println(num);
+}
+
+// 输出：
+// null
+```
+一个需要注意的点是，HashSet并不是一个线程安全的实现类，如果在多线程的情况下，必须要做到外部同步
+
+#### 具体用法
+在介绍完这些特性之后，便要来介绍HashSet的具体用法了，与前文的List接口一致，此处介绍的方法如果在下面的实现类中再次出现将不会再次介绍
+
+但由于HashSet的接口Set接口完全继承与Collection接口，而Collection接口的方法我们在前文ArrayList的部分已经讲过了，所以这里便不再复述
+
+也就是说，HashSet并没有**任何独立**的公共方法
+
+#### HashSet存在的意义
+既然没有独立的方法，那么HashSet存在的意义是什么呢？
+
+在之前我们也提到过了，HashSet存储不重复的元素，这也就导致了如果有相同的元素被相继加入到数组中，那么HashSet只会存储前一个，而后一个并不会存储
+
+``` Java
+HashSet<String> list = new HashSet<>();
+list.add("aaa");
+list.add("bbb");
+list.add("aaa");
+for(String num : list){
+   System.out.println(num);
+}
+// 输出：
+// aaa
+// bbb
+```
+> 事实上是，如果你在IntelliJ IDEA里面add()两个相同的元素，那么会抛出一个警告：重复的 Set 元素
+
+接下来是其独特的特性：**极快的查询速度**
+
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+for(int i = 0;i < 99999999; ++i){
+   arrayList.add("Hello" + i);
+}
+Instant arrayStartTime = Instant.now();
+System.out.println(arrayList.contains("Hello"+9999999));
+Instant arrayEndTime = Instant.now();
+System.out.printf("ArrayList查询指定元素时间为：%s\n", Duration.between(arrayStartTime,arrayEndTime).toNanos());
+
+// 输出：
+// true
+// ArrayList查询指定元素时间为：65384600
 ```
