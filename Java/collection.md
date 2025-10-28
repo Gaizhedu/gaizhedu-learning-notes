@@ -901,3 +901,122 @@ System.out.printf("ArrayList查询指定元素时间为：%s\n", Duration.betwee
 // true
 // ArrayList查询指定元素时间为：65384600
 ```
+
+那么让我们看看HashSet咋以相同代码下的查询速度：
+``` Java
+for (int i = 0; i < 99999999; i++) {
+   hashList.add("hello"+ i);
+}
+Instant hashStartTime = Instant.now();
+System.out.println(hashList.contains("hello"+9999999));
+Instant hashEndTime = Instant.now();
+System.out.printf("HashSet查询指定元素的时间为：%s\n",Duration.between(hashStartTime,hashEndTime).toNanos());
+
+// 输出：
+// true
+// HashSet查询指定元素的时间为：0
+```
+
+可以看到，这里HashSet查找的速度远远大于ArrayList，这也可以突出其特点
+
+#### 补充点：快速失败（fail-fast）
+快速失败是一个很有意思的机制，部分实现类拥有这个特性
+
+会出现这个特性的原因是因为迭代器的问题
+
+如果你在使用迭代器的时候同时用非迭代器方法修改这个集合（比如说add()），那么此时迭代器会瞬间检测到这一修改并且抛出错误：
+
+``` Java
+HashSet<String> hashList = new HashSet<>();
+hashList.add("hello！");
+Iterator<String> iterator = hashList.iterator();
+for (; iterator.hasNext(); iterator.next() ) {
+   hashList.add("hello");
+}
+
+// 输出：
+// Exception in thread "main" java.util.ConcurrentModificationException
+```
+
+可以看到，这里抛出了报错`ConcurrentModificationException`
+
+那么为什么会这样呢？
+
+首先我们需要知道一个有意思的点：`modCount`
+
+这个是什么呢？简单来说就是记录你对这个集合操作的次数
+
+我们直接看源码可以发现：
+``` Java
+// HashMap.java
+// putVal()方法
+...//省略
+++modCount;
+if (++size > threshold)
+   resize();
+afterNodeInsertion(evict);
+return null;
+```
+
+也就是说，如果你对这个集合进行了一些操作，那么这个计数器都会记录操作的次数
+
+那这跟快速失败有什么关联呢
+
+在生成一个迭代器的时候，迭代器会讲modCount的值复制一遍，存储到：`expectedModCount`中
+
+使用迭代器的方法`next()`或者`remove()`的时候，便会将这个值与`modCount`进行对比，如果两者相等则说明没有进行任何修改操作
+
+则正常进行
+
+但如果修改（例如上面提到的例子一样），则会直接抛出报错：ConcurrentModificationException
+
+特别补充的一点是，modCount这个属性是`private`的，所以不用担心会被修改
+
+另外，如果需要删除元素可以选择迭代器自带的删除方法：`remove()`
+
+---
+#### 补充点：底层实现
+接下来聊聊HashSet的底层实现
+
+首先第一个点，我们可以思考一下HashSet是如何实现存储不重复元素的
+
+> 由于源代码putVal巨抽象，这里就简单讲讲
+
+首先从创建讲起，假设你现在创建了一个HashSet集合
+
+那么在底层，会顺带创建一个HashMap数组用于存储，一般而言，这个数组桶个数为16个（这个值是默认值，可以修改的）
+
+假设你往这个HashSet里面添加一个值，那么这个值会先使用`hashcode()`得到一个值，在经过一些系列处理后得到桶索引，这个索引将告诉我们添加的这个值应该被放到哪个桶里面
+
+> 至于怎么计算出这个桶索引的，就太复杂了，涉及到一系列杂七杂八乱七八糟的操作，这里就不补充了
+
+那么至此，这个值就得到了两个有意思的东西，分别是它的**哈希值**（通过hashcode()）获得，还有是它的**桶索引**（通过获取到哈希值后经过一系列操作得到）
+
+假设我们需要往里面再添加一个新的值，则会继续这一步操作
+
+此时如果我们试图添加一个与之前添加的值相同的值，那么会发生什么呢？
+
+依旧进行之前的步骤，首先是计算其哈希值，以及其桶索引，在将要把这个值放进去桶的时候，会先将这个元素的哈希值进行比较，如果这个值与桶里面元素的哈希值都不相同，则添加进桶里面
+
+那么如果相等就可以直接丢掉吗？
+
+当然不是！有时候哈希值相同值却不同，所以这个时候还需要`equals()`方法来检测其是否相同
+
+如果相同，则不添加；如果不相同，则添加进桶里面去
+
+#### 补充点：哈希冲突后处理
+接下来将讲一下哈希冲突
+
+在上面的补充点中我们提到一个点：不同元素的哈希值经过计算转换成桶索引后会出现相同的情况
+
+这就是**哈希冲突**，说白了就是：一个桶里面塞了不止一个东西
+
+那么HashSet（根本上讲应该是HashMap）是怎么处理的呢？
+
+首先，假设我们在一个桶里面塞了超过7个元素，那么此时HashSet会直接将桶的数量翻倍（假设为默认的16，那么就变成32个桶了）
+
+由于桶索引的计算与桶的个数是相关的，所以这里会重新分配桶
+
+诶，这里就有人要说了，假设又塞满了呢？
+
+如果此处又出现了一个桶里面塞的元素超过7个，那么会继续翻倍桶的数量
