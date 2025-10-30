@@ -1047,3 +1047,126 @@ return null;
 
 触发链表转红黑树（只有满足条件的桶才转换）
 1. 单个桶的元素数量大于7，并且此时总桶数大于64
+
+### TreeSet
+接下来讲讲TreeSet
+
+TreeSet是一个很有意思的实现类
+
+这个实现类的特点就是会将这个类中的元素自动排序
+
+``` Java
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(random.nextInt(0,20));
+}
+System.out.println(treeSet);
+
+// 输出：
+// [2, 3, 6, 8, 9, 10, 11, 13]
+```
+可以看到，即使将生成的随机数字填入这个数组中，输出的时候依旧会按顺序输出
+
+这也体现了这个类的特点：对输入的元素自动排序
+
+#### 特有方法
+接下来介绍一下TreeSet特有的方法，这些方法主要实现`SortedSet`接口和`NavigableSet`接口
+
+首先讲讲`SortedSet`接口中实现的方法：
+
+**first() & last()**
+这个方法的作用为返回第一个元素（最低）和返回最后一个元素（最高）
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(random.nextInt(0,20));
+}
+int lower = treeSet.first();
+int higher = treeSet.last();
+System.out.printf("该数组为：%s\n",treeSet);
+System.out.printf("该数组最低元素为：%d，最高元素为：%d",lower,higher);
+
+// 输出：
+// 该数组为：[0, 2, 5, 8, 9, 11, 12, 18, 19]
+// 该数组最低元素为：0，最高元素为：19
+```
+可以看到，在分别对该数组使用first()方法和last()方法后，相对应的值变成了其最低项和最高项
+
+[TODO]
+
+**floor() & ceiling()**
+
+
+**headSet()**
+接下来是headSet()方法
+
+这个方法的作用是限制只有小于括号内的元素才可以输出
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(random.nextInt(0,20));
+}
+SortedSet<Integer> headset = treeSet.headSet(10);
+System.out.printf("该数组为：%s\n",treeSet);
+System.out.printf("该数组中小于数的有：%s",headset);
+
+// 输出：
+// 该数组为：[2, 3, 5, 10, 17, 19]
+// 该数组中小于数的有：[2, 3, 5]
+```
+
+**tailSet()**
+既然有小于，那就一定有大于，`tailSet()`便是返回大于括号内参数的数的方法
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(random.nextInt(0,20));
+}
+SortedSet<Integer> headset = treeSet.tailSet(10);
+System.out.printf("该数组为：%s\n",treeSet);
+System.out.printf("该数组中大于数的有：%s",headset);
+
+// 输出：
+// 该数组为：[1, 3, 5, 6, 8, 9, 10, 12, 13, 17]
+// 该数组中大于数的有：[10, 12, 13, 17]
+```
+
+**subSet()**
+既然有查找小于的`headSet()`，也有查找大于的`tailSet()`
+
+自然而然的便有可以返回指定数字范围的方法：`subSet()`
+
+这个方法有两个参数：`subSet(E fromElement, E toElement)`
+
+第一个`fromElement`，代表最低的元素大小，而第二个参数`toElement`，代表了最高的元素大小
+
+需要注意的一点是，这个参数的范围为左闭右开区间
+
+接下来给出实例：
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(random.nextInt(0,20));
+}
+SortedSet<Integer> subSet = treeSet.subSet(10,15);
+System.out.printf("该数组为：%s\n",treeSet);
+System.out.printf("该数组中位于固定范围的数有：%s",subSet);
+
+// 输出：
+// 该数组为：[1, 2, 3, 4, 7, 12, 14, 15, 19]
+// 该数组中位于固定范围的数有：[12, 14]
+```
+
+[TODO]
+
+接下来是`NavigableSet`接口的内容
+
+#### 补充点：定义排序规则
