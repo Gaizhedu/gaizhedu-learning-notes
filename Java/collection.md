@@ -16,11 +16,11 @@
      - [ ] TODO hashCode()方法
      - [ ] TODO clone()方法
      - [ ] TODO toString()方法
-   - [ ] LinkedList
+   - [x] LinkedList
    - [ ] （拓展）Vector
    - [ ] （拓展）Stack
 2. Set接口
-   - [ ] HashSet
+   - [x] HashSet
    - [ ] TreeSet
    - [ ] （拓展）LinkedHashSet
    - [ ] （拓展）ConcurrentSkipListSet
@@ -1094,15 +1094,14 @@ System.out.printf("该数组最低元素为：%d，最高元素为：%d",lower,h
 ```
 可以看到，在分别对该数组使用first()方法和last()方法后，相对应的值变成了其最低项和最高项
 
-[TODO]
-
-**floor() & ceiling()**
-
-
 **headSet()**
 接下来是headSet()方法
 
-这个方法的作用是限制只有小于括号内的元素才可以输出
+这个方法拥有1个可填参数：`headSet(E toElement)`
+
+其中参数`toElement`代表规定的范围
+
+这个方法的作用是限制只有小于括号内的参数（toElement）才可以输出
 
 ``` Java
 Random random = new Random();
@@ -1121,6 +1120,10 @@ System.out.printf("该数组中小于数的有：%s",headset);
 
 **tailSet()**
 既然有小于，那就一定有大于，`tailSet()`便是返回大于括号内参数的数的方法
+
+这个方法的同样拥有一个参数：`tailSet(E fromElement)`
+
+与上文的headSet()一致，这里也是用于限制范围
 
 ``` Java
 Random random = new Random();
@@ -1146,7 +1149,7 @@ System.out.printf("该数组中大于数的有：%s",headset);
 
 第一个`fromElement`，代表最低的元素大小，而第二个参数`toElement`，代表了最高的元素大小
 
-需要注意的一点是，这个参数的范围为左闭右开区间
+需要注意的一点是，这个参数的范围为**左闭右开区间**
 
 接下来给出实例：
 
@@ -1165,8 +1168,238 @@ System.out.printf("该数组中位于固定范围的数有：%s",subSet);
 // 该数组中位于固定范围的数有：[12, 14]
 ```
 
-[TODO]
-
 接下来是`NavigableSet`接口的内容
 
+**lower() & higher()**
+接下来是这两个方法
+
+首先第一个方法`lower()`的作用是返回最大不小于该数的数，例如规定数字为10，则返回所有比10小的数中最大的那个数
+
+第二个方法`higher()`的作用与`lower()`类似，返回最小不小于该数的数，例如规定数字为10，则返回所有比10大的数中最小的数
+
+这两个方法都拥有一个可填的参数：`lower(E e)`、`higher(E e)`
+
+其中`参数e`分别代表最大不能超过这个数字的数，以及最小不能小于这个数的数
+
+接下来看看具体用法：
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(random.nextInt(0,20));
+}
+int lower = treeSet.lower(10);
+System.out.printf("该数组为：%s\n",treeSet);
+System.out.printf("该数组小于规定数的数字中最大的是：%s",lower);
+
+// 输出：
+// 该数组为：[6, 8, 10, 11, 14, 18]
+// 该数组小于规定数的数字中最大的是：8
+```
+`higher()`的用法与之类似，这里不再演示
+
+需要注意的一点是，这里的数字只能小于或大于规定的数，**不可以等于**，相当于开区间
+
+---
+**floor() & ceiling()**
+接下来是这个方法
+
+这两个方法的参数都只有一个：`floor(E e)`和`ceiling(E e)`
+
+其中`参数e`代表最大或最小可以选取到的数字
+
+`floot()`和`ceiling()`方法与上文的`lower()`和`higher()`方法类似，不过区别是`floot()`方法和`ceiling()`方法是闭区间而`lower()`方法和`higher()`方法都是开区间
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(random.nextInt(0,20));
+}
+int floor = treeSet.floor(10);
+System.out.printf("该数组为：%s\n",treeSet);
+System.out.printf("该数组中大于等于规定数的有：%s",floor);
+
+// 输出：
+// 该数组为：[5, 6, 7, 8, 10, 11, 12, 13]
+// 该数组中大于等于规定数的有：10
+```
+可以看到，在该程序中，`floor()`选取的标准是大于等于括号内最小（最接近）的数
+
+而`ceiling()`也是相同的道理
+
+**headSet() & tailSet & subSet()**
+由于`NavigableSet接口`继承与`SortedSet接口`，所以这个接口也有`SortedSet接口`的一些方法
+
+那么重复定义是不是过于冗余呢？其实不然，在`NavigableSet接口`中，这三个方法要比父接口要更加灵活
+
+接下来介绍`NavigableSet接口`中的`headSet()`、`tailSet()`、`subSet()`方法
+
+首先这三个方法的具体功能与`SortedSet接口`是一致的，所以此处不再次介绍
+
+不一样的是，这三个方法都多了一到两个可选参数：
+
+``` Java
+headSet(E toElement, boolean inclusive)
+
+tailSet(E fromElement, boolean inclusive)
+
+subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive)
+```
+
+通过其类型为`boolean`便可以简单推断这个参数的作用
+
+没错，便是使其可以**自由调整**为开闭区间
+
+这一点便与其父接口不一致了
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(random.nextInt(0,20));
+}
+NavigableSet<Integer> headset = treeSet.headSet(10,true);
+System.out.printf("该数组为：%s\n",treeSet);
+System.out.printf("该数组中小于等于数的有：%s",headset);
+
+// 输出：
+// 该数组为：[5, 6, 9, 10, 11, 13, 14, 18, 19]
+// 该数组中小于等于数的有：[5, 6, 9, 10]
+```
+
+可以看到，这里设定为`true`，输出也包括了规定的数字
+
+而`subSet()`的参数有两个是决定范围的，分别决定前后数字为开闭区间
+
+##### 补充点：源码中有趣的事情
+如果你曾阅读过`TreeSet.java`中有关这部分的内容
+
+那么你会发现一件事情：
+``` Java
+public SortedSet<E> headSet(E toElement) {
+   return headSet(toElement, false);
+}
+
+public NavigableSet<E> headSet(E toElement, boolean inclusive) {
+   return new TreeSet<>(m.headMap(toElement, inclusive));
+}
+```
+可以看到，这里`SortedSet<E> headSet(E toElement)`返回的结果刚好是下面的`NavigableSet<E> headSet(E toElement, boolean inclusive)`，只不过将第二个决定开闭区间的参数固定为`false`
+
+而`subSet()`也有类似的内容：
+
+``` Java
+public SortedSet<E> subSet(E fromElement, E toElement) {
+   return subSet(fromElement, true, toElement, false);
+}
+```
+可以看到，这里默认便为左闭右开区间
+
+##### 补充点：关于多态
+在上文提及到：`NavigableSet接口`继承与`SortedSet接口`，也就是说，下面这种语法也是正确的：
+
+``` Java
+SortedSet<Integer> headset = treeSet.headSet(10,true);
+```
+
+这里使用到了面向对象中的多态：**父类/接口引用指向子类/实现类对象**
+
+---
+**pollFirst() & pollLast()**
+`pollFirst()`和`pollLast()`是两个相对应的方法，作用为**移除并返回首项 / 末项**
+
+这两个方法均没有可填的参数
+
+接下来看看具体例子
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(random.nextInt(0,20));
+}
+System.out.printf("该数组为：%s\n",treeSet);
+Integer pollFirst = treeSet.pollFirst();
+System.out.printf("使用pollFirst()方法移除了首项：%s\n",pollFirst);
+System.out.printf("移除后数组为：%s\n",treeSet);
+
+// 输出：
+// 该数组为：[3, 4, 6, 10, 11, 13, 15, 18]
+// 使用pollFirst()方法移除了首项：3
+// 移除后数组为：[4, 6, 10, 11, 13, 15, 18]
+```
+另一个方法`pollLast()`则为移除并返回末项
+
+
+**descendingSet()**
+接下来是这个方法
+
+这个方法依旧没有参数可以选择
+
+这个方法的作用是反转数组：
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(random.nextInt(0,20));
+}
+System.out.printf("原数组为：%s\n", treeSet);
+NavigableSet<Integer> reverseTreeSet = treeSet.descendingSet();
+System.out.printf("反转后数组为：%s\n", reverseTreeSet);
+
+// 输出：
+// 原数组为：[8, 9, 10, 12, 14, 16, 17]
+// 反转后数组为：[17, 16, 14, 12, 10, 9, 8]
+```
+
+##### 补充点：与reverse()方法的区别
+看到这个方法可能会有人想到另一个方法：`reverse()`
+
+这两个方法都可以做到反转数组的功能，那么有什么差别呢？
+
+一个最简单的差别就是加入时间
+
+`descendingSet()`在Java 6便加入了，而`reverse()`直到Java 21才加入
+
+不过有意思的一点在源代码上：
+
+``` Java
+default NavigableSet<E> reversed() {
+   return this.descendingSet();
+}
+```
+可以看到，这里的reversed()方法其实就是复用descendingSet()方法
+
+诶，这是为什么呢？其实在Java 21中新增了一个接口`SequencedCollection`，这个接口又被`NavigableSet接口`继承，这个接口有个可以返回反转数列的方法（也就是`reversed()`），但是原本就有一个方法——`descendingSet()`，再次实现多少有点不太方便，所以便复用了这个方法
+
 #### 补充点：定义排序规则
+
+> 注意！！！！！
+> 由于自定义排序规则的方法太多了！！！此处仅演示Lambda表达式的方法
+
+接下来是自定义排序规则
+
+诶，那么要怎么自定义排序规则呢
+
+其实很简单，只需要在创建的时候在`TreeSet<>()`后面的圆括号上加上对应的规则即可：
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> sequentialTreeSet = new TreeSet<>((a,b) -> a - b);
+TreeSet<Integer> reverseTreeSet = new TreeSet<>((a,b) -> b - a);
+for (int i = 0; i < 10; i++) {
+   sequentialTreeSet.add(random.nextInt(0,20));
+   reverseTreeSet.add(random.nextInt(0,20));
+}
+System.out.printf("使用正序规则：%s\n",sequentialTreeSet);
+System.out.printf("使用倒序规则：%s\n",reverseTreeSet);
+
+// 输出：
+// 使用正序规则：[5, 7, 11, 13, 14, 15, 17, 19]
+// 使用倒序规则：[19, 17, 14, 13, 11, 8, 6, 4, 3, 1]
+```
+
+在圆括号内部的是**lambda表达式**，因此，我们还可以给出一些更加自定义的规则：
