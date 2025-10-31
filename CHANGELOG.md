@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2025-10-31]
+- 新增：有关TreeSet的相关内容
+  * 介绍了有关NavigableSet接口的相关方法
+  * 介绍了部分自定义排序规则的内容
+
 ## [2025-10-30]
 - 新增：有关TreeSet的相关内容
   * 介绍了有关TreeSet中实现SortedSet接口方法的相关内容
