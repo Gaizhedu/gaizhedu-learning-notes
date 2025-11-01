@@ -1402,4 +1402,187 @@ System.out.printf("使用倒序规则：%s\n",reverseTreeSet);
 // 使用倒序规则：[19, 17, 14, 13, 11, 8, 6, 4, 3, 1]
 ```
 
-在圆括号内部的是**lambda表达式**，因此，我们还可以给出一些更加自定义的规则：
+##### 安全的排序规则
+在圆括号内部的是**lambda表达式**，这样存在一个十分严重的问题，如果两者的差过大(一个整数a减一个负数b)，可能会导致溢出
+
+``` Java
+TreeSet<Integer> sequentialTreeSet = new TreeSet<>((a,b) -> a - b);
+for (int i = 0; i < 10; i++) {
+   sequentialTreeSet.add(2147483647);
+   sequentialTreeSet.add(-2147483648);
+}
+System.out.printf("使用正序规则：%s\n",sequentialTreeSet);
+
+// 输出：
+// 使用正序规则：[2147483647, -2147483648]
+```
+由于比较规则为前后相减，原本应为`4294967295`，但这个值溢出了，变成了-1
+
+如果为负数，那么就意味着前面的数比后面的数小，但我们这个情况，正常应该是正数在前
+
+那要怎么解决这个问题呢？其实很简单，我们可以使用到**静态工厂方法**：
+
+``` Java
+TreeSet<Integer> sequentialTreeSet = new TreeSet<>(Comparator.comparingInt(a -> a));
+for (int i = 0; i < 10; i++) {
+   sequentialTreeSet.add(2147483647);
+   sequentialTreeSet.add(-2147483648);
+}
+System.out.printf("使用正序规则：%s\n",sequentialTreeSet);
+
+// 输出：
+// 使用正序规则：[-2147483648, 2147483647]
+```
+这种写法还有一些类似的写法：
+
+``` Java
+// 使用对应包的compare
+new TreeSet<>(Integer::compare)
+
+// 使用Comparator.naturalOrder()
+new TreeSet<>(Comparator.naturalOrder())
+
+// 直接不填！因为不填算是自然排序，等价于上文的naturalOrder()
+new TreeSet<>()
+```
+
+---
+我们还可以给出一些更加自定义的规则：
+
+``` Java
+var comparatorRule =
+         Comparator.comparing(String::length).thenComparing(Comparator.naturalOrder());
+var comparatorRuleReversed =
+         (Comparator.comparing(String::length).thenComparing(Comparator.naturalOrder())).reversed();
+
+TreeSet<String> sequentialTreeSet = new TreeSet<>(comparatorRule);
+TreeSet<String> reverseTreeSet = new TreeSet<>(comparatorRuleReversed);
+
+for (int i = 0; i < 5; i++) {
+   String randomInt = String.valueOf(random.nextInt(0, 999999));
+   sequentialTreeSet.add(randomInt);
+   reverseTreeSet.add(randomInt);
+}
+System.out.println("排序规则为字符长度：\n");
+System.out.printf("使用正序规则：%s\n", sequentialTreeSet);
+System.out.printf("使用倒序规则：%s\n", reverseTreeSet);
+
+// 输出：
+// 使用正序规则：[82100, 213078, 484793, 858731, 965938]
+// 使用倒序规则：[965938, 858731, 484793, 213078, 82100]
+```
+可以看到，这里的比较规则是先比较字符串长度，再用自然规则（naturalOrder）进行排序
+
+##### 自定义类排序
+除此之外，还可以使用自定义类来排序
+``` Java
+class Product{
+    private final String productName;
+    private final int productPrice;
+
+    public Product(String productName, int productPrice){
+        this.productName = productName;
+        this.productPrice = productPrice;
+    }
+
+    public int getProductPrice() {
+        return productPrice;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+}
+
+public class TreeSetLearning {
+    public static void main(String[] args) {
+        Random random = new Random();
+        TreeSet<Product> products = new TreeSet<>(Comparator.comparingInt(Product::getProductPrice));
+        for (int i = 0; i < 5; i++) {
+            int randomPrice = random.nextInt(100,3000);
+            products.add(new Product("货物" + (i+1), randomPrice));
+        }
+        System.out.println("排序后商品价格为：");
+        for (Product lst : products){
+            System.out.printf("商品：%s， 价格：%s\n",lst.getProductName(),lst.getProductPrice());
+        }
+    }
+}
+
+// 输出：
+// 商品：货物3， 价格：1079
+// 商品：货物1， 价格：1659
+// 商品：货物4， 价格：2003
+// 商品：货物2， 价格：2027
+// 商品：货物5， 价格：2938
+```
+接下来开始解析这段代码：
+
+首先第一个部分，这里新建了一个类：`Product`
+
+这个类里面定义了两个属性：`productName`和`productPrice`
+
+这两个属性分别记录商品的名字和商品的价格
+
+接下来看到声明`TreeSet`中的自定义排序规则部分：
+
+``` Java
+Comparator.comparingInt(Product::getProductPrice)
+```
+
+此处使用了这个规则，括号内部是一个匿名函数，意思是使用`Product`的`getProductPrice`的返回值进行比较
+
+而前面的`Comparator.comparingInt`意思是比较的内容为数字
+
+又因为`getProductPrice`的返回值为数字（productPrice），所以是合法的
+
+当然这里有个小问题，如果价格相等是不会加入的
+
+所以需要在这个规则后面加上一句，如果相等则比较其他的内容：
+
+``` Java
+TreeSet<Product> products = new TreeSet<>(Comparator.comparingInt(Product::getProductPrice)
+      .thenComparing(Product::getProductName));
+```
+此处由于类中只有名字还可以用，所以就使用名字作为第二个比较的标准
+
+> 实际上还可以再继续比较下去：
+> Comparator.comparingInt(...).thenComparing(...).thenComparing(...)
+> 不过没有什么意义就对了
+
+这种格式的写法为**静态工厂**写法，更加安全
+
+
+##### 处理null值
+如果数组存在null值，不加处理会导致报错：
+
+``` Java
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   treeSet.add(123);
+   treeSet.add(null);
+}
+System.out.printf("数组排序后：%s\n",treeSet);
+
+// 输出：
+// Exception in thread "main" java.lang.NullPointerException
+```
+可以看到这里的报错为`NullPointerException`
+
+那要怎么办呢？其实很简单，只需要在排序规则那里加入如何处理`null`值即可
+
+``` Java
+TreeSet<Integer> treeSet = new TreeSet<>(Comparator.nullsFirst(Integer::compare));
+for (int i = 0; i < 10; i++) {
+   treeSet.add(123);
+   treeSet.add(null);
+}
+System.out.printf("数组排序后：%s\n",treeSet);
+
+// 输出：
+// 数组排序后：[null, 123]
+```
+> 此处使用Integer::compareTo也可以，本质上compareTo就是调用compare
+可以看到，这里使用了`Comparator.nullsFirst(Integer::compare)`，用于将null值放到最前面
+
+除此以外还有`nullsLast`，用于将null值放到最后面
