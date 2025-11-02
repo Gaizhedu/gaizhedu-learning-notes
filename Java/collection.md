@@ -464,6 +464,43 @@ System.out.printf("数组长度为：%s",list.size());
 // 数组长度为：2
 ```
 
+**clear()**
+接下来是`clear()`
+
+这个方法比较简单，主要的作用是清空当前数组
+
+``` Java
+ArrayList<String> lst = new ArrayList<>();
+lst.add("测试1");
+lst.clear();
+lst.add("又新增回来了");
+System.out.println(lst);
+
+// 输出：
+// [又新增回来了]
+```
+
+可以看到，在使用`clear()`方法后，这个数组中的元素便被清空了，之后输出也是重新添加的元素
+
+这个方法的代码实现也很简单粗暴：
+``` Java
+public void clear() {
+   modCount++;
+   final Object[] es = elementData;
+   for (int to = size, i = size = 0; i < to; i++)
+      es[i] = null;
+}
+```
+首先是将操作数`modCount`增加一个单位，之后便将es赋值为这个数组
+
+赋值后便是一个简单的for循环，这个for循环中的条件中size为数组长度
+
+这里有个很巧妙的点，我们在使用clear后数组为空，此时数组长度为0
+
+此处在赋值给to后又使用了`i = size = 0`，这样就使得数组长度被设定为0，符合清空的情况
+
+循环语句的作用为将这个数组的每一项都设定为null值，利用这种方法来实现清空数组
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
