@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2025-11-03]
+- 新增：一些ArrayList的一些补充的方法
+  * 介绍了isEmply方法
+  * 介绍了contains方法
+  * 介绍了retainAll方法
+
 ## [2025-11-02]
 - 新增：有关clear方法的相关内容
 
