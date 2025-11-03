@@ -2,10 +2,10 @@
 [TODO]
 1. List接口
    - [x] ArrayList
-     - [ ] TODO clear()方法
-     - [ ] TODO isEmply()方法
-     - [ ] TODO contains()方法
-     - [ ] TODO retainAll()方法
+     - [x] TODO clear()方法
+     - [x] TODO isEmply()方法
+     - [x] TODO contains()方法
+     - [x] TODO retainAll()方法
      - [ ] TODO toArray()方法
      - [ ] TODO spliterator()方法
      - [ ] TODO forEach()方法
@@ -21,7 +21,7 @@
    - [ ] （拓展）Stack
 2. Set接口
    - [x] HashSet
-   - [ ] TreeSet
+   - [x] TreeSet
    - [ ] （拓展）LinkedHashSet
    - [ ] （拓展）ConcurrentSkipListSet
    - [ ] （拓展）CopyOnWriteArraySet 
@@ -500,6 +500,101 @@ public void clear() {
 此处在赋值给to后又使用了`i = size = 0`，这样就使得数组长度被设定为0，符合清空的情况
 
 循环语句的作用为将这个数组的每一项都设定为null值，利用这种方法来实现清空数组
+
+**isEmply()**
+接下来介绍isEmply方法，这个方法的主要作用是检测当前数组是否为空，如果为空则返回true，否则返回false
+
+``` Java
+ArrayList<String> lst = new ArrayList<>();
+lst.add("你好！");
+System.out.printf("当前数组状态（是否为空）：%s\n", lst.isEmpty());
+lst.clear();
+System.out.printf("当前数组状态（是否为空）：%s\n", lst.isEmpty());
+
+// 输出：
+// 当前数组状态（是否为空）：false
+// 当前数组状态（是否为空）：true
+```
+可以看到，在执行clear方法将数组清空后，`isEmpty()`显示为`true`
+
+代码实现也很简单：
+``` Java
+public boolean isEmpty() {
+   return size == 0;
+}
+```
+可以看到这里的代码实现就是通过检测数组大小是否为0，并且返回结果
+
+**contains()**
+接下来是contains方法
+
+这个方法有一个参数可选：`contains(Object o)`
+
+其中`参数o`代表需要检测的元素
+
+这个方法的检测当前数组中是否有括号内的参数
+
+``` Java
+ArrayList<String> lst = new ArrayList<>();
+lst.add("你好！");
+System.out.printf("当前数组是否有目标元素：%s\n", lst.contains("你好！"));
+
+// 输出：
+// 当前数组是否有目标元素：true
+```
+假设这个数组内有该元素，那么则会返回true
+
+那么他的代码实现是怎么样的呢？
+
+其实很简单：
+``` Java
+public boolean contains(Object o) {
+   return indexOf(o) >= 0;
+}
+```
+可以看到，这个方法实际上是复用了`indexOf`的方法，并通过这个方法的返回值是否大于等于0来判断是否为true
+
+为什么可以这样呢？其实很简单，因为这个方法实际上是返回该元素所在位置
+
+如果没有该元素，则返回-1
+
+通过这种形式，成功精简了代码
+
+> 此处实现了DRY原则
+
+**retainAll()**
+接下来介绍这个方法
+
+这个方法拥有一个参数：`retainAll(Collection<?> c)`
+
+这个参数的意思是支持所有实现Collection接口的集合，例如List接口，Set接口
+
+这个方法的主要用法是`A.retainAll(B)`（A和B都是符合条件的数组）
+
+这里代表将A赋值为A和B的交集
+
+``` Java
+ArrayList<String> arrayList1 = new ArrayList<>();
+ArrayList<String> arrayList = new ArrayList<>();
+for (int i = 0; i < 10; i++) {
+   arrayList.add(String.valueOf(i));
+}
+for (int i = 0; i < 15; i++) {
+   arrayList1.add(String.valueOf(i));
+}
+System.out.printf("当前数组treeSet：\n%s\n", arrayList);
+System.out.printf("当前数组lst：\n%s\n", arrayList1);
+arrayList1.retainAll(arrayList);
+System.out.printf("交集后数组：\n%s", arrayList1);
+
+// 输出：
+// 当前数组treeSet：
+// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+// 当前数组lst：
+// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+// 交集后数组：
+// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
 
 ---
 ### LinkedList
