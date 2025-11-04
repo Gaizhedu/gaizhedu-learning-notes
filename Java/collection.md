@@ -582,8 +582,8 @@ for (int i = 0; i < 10; i++) {
 for (int i = 0; i < 15; i++) {
    arrayList1.add(String.valueOf(i));
 }
-System.out.printf("当前数组treeSet：\n%s\n", arrayList);
-System.out.printf("当前数组lst：\n%s\n", arrayList1);
+System.out.printf("当前数组arrayList1：\n%s\n", arrayList);
+System.out.printf("当前数组arrayList：\n%s\n", arrayList1);
 arrayList1.retainAll(arrayList);
 System.out.printf("交集后数组：\n%s", arrayList1);
 
@@ -595,6 +595,144 @@ System.out.printf("交集后数组：\n%s", arrayList1);
 // 交集后数组：
 // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
+
+**toArray()**
+接下来来讲讲这个方法
+
+首先这个方法拥有一个参数：`toArray(T[] a)`
+
+完整的版本如下：`<T> T[] toArray(T[] a)`
+
+当然也有没参数的版本：`Object[] toArray()`
+
+这个方法的作用是将一个**集合转变为数组**
+
+接下来将分别演示带参数和不带参数的版本：
+
+``` Java
+Random random = new Random();
+
+TreeSet<Integer> treeSet = new TreeSet<>();
+
+for (int i = 0; i < 10; i++) {
+   int randomNumber = random.nextInt(0, 201);
+   treeSet.add(randomNumber);
+}
+System.out.printf("treeSet属于的类型：%s\n", treeSet.getClass().getSimpleName());
+Object[] newTreeSet = treeSet.toArray();
+System.out.printf("newTreeSet属于的类型：%s\n", newTreeSet.getClass().getSimpleName());
+
+// 输出：
+// treeSet属于的类型：TreeSet
+// newTreeSet属于的类型：Object[]
+```
+
+可以看到，这里选择了不加参数的版本，对应的类型也是选择了：`Object`
+
+但是一般来讲并不建议使用这种做法，因为这种做法在使用的时候一般需要进行强制类型转换，如果不进行强制类型转化，那么会导致报错：
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   int randomNumber = random.nextInt(0, 201);
+   treeSet.add(randomNumber);
+}
+Object[] newTreeSet = treeSet.toArray();
+int addNumber = (Integer) newTreeSet[0] + (Integer) newTreeSet[1];
+System.out.printf("newTreeSet第一项为：%d\n", newTreeSet[0]);
+System.out.printf("newTreeSet第二项为：%d\n", newTreeSet[1]);
+System.out.printf("newTreeSet第一项与第二项相加：%d\n", addNumber);
+
+// 输出：
+// newTreeSet第一项为：5
+// newTreeSet第二项为：7
+// newTreeSet第一项与第二项相加：12
+```
+
+上面是正确做法，但是不正确会怎么样呢（不正确也就是没有使用强制类型转换）
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   int randomNumber = random.nextInt(0, 201);
+   treeSet.add(randomNumber);
+}
+Object[] newTreeSet = treeSet.toArray();
+int addNumber = newTreeSet[0] + newTreeSet[1];
+System.out.printf("newTreeSet第一项为：%d\n", newTreeSet[0]);
+System.out.printf("newTreeSet第二项为：%d\n", newTreeSet[1]);
+System.out.printf("newTreeSet第一项与第二项相加：%d\n", addNumber);
+```
+上面便是没有使用强制类型转换的代码，如果没有使用强制类型转化，则会显示出：
+
+`运算符 '+' 不能应用于 'java.lang.Object'、'java.lang.Object'`
+
+但如果使用带参数的形式，那么便可以十分简单地解决这个问题
+
+``` Java
+Random random = new Random();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 10; i++) {
+   int randomNumber = random.nextInt(0, 201);
+   treeSet.add(randomNumber);
+}
+Integer[] newTreeSet = treeSet.toArray(new Integer[0]);
+int addNumber = newTreeSet[0] + newTreeSet[1];
+System.out.printf("newTreeSet第一项为：%d\n", newTreeSet[0]);
+System.out.printf("newTreeSet第二项为：%d\n", newTreeSet[1]);
+System.out.printf("newTreeSet第一项与第二项相加：%d\n", addNumber);
+```
+
+上面这里将原本的`Object[]`替换为`Integer[]`，相对应的，后面的参数也要填写对应的类型
+
+在这里例子中，两个项数相加的时候便没有使用强制类型转换
+
+在一般情况下都是建议使用带参数的版本的，一方面这样更加安全，另一方面，不带参的版本属于历史遗留问题
+
+从性能角度看，不带参数每次都需要创建新的数组，而带参数的可能会复用传入的数组
+
+~~当然，除非你真的需要用到`Object`~~
+
+这里我们可以补充一个内容，上文的带参数的形式使用了`new Integer[0]`
+
+那么这里的`[0]`是什么意思呢
+
+其实这里是在声明创建数组的大小，那么有人就要问了：诶，0不是代表长度为0吗？
+
+是的，但是Java在创建数组的时候有一个有意思的特性：
+
+如果传入的集合大小是刚好与创建的数组声明的大小是一致的，那么会直接存入并返回
+
+如果是小于（也就是空间不足），那么会创建新数组并返回
+
+如果是大于的，那么则会在存入集合后把多余的空间用**null**填充
+
+##### 补充点：为什么要使用数组
+说了这么多，还没有体积到**为什么要使用数组**
+
+确实，原先的集合已经很方便了，但是在性能上，数组的是要比集合更加好的：
+
+我们这里就以ArrayList为例，这个集合的底层实现也是数组
+
+首先，我们需要搞懂ArrayList到底是怎么存的
+
+说的简单粗暴一点，其实里面存的东西实际上并不是直接的元素，而是**指向对应元素的引用**
+
+> 这一点其实有点像C中的指针
+
+这就导致了什么，每次查询都是间接查询，而不是直接查询
+
+但是数组呢？由于其特性，每个元素都是按顺序排序的
+
+这就导致了在查询的时候时间十分快
+
+并且由于不用间接可以直接查询
+
+这种特性对于CPU的缓存是更好的
+
+在这一点上，数组性能是要高于集合的，尽管这两者实际使用效果差不多
 
 ---
 ### LinkedList
