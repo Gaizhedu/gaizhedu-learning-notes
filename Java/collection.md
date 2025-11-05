@@ -6,7 +6,7 @@
      - [x] TODO isEmply()方法
      - [x] TODO contains()方法
      - [x] TODO retainAll()方法
-     - [ ] TODO toArray()方法
+     - [x] TODO toArray()方法
      - [ ] TODO spliterator()方法
      - [ ] TODO forEach()方法
      - [ ] TODO removeIf()方法
@@ -733,6 +733,88 @@ System.out.printf("newTreeSet第一项与第二项相加：%d\n", addNumber);
 这种特性对于CPU的缓存是更好的
 
 在这一点上，数组性能是要高于集合的，尽管这两者实际使用效果差不多
+
+**forEach**
+forEach方法是一个用于批量操作的方法
+
+其带有一个参数：`forEach(Consumer<? super E> action)`
+
+这个参数的意思是在里面输入相对应的行为：
+
+``` Java
+Random random = new Random();
+ArrayList<Integer> arrayList = new ArrayList<>();
+for (int i = 0; i < 3; i++) {
+   arrayList.add(random.nextInt(0, 200));
+}
+
+arrayList.forEach(System.out::println);
+
+// 输出：
+// 142
+// 143
+// 92
+```
+这里的意思的将arrayList的所有元素都使用`System.out`中的`println`方法输出
+
+除了这种简单的方法，forEach方法还可以使用代码块来定义行为
+
+``` Java
+Random random = new Random();
+ArrayList<Integer> arrayList = new ArrayList<>();
+for (int i = 0; i < 3; i++) {
+   arrayList.add(random.nextInt(0, 200));
+}
+arrayList.forEach(array -> {
+   int square = array * array;
+   System.out.printf("原数字为：%d，平方数字为：%d\n", array, square);
+});
+
+// 输出：
+// 原数字为：188，平方数字为：35344
+// 原数字为：11，平方数字为：121
+// 原数字为：35，平方数字为：1225
+```
+
+**注意！在使用的过程中不可使用任何会引起modCount改变的方法，否则会抛出报错**
+
+``` Java
+Random random = new Random();
+ArrayList<Integer> arrayList = new ArrayList<>();
+for (int i = 0; i < 3; i++) {
+   arrayList.add(random.nextInt(0, 200));
+}
+arrayList.forEach(array -> {
+   arrayList.add(123);
+   int square = array * array;
+   System.out.printf("原数字为：%d，平方数字为：%d\n", array, square);
+});
+
+// 输出：
+// ConcurrentModificationException
+```
+上面使用了`add`，这个方法会导致`modCount`发生改变，所以不可以使用
+
+不过Iterator的remove是可以使用的，原因之前也提及到的
+
+接下来需要补充一个点，就是forEach方法是无法获取到遍历的下标的，如果需要索引下标，则必须自己新增变量自增获得
+
+``` Java
+Random random = new Random();
+ArrayList<Integer> arrayList = new ArrayList<>();
+for (int i = 0; i < 3; i++) {
+   arrayList.add(random.nextInt(0, 200));
+}
+int[] lstIndex = {0};
+arrayList.forEach(array -> {
+   System.out.printf("当前下标为%d\n", lstIndex[0]++);
+});
+
+// 输出：
+// 当前下标为0
+// 当前下标为1
+// 当前下标为2
+```
 
 ---
 ### LinkedList
