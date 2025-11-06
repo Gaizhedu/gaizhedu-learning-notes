@@ -8,7 +8,7 @@
      - [x] TODO retainAll()方法
      - [x] TODO toArray()方法
      - [ ] TODO spliterator()方法
-     - [ ] TODO forEach()方法
+     - [x] TODO forEach()方法
      - [ ] TODO removeIf()方法
      - [ ] TODO stream()方法
      - [ ] TODO parallelStream()方法
@@ -814,6 +814,58 @@ arrayList.forEach(array -> {
 // 当前下标为0
 // 当前下标为1
 // 当前下标为2
+```
+
+**removeIf()**
+接下来介绍这个方法
+
+这个方法有一个参数：
+
+这个参数代表可以选择的筛选方法
+
+这个方法的作用就是根据筛选的方法来删除指定元素，如果满足条件则删除该元素
+
+筛选方法依旧支持Lambda表达式
+
+``` Java
+Random random = new Random();
+ArrayList<Integer> arrayList = new ArrayList<>();
+for (int i = 0; i < 10; i++) {
+   arrayList.add(random.nextInt(0, 500));
+}
+System.out.printf("原数组：\n%s\n", arrayList);
+arrayList.removeIf(array -> array % 3 == 0);
+System.out.printf("筛选后的数组：\n%s\n", arrayList);
+
+// 输出：
+// 原数组：
+// [211, 118, 450, 306, 130, 204, 223, 334, 444, 212]
+// 筛选后的数组：
+// [211, 118, 130, 223, 334, 212]
+```
+可以看到，上面的数组一部分满足条件的元素被删除了
+
+这个方法还可以用于删除`null`值
+ 
+``` Java
+Random random = new Random();
+ArrayList<Integer> arrayList = new ArrayList<>();
+for (int i = 0; i < 10; i++) {
+   if (random.nextBoolean()) {
+         arrayList.add(random.nextInt(0, 500));
+   } else {
+         arrayList.add(null);
+   }
+}
+System.out.printf("原数组：\n%s\n", arrayList);
+arrayList.removeIf(Objects::isNull);
+System.out.printf("筛选后的数组：\n%s\n", arrayList);
+
+// 输出：
+// 原数组：
+// [491, null, 141, 395, 313, null, 168, 487, 6, 216]
+// 筛选后的数组：
+// [491, 141, 395, 313, 168, 487, 6, 216]
 ```
 
 ---
