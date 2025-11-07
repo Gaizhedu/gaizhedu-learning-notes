@@ -9,7 +9,7 @@
      - [x] TODO toArray()方法
      - [ ] TODO spliterator()方法
      - [x] TODO forEach()方法
-     - [ ] TODO removeIf()方法
+     - [x] TODO removeIf()方法
      - [ ] TODO stream()方法
      - [ ] TODO parallelStream()方法
      - [ ] TODO equals()方法
@@ -866,6 +866,44 @@ System.out.printf("筛选后的数组：\n%s\n", arrayList);
 // [491, null, 141, 395, 313, null, 168, 487, 6, 216]
 // 筛选后的数组：
 // [491, 141, 395, 313, 168, 487, 6, 216]
+```
+
+**equals()**
+接下来介绍这个方法
+
+这个方法的作用为判断是否相等
+
+这个方法有一个参数：`equals(Object o)`
+
+参数o代表一个对象
+
+在这里的用法为判断两个集合的元素是否相等：
+
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+arrayList.add("Hello");
+ArrayList<String> arrayList1 = new ArrayList<>();
+arrayList1.add("Hello");
+System.out.printf("判断两个集合是否相等：%s",arrayList.equals(arrayList1));0
+
+// 输出：
+// 判断两个集合是否相等：true
+```
+可以看到，这两个集合的元素完全一致，所以返回`true`
+
+注意，如果两者类型不同，那么即使元素相同也会返回`false`
+
+``` Java
+ArrayList<Integer> arrayList = new ArrayList<>();
+TreeSet<Integer> treeSet = new TreeSet<>();
+for (int i = 0; i < 5; i++) {
+   arrayList.add(i);
+   treeSet.add(i);
+}
+System.out.printf("判断两个集合是否相等：%s",arrayList.equals(treeSet));
+
+// 输出：
+// 判断两个集合是否相等：false
 ```
 
 ---
