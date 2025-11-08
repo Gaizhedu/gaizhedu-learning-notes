@@ -12,7 +12,7 @@
      - [x] TODO removeIf()方法
      - [ ] TODO stream()方法
      - [ ] TODO parallelStream()方法
-     - [ ] TODO equals()方法
+     - [x] TODO equals()方法
      - [ ] TODO hashCode()方法
      - [ ] TODO clone()方法
      - [ ] TODO toString()方法
@@ -884,14 +884,14 @@ ArrayList<String> arrayList = new ArrayList<>();
 arrayList.add("Hello");
 ArrayList<String> arrayList1 = new ArrayList<>();
 arrayList1.add("Hello");
-System.out.printf("判断两个集合是否相等：%s",arrayList.equals(arrayList1));0
+System.out.printf("判断两个集合是否相等：%s",arrayList.equals(arrayList1));
 
 // 输出：
 // 判断两个集合是否相等：true
 ```
 可以看到，这两个集合的元素完全一致，所以返回`true`
 
-注意，如果两者类型不同，那么即使元素相同也会返回`false`
+注意，如果两者属于不同接口，那么即使元素相同也会返回`false`
 
 ``` Java
 ArrayList<Integer> arrayList = new ArrayList<>();
@@ -905,6 +905,81 @@ System.out.printf("判断两个集合是否相等：%s",arrayList.equals(treeSet
 // 输出：
 // 判断两个集合是否相等：false
 ```
+这里分别为两个不同的接口，所以即使内容相同，也是返回`false`
+
+但如果接口相同，内容相同，但是实现类不同，那也是会正常返回`true`的：
+
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+LinkedList<String> linkedList = new LinkedList<>();
+System.out.printf("两个集合是否相等：%s",linkedList.equals(arrayList));
+
+// 输出
+// 两个集合是否相等：true
+```
+
+为什么会这样？这是因为在源码中已经写清楚了：
+
+``` Java
+public boolean equals(Object o) {
+   if (o == this)
+      return true;
+   if (!(o instanceof List))
+      return false;
+   ...
+}
+```
+
+可以看到，这里的第二个if语句便是判断是否属于同一接口的方法，上文输出为false的例子一个为List接口，而另一个为Set接口，所以返回为false
+
+##### 补充点：null安全
+这里补充一点，`equals()`方法是**null安全**的
+
+什么是null安全呢？简单来说就是在处理集合中的null元素的时候不会抛出空指针报错：`NullPointerException`
+
+那么为什么要特意强调这一点呢？
+
+因为在Java中null指的是**没有指向任何对象的引用**
+
+如果试图对null调用任何方法，则会抛出**NullPointerException**
+
+但是`equals()`是如何处理的呢？
+
+可以在源码里面看到
+
+``` Java
+if (!(o1==null ? o2==null : o1.equals(o2)))
+      return false;
+```
+这里是一个三元表达式，具体的逻辑如下：
+
+如果o1为null，那么则判断o2是否为null
+
+如果也为null，那么条件正确，返回true，但由于为!，所以实际为false，不执行判断内的语句
+
+而如果o2不为null，那么则返回false，进而转变为true，执行语句`return false`，这就跟我们的目的相一致（因为一个为null一个不为null）
+
+而如果o1不为null，那么就执行`o1.equals(o2)`
+
+如果两者相等，那么则返回true，转换为false，不执行语句
+
+可以看到，无论怎么样，这里都会正确的比较
+
+那么问题来了，为什么不直接用`equals()`
+
+我们不妨看看这里（指的是o1.equals(o2)）的equals源码是怎么写的：
+
+> 这里的equals来自这个文件 -> Object.java
+``` Java
+public boolean equals(Object obj) {
+   return (this == obj);
+}
+```
+可以清楚地看到，这里并没有对null进行处理
+
+不进行处理会导致什么后果呢？很明显，那就是：**NullPointerException**
+
+****
 
 ---
 ### LinkedList
