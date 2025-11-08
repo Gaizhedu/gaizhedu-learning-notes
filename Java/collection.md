@@ -979,7 +979,71 @@ public boolean equals(Object obj) {
 
 不进行处理会导致什么后果呢？很明显，那就是：**NullPointerException**
 
-****
+**hashcode()**
+
+接下来是hashcode方法
+
+这个方法没有参数，主要的使用用途为计算指定元素的哈希值：
+
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+arrayList.add("Hello！");
+System.out.printf("该元素的哈希值%s",arrayList.getFirst().hashCode());
+
+// 输出：
+// 该元素的哈希值：-2137002865
+```
+
+一个比较常见的用法是通过比较生成的哈希值来判断两个值是否相等：
+
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+ArrayList<String> arrayList1 = new ArrayList<>();
+arrayList.add("Hello！");
+arrayList1.add("Hello！");
+int arrayListHashCode = arrayList.getFirst().hashCode();
+int arrayList1HashCode = arrayList1.getFirst().hashCode();
+System.out.printf("这两个元素是否相等：%s", arrayList1HashCode == arrayListHashCode);
+
+// 输出：
+// 这两个元素是否相等：true
+```
+
+不过需要说明的一点是，上面的比较方法是有点问题的
+
+在Java中经常是有些元素的哈希值是相同的，比如**通话**和**重地**
+
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+ArrayList<String> arrayList1 = new ArrayList<>();
+arrayList.add("通话");
+arrayList1.add("重地");
+int arrayListHashCode = arrayList.getFirst().hashCode();
+int arrayList1HashCode = arrayList1.getFirst().hashCode();
+System.out.printf("这两个元素是否相等：%s", arrayList1HashCode == arrayListHashCode);
+
+// 输出：
+// 这两个元素是否相等：true
+```
+
+那么要怎么解决这个问题呢？其实很简单：
+
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+ArrayList<String> arrayList1 = new ArrayList<>();
+arrayList.add("通话");
+arrayList1.add("重地");
+int arrayListHashCode = arrayList.getFirst().hashCode();
+int arrayList1HashCode = arrayList1.getFirst().hashCode();
+System.out.printf("这两个元素是否相等：%s", arrayList1HashCode == arrayListHashCode && arrayList1.getFirst().equals(arrayList.getFirst()));
+
+// 输出：
+// 这两个元素是否相等：false
+```
+
+通过先比较哈希值再比较字符串是否相等，这样便可以解决**哈希碰撞**的问题
+
+> 更多的内容可以参考后面HashSet的 补充点：底层实现
 
 ---
 ### LinkedList
