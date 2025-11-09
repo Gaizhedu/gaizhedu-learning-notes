@@ -13,7 +13,7 @@
      - [ ] TODO stream()方法
      - [ ] TODO parallelStream()方法
      - [x] TODO equals()方法
-     - [ ] TODO hashCode()方法
+     - [x] TODO hashCode()方法
      - [ ] TODO clone()方法
      - [ ] TODO toString()方法
    - [x] LinkedList
@@ -1044,6 +1044,192 @@ System.out.printf("这两个元素是否相等：%s", arrayList1HashCode == arra
 通过先比较哈希值再比较字符串是否相等，这样便可以解决**哈希碰撞**的问题
 
 > 更多的内容可以参考后面HashSet的 补充点：底层实现
+
+**clone()**
+接下来讲讲这个方法
+
+在讲这个方法的具体用法之前，需要先补充一下`浅拷贝`和`深拷贝`的内容
+
+##### 补充点：浅拷贝与深拷贝
+> 此处可能会使用到C里面的指针来辅助理解
+首先是浅拷贝
+
+假设现在有一个数组，你使用浅拷贝拷贝这个数组，那么拷贝后的新数组中是原来的元素吗
+
+虽然说表面上是一样的，但实际上是不一致的
+
+新数组拷贝的是老数组中的对各个元素的引用，这意味了什么？
+
+意味着假设你修改了老数组中引用对应的元素，那么拷贝后的数组也会被修改
+
+``` Java
+ArrayList<StringBuffer> arrayList = new ArrayList<>();
+for (int i = 0; i < 5; i++) {
+   arrayList.add(new StringBuffer("Hello" + i));
+}
+ArrayList<StringBuffer> arrayListClone = (ArrayList<StringBuffer>) arrayList.clone();
+arrayList.get(2).append(3);
+System.out.printf("原数组：%s\n",arrayList);
+System.out.printf("复制后的数组：%s\n",arrayListClone);
+
+// 输出：
+// 原数组：[Hello0, Hello1, Hello23, Hello3, Hello4]
+// 复制后的数组：[Hello0, Hello1, Hello23, Hello3, Hello4]
+```
+可以看到，即使是先复制再修改也没办法改变，因为实际上是复制引用而不是直接复制对应的元素
+
+这里可能有人就要说了：诶，那为什么我的结果跟这里说的不一样：
+
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+for (int i = 0; i < 5; i++) {
+   arrayList.add("Hello" + i);
+}
+ArrayList<String> arrayListClone = (ArrayList<String>) arrayList.clone();
+arrayList.add(2,"3");
+System.out.printf("原数组：%s\n",arrayList);
+System.out.printf("复制后的数组：%s\n",arrayListClone);
+
+// 输出：
+// 原数组：[Hello0, Hello1, 3, Hello2, Hello3, Hello4]
+// 复制后的数组：[Hello0, Hello1, Hello2, Hello3, Hello4]
+```
+可以看到，这里即使修改了原数组复制后的数组依旧没有改变
+
+难道是出问题了吗？**不是**，其实这里跟所选的类型有关
+
+我们可以看到，在第一个例子中我们选择的类型为：`StringBuffer`
+
+而第二个例子中我们选择的是`String`
+
+诶，那这俩有什么区别呢？
+
+很简单，一个可变，一个不可变
+
+说白了就是`StringBuffer`是可变的，所以当原数组变了复制的数组也就变了
+
+而`String`是不可变的，该怎么样就怎么样，不管是不是被修改的
+
+---
+那么此处来通过C的例子来简单说明一下浅拷贝
+
+假设我们有一个装满指针的数组，浅拷贝就是复制这个数组
+
+这个数组有什么呢？有指针，指向不同的内存地址
+
+那么，假设我现在修改原数组中某一个指针指向的一个元素，
+
+那么这个指针指向的就是这个新的元素
+
+由于复制的只是指针，所以复制的数组也会指向这个元素（由于内存地址不变，这个指针指向的还是那个地址）
+
+那么要怎么解决这个问题呢？其实很简单，使用**深拷贝**即可
+
+诶，那深拷贝又是复制什么呢？
+
+准确来讲，深拷贝其实是创建了一个新的对象，然后递归复制所有原先数组引用的底层对象
+
+说白了就是直接复制元素而不是复制引用
+
+> 不过有一说一，之前举的String的例子其实就有点深拷贝的意味了
+> ~~不过这玩意由于是误打误撞实现了，所以不能这么记~~
+
+---
+在讲完浅拷贝和深拷贝之后，就要正式介绍有关`clone()`方法的内容了
+
+首先这个方法并没有任何的参数：`Object clone()`
+
+并且在使用的时候还要记得**显式类型转换**，否则会报错：
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+for (int i = 0; i < 5; i++) {
+   arrayList.add("Hello" + i);
+}
+ArrayList<String> arrayListClone = arrayList.clone();
+arrayList.add(2,"3");
+System.out.printf("原数组：%s\n",arrayList);
+System.out.printf("复制后的数组：%s\n",arrayListClone);
+
+// 输出：
+// java: 不兼容的类型: java.lang.Object无法转换为java.util.ArrayList<java.lang.String>
+```
+
+正确的写法是这样的：
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+for (int i = 0; i < 5; i++) {
+   arrayList.add("Hello" + i);
+}
+ArrayList<String> arrayListClone = (ArrayList<String>) arrayList.clone();
+arrayList.add(2,"3");
+System.out.printf("原数组：%s\n",arrayList);
+System.out.printf("复制后的数组：%s\n",arrayListClone);
+
+// 输出：
+// 原数组：[Hello0, Hello1, 3, Hello2, Hello3, Hello4]
+// 复制后的数组：[Hello0, Hello1, Hello2, Hello3, Hello4]
+```
+可以看到，这里就正常运行了
+
+##### 补充点：为什么会有警告
+如果你使用IntelliJ IDEA并且打出上面那段代码，那么你会发现编译器会给你一个警告：
+`未检查的转换: 'java.lang.Object' 转换为 'java.util.ArrayList<java.lang.String>'`
+
+那么这是什么意思呢？简单来说就是编译器没办法在运行的时候判断其正确性
+
+虽然说ArrayList重写了`clone()`方法，但为了兼容性，返回类型依旧为`Object`
+
+``` Java
+// 来自ArrayList.java
+
+public Object clone() {
+   ...
+}
+```
+那么有什么问题呢？
+
+为了正常运行，我们在使用`clone()`的时候是有进行显式类型转换的
+
+但是Java的泛型在运行时会被擦除（Type Erasure）
+
+虽然JVM知道这玩意是ArrayList，但是不知道是哪个类型
+
+这就导致了无法确定这玩意是不是真的是装着`String`的ArrayList
+
+那要怎么办呢？其实很简单：那就是换一种复制方法：
+
+``` Java
+ArrayList<StringBuffer> arrayList = new ArrayList<>();
+for (int i = 0; i < 5; i++) {
+   arrayList.add(new StringBuffer("Hello" + i));
+}
+ArrayList<StringBuffer> arrayListClone = new ArrayList<>(arrayList);
+arrayList.get(2).append(3);
+System.out.printf("原数组：%s\n",arrayList);
+System.out.printf("复制后的数组：%s\n",arrayListClone);
+
+// 输出：
+// 原数组：[Hello0, Hello1, Hello23, Hello3, Hello4]
+// 复制后的数组：[Hello0, Hello1, Hello23, Hello3, Hello4]
+```
+可以看到，这里使用了`new ArrayList<>(arrayList)`，这种方法就不会抛出警告了
+> 顺带一提，这种方式也是浅拷贝（看输出也可以明白）
+
+不过如果你真的很想使用原先的`clone()`方法，但不想看到警告，那么可以在这个语句的上一行加上这么一句：
+
+``` Java
+ArrayList<StringBuffer> arrayList = new ArrayList<>();
+for (int i = 0; i < 5; i++) {
+   arrayList.add(new StringBuffer("Hello" + i));
+}
+@SuppressWarnings("unchecked")
+ArrayList<StringBuffer> arrayListClone = (ArrayList<StringBuffer>) arrayList.clone();
+arrayList.get(2).append(3);
+System.out.printf("原数组：%s\n",arrayList);
+System.out.printf("复制后的数组：%s\n",arrayListClone);
+```
+
+这里加上了`@SuppressWarnings("unchecked")`语句，成功消除了警告
 
 ---
 ### LinkedList
