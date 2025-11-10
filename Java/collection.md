@@ -11,6 +11,41 @@
      - [x] TODO forEach()方法
      - [x] TODO removeIf()方法
      - [ ] TODO stream()方法
+       - [ ] filter()
+       - [ ] map()
+       - [ ] mapMulti()
+       - [ ] mapMultiToInt()
+       - [ ] mapMultiToLong()
+       - [ ] mapMultiToDouble()
+       - [ ] mapToInt()
+       - [ ] mapToLong()
+       - [ ] mapToDouble()
+       - [ ] flatMap()
+       - [ ] flatMapToInt()
+       - [ ] flatMapToLong()
+       - [ ] flatMapToDouble()
+       - [ ] distinct()
+       - [ ] sorted()
+       - [ ] peek()
+       - [ ] limit()
+       - [ ] skip()
+       - [ ] takeWhile()
+       - [ ] dropWhile()
+       - [ ] forEach()
+       - [ ] forEachOrdered()
+       - [ ] toArray()
+       - [ ] reduce()
+       - [ ] collect()
+       - [ ] min()
+       - [ ] max()
+       - [ ] count()
+       - [ ] anyMatch()
+       - [ ] allMatch()
+       - [ ] noneMatch()
+       - [ ] findFirst()
+       - [ ] findAny()
+       - [ ] gather()
+       - [ ] toList()
      - [ ] TODO parallelStream()方法
      - [x] TODO equals()方法
      - [x] TODO hashCode()方法
@@ -1312,6 +1347,34 @@ public String toString() {
 此处是先检测是否集合遍历结束才来加上逗号和空格的
 
 ArrayList也可以重写这个方法，与之前演示的例子没有太大差异，这里便不多阐述
+
+**stream()**
+接下来是stream()方法，这个方法下面有高达35个方法，这里将依次介绍
+
+但是在这之前我们需要介绍一下stream是来干什么的
+
+首先简单介绍一下，这个方法正如他的名字一样：可以进行流式处理
+
+相当于说把这玩意通过一个流水线一点一点进行处理，最后输出想要的结果
+
+**filter()**
+filter这个方法的作用是作为一个筛子筛选出对应的元素
+
+比如说我想要筛选出所有第一个字母为`a`的元素，那么可以这么操作：
+``` Java
+String[] itemList = {"banana", "apple", "cherry", "blueberry", "avocado"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+arrayList.stream()
+         .filter(a -> a.startsWith("a"))
+         .forEach(System.out::println);
+
+// 输出：
+// apple
+// avocado
+```
+可以看到，在上面这个例子中我们通过`filter`方法成功筛选出所有以字母a开头的元素
+
+虽然这玩意可以筛选指定元素，但是并不会对原来集合进行修改
 
 ---
 ### LinkedList
