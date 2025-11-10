@@ -14,8 +14,8 @@
      - [ ] TODO parallelStream()方法
      - [x] TODO equals()方法
      - [x] TODO hashCode()方法
-     - [ ] TODO clone()方法
-     - [ ] TODO toString()方法
+     - [x] TODO clone()方法
+     - [x] TODO toString()方法
    - [x] LinkedList
    - [ ] （拓展）Vector
    - [ ] （拓展）Stack
@@ -1231,13 +1231,95 @@ System.out.printf("复制后的数组：%s\n",arrayListClone);
 
 这里加上了`@SuppressWarnings("unchecked")`语句，成功消除了警告
 
+**toString()**
+接下来讲讲toString方法，这个方法有点类似Python中的`__str__`魔术方法
+
+一般而言，这个方法会被重写成想要的方法来方便输出对应的数据
+
+``` Java
+class Aclass{
+    private String whatName;
+
+    public Aclass(String whatName){
+        this.whatName = whatName;
+    }
+
+    @Override
+    public String toString(){
+        return String.format("这个对象的名字是：%s",whatName);
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Aclass aclass = new Aclass("测试");
+        System.out.println(aclass.toString());
+    }
+}
+
+// 输出：
+// 这个对象的名字是：测试
+```
+可以看到，我们这里重写了这个方法：`toString()`，是的他可以按我们规定的输出方式输出
+
+那么在ArrayList里面又是如何的呢：
+
+``` Java
+ArrayList<String> arrayList = new ArrayList<>();
+for (int i = 0; i < 5; i++) {
+   arrayList.add("hello" + i);
+}
+System.out.printf("使用toString方法: %s", arrayList.toString());
+
+// 输出：
+// 使用toString方法: [hello0, hello1, hello2, hello3, hello4]
+```
+可以看到，这里输出的结果实际上和直接使用该集合作为参数是一致的：
+
+那么具体又是如何的呢？
+``` Java
+public String toString() {
+   Iterator<E> it = iterator();
+   if (! it.hasNext())
+      return "[]";
+
+   StringBuilder sb = new StringBuilder();
+   sb.append('[');
+   for (;;) {
+      E e = it.next();
+      sb.append(e == this ? "(this Collection)" : e);
+      if (! it.hasNext())
+            return sb.append(']').toString();
+      sb.append(',').append(' ');
+   }
+}
+```
+这段代码来自：`AbstractCollection.java`，ArrayList中toString方法的实现就是来自这里
+
+此处的基本原理是：如果一开始无法用迭代器返回下一个元素，则直接返回：`[]`
+> 这里其实也就是在处理 null
+
+如果不属于null，那么则处理另一种情况：
+
+首先第一步：是往StringBuilder里面添加：`[`来模拟数组的输出
+
+之后开始一个一个遍历元素
+
+此处用到了一些很巧妙的点，注意看这里的for循环三个表达式都是没有的，唯一的退出条件就是迭代器无法返回下一个元素（也就是结束的情况）
+
+这样的好处是可以完全遍历这个集合
+
+此处是先检测是否集合遍历结束才来加上逗号和空格的
+
+ArrayList也可以重写这个方法，与之前演示的例子没有太大差异，这里便不多阐述
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
 
 LinkedList是一个双向链表，那么什么是双向链表呢
 
-**双向列表**
+**双向链表**
 简单来讲，双向链表是一种线性数据结构，特点是链表中的每个元素都包含**两个指针**
 
 这两个指针分别指着什么呢？一个指针指向前一个节点，而第二个指针指向后一个节点
