@@ -25,7 +25,7 @@
        - [ ] flatMapToLong()
        - [ ] flatMapToDouble()
        - [x] distinct()
-       - [ ] sorted()
+       - [x] sorted()
        - [ ] peek()
        - [ ] limit()
        - [ ] skip()
@@ -1491,6 +1491,41 @@ sorted()的底层使用了`双轴快排（Dual-Pivot Quicksort）`
 使用双轴快排的好处是减小**常数因子**（两种快排的时间复杂度都是O(n log n)）
 
 通过减少常数因子来得到更好的效率，这也就是为什么选择双轴快排的原因
+
+**peek()**
+此方法返回值为stream，故为中间操作
+
+接下来介绍peek()这个方法
+
+这个方法很简单，就是在流的指定的地方来进行一次操作（这个操作不会产生影响）
+
+一般而言，这个东西会用于日志这一类操作里面
+
+不过这里就简单的演示一下：
+
+``` Java
+String[] numbersList = {"apple", "apricot", "banana", "cherry"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(numbersList));
+arrayList.stream()
+         .distinct()
+         .peek(a -> System.out.printf("当前数组元素有：%s%n", a))
+         .sorted(Comparator.comparing(String::length)
+               .thenComparing(Comparator.naturalOrder()))
+         .forEach(System.out::println);
+
+// 输出：
+// 当前数组元素有：apple
+// 当前数组元素有：apricot
+// 当前数组元素有：banana
+// 当前数组元素有：cherry
+// apple
+// banana
+// cherry
+// apricot
+```
+可以看到，这里插入了一个打印的操作
+
+需要注意的一个点是，如果没有任何的终端操作，那么是不会执行peek的操作的
 
 ---
 ### LinkedList
