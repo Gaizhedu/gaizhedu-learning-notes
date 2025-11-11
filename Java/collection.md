@@ -1430,6 +1430,68 @@ arrayList.stream()
 
 这个方法的底层实现也是很有意思的，其去重的原理跟Set接口其实差不多，通过使用`equals()`和`hashcode()`方法来实现去重
 
+**sorted()**
+此方法返回类型为`stream`，故为中间操作
+
+接下来是sorted()，这个方法的作用是对当前流进行排序
+
+有点类似TreeMap或者TreeSet
+
+这里我们依旧以上文`distinct()`中的例子作为例子
+``` Java
+String[] numbersList = {"1","2","1","2","5","3","2","3","4","3","2","3","3"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(numbersList));
+arrayList.stream()
+         .distinct()
+         .sorted()
+         .forEach(System.out::println);
+
+// 输出：
+// 1
+// 2
+// 3
+// 4
+// 5
+```
+可以看到，在使用了sorted()之后，输出的结果便不是之前的乱序了，而是以正序排列
+
+既然这个可以实现排序，那么自然也可以定义排序，相关的内容可以参照TreeSet的`补充点：定义排序规则`
+
+这里简单举几个例子：
+``` Java
+String[] numbersList = {"apple", "apricot", "banana", "cherry", "coconut", "avocado", "durian"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(numbersList));
+arrayList.stream()
+         .distinct()
+         .sorted(Comparator.comparing(String::length)
+               .thenComparing(Comparator.naturalOrder()))
+         .forEach(System.out::println);
+
+// 输出：
+// apple
+// banana
+// cherry
+// durian
+// apricot
+// avocado
+// coconut
+```
+这里的排序规则是这样的：
+`Comparator.comparing(String::length).thenComparing(Comparator.naturalOrder())`
+
+那么这个是什么意思的，简单来说就是先按字符串长度排序（String::length）
+
+然后再以自然排序的方式排序（Comparator.naturalOrder()）
+
+##### 补充点：有关如何排序
+sorted()的底层使用了`双轴快排（Dual-Pivot Quicksort）`
+
+这个东西是传统快排的一个改进版本，使用了三个分区，而传统快排只用了两个分区
+
+使用双轴快排的好处是减小**常数因子**（两种快排的时间复杂度都是O(n log n)）
+
+通过减少常数因子来得到更好的效率，这也就是为什么选择双轴快排的原因
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
