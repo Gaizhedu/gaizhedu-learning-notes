@@ -27,7 +27,7 @@
        - [x] distinct()
        - [x] sorted()
        - [x] peek()
-       - [ ] limit()
+       - [x] limit()
        - [ ] skip()
        - [ ] takeWhile()
        - [ ] dropWhile()
@@ -1596,6 +1596,73 @@ Stream.iterate(1, i -> i + 1)
 // 10
 ```
 可以看到，这里在一个无限数组里面成功输出了前五个偶数
+
+**skip()**
+该方法返回类型为`stream`，故为中间操作
+
+接下来介绍一下skip()方法，这个方法比较简单，具体的功能为跳过指定的n个元素（或者说从第n + 1个元素开始）
+
+``` Java
+String[] numbersList = {"apple", "apricot", "banana", "cherry"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(numbersList));
+arrayList.stream()
+         .skip(2)
+         .forEach(System.out::println);
+
+// 输出：
+// banana
+// cherry
+```
+可以看到，这里输出的内容是从第三项开始的，也就是跳过了两项
+
+不过需要提醒的一点是，如果这个是有序流（例如这里的ArrayList），那么则会正常的跳过前n项
+
+但如果是无序流（例如Set接口里面的集合），由于不知道顺序是什么，所以跳过的元素是随机的
+
+这里同样引出一个问题：如果数组长度大于等于小于原流会怎么样
+
+简单概括如下
+
+如果大于原流，那么什么都不返回
+
+如果等于原流，也是什么都不返回
+
+如果小于原流，那么按正常结果返回
+
+除此之外，如果n小于等于0，那么会抛出这个报错：
+
+``` Java
+String[] numbersList = {"apple", "apricot", "banana", "cherry"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(numbersList));
+arrayList.stream()
+         .skip(-1)
+         .forEach(System.out::println);
+
+// 输出：
+// IllegalArgumentException
+```
+
+---
+在实际的应用中，你可以利用这个方法实现翻页效果
+
+> 此处仅限小数据！大规模数据这里花费时间为n，太慢了！
+``` Java
+String[] itemList = {"apple", "apricot", "banana", "cherry", "coconut", "avocado", "durian", "damson"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+int eachPage = 2;
+int startPage = 3;
+arrayList.stream()
+         .skip(eachPage * (startPage - 1))
+         .limit(eachPage)
+         .forEach(System.out::println);
+
+// 输出：
+// coconut
+// avocado
+```
+可以看到，这里输出的便是第三页的内容
+
+每页有两个元素，从第三页开始，那么便跳过了 2 * (3 - 1) 个元素
 
 ---
 ### LinkedList
