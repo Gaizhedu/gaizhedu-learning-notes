@@ -30,8 +30,8 @@
        - [x] limit()
        - [x] skip()
        - [x] takeWhile()
-       - [ ] dropWhile()
-       - [ ] forEach()
+       - [x] dropWhile()
+       - [x] forEach()
        - [ ] forEachOrdered()
        - [ ] toArray()
        - [ ] reduce()
@@ -1702,6 +1702,56 @@ arrayList.stream()
 与上文的limit一样，这个方法也可以用于短路操作
 
 由于这个方法读取顺序是按顺序读取，所以如果为无序流则会随机读取
+
+**dropWhile()**
+此方法返回类型为stream，故属于中间操作
+
+这个方法的作用与takeWhile差不多，主要效果与上文的takeWhile效果是相反的
+
+换句话说，这个方法的作用是在判断为真时跳过，如果判断为假，则截断并选取后面所有的元素
+
+我们通过一个例子来说明：
+
+``` Java
+String[] itemList = {"apple", "banana", "cabbage", "date", "brush", "comb"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+arrayList.stream()
+         .dropWhile(a -> a.length() > 4)
+         .forEach(System.out::println);
+
+// 输出：
+// date
+// brush
+// comb
+```
+通过上文我们可以知道此处在第四次的时候返回为假，所以返回的结果就是该项后面的各个元素
+
+**forEach()**
+该方法返回类型**不为**stream，故为终端操作
+
+接下来介绍这个方法，这个方法属于终端操作，所以只能放置在最后一个位置
+
+并且在上文也提及到了，**每个操作流中只能有一个终端操作**
+
+在简单介绍完终端操作之后，便开始介绍这个方法：
+
+这个方法的作用是对流中的**每一个元素执行指定的操作**
+
+> 在上文其实很多例子都使用了这个方法，但是此处还是再次举个例子来说明
+
+``` Java
+String[] itemList = {"banana", "bag", "ball", "comb", "band", "bath"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+arrayList.stream()
+         .takeWhile(a -> a.startsWith("ba"))
+         .forEach(System.out::println);
+
+// 输出：
+// banana
+// bag
+// ball
+```
+可以看到，这里`forEach`语句对所有的元素都使用了`System.out::println`，也就是将流里面的每一个元素都打印出来
 
 ---
 ### LinkedList
