@@ -28,8 +28,8 @@
        - [x] sorted()
        - [x] peek()
        - [x] limit()
-       - [ ] skip()
-       - [ ] takeWhile()
+       - [x] skip()
+       - [x] takeWhile()
        - [ ] dropWhile()
        - [ ] forEach()
        - [ ] forEachOrdered()
@@ -1663,6 +1663,45 @@ arrayList.stream()
 可以看到，这里输出的便是第三页的内容
 
 每页有两个元素，从第三页开始，那么便跳过了 2 * (3 - 1) 个元素
+
+**takeWhile()**
+该方法返回的类型为stream，故为中间操作
+
+该方法有一个可填参数，该参数用于判断
+
+接下来是takeWhile方法，这个方法的作用是按顺序选取流里面的元素，直到出现不满足条件的元素，并返回新流
+
+举个例子：
+
+``` Java
+String[] itemList = {"apple", "banana", "cabbage", "date", "brush", "comb"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+arrayList.stream()
+         .takeWhile(a -> a.length() > 4)
+         .forEach(System.out::println);
+
+// 输出：
+// apple
+// banana
+// cabbage
+```
+可以看到，这里选择的标准为：**若该元素长度大于4，则返回为真**
+
+我们可以稍微模拟一下：
+
+首先第一次：`apple`，长度为5，大于4，所以为真
+
+第二次：`banana`，长度为6，大于4，所以为真
+
+第三次：`cabbage`，长度为7，大于4，所以为真
+
+第四次：`date`，长度为4，等于4，不满足条件，退出
+
+可以看到，第四次条件不满足，所以直接退出了，返回的新流为一到三次的结果
+
+与上文的limit一样，这个方法也可以用于短路操作
+
+由于这个方法读取顺序是按顺序读取，所以如果为无序流则会随机读取
 
 ---
 ### LinkedList
