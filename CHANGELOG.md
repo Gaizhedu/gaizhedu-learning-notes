@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2025-11-13]
+- 新增stream的相关内容
+  * 新增有关takeWhile方法的相关内容
+  * 新增有关dropWhile方法的相关内容
+  * 新增有关forEach方法的相关内容
+  * 新增有关forEachOrdered方法的相关内容
+
 ## [2025-11-12]
 - 新增stream的相关内容
   * 新增有关limit方法的相关内容
