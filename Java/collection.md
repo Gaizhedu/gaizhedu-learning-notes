@@ -38,7 +38,7 @@
        - [ ] collect()
        - [x] min()
        - [x] max()
-       - [ ] count()
+       - [x] count()
        - [ ] anyMatch()
        - [ ] allMatch()
        - [ ] noneMatch()
@@ -1874,6 +1874,30 @@ System.out.printf("满足条件的个数：%s", howMany);
 这个方法有个很有意思的点，如果这个流来自一个大小已知的源，并且没有执行任何会修改的操作（比如filter或者takeWhile），那么会直接返回底层的size，时间复杂度为`O(1)`
 
 但如果有的话则需要遍历整个数组，时间复杂度会变为`O(n)`
+
+**anyMatch()**
+该方法返回类型boolean，所以为终端操作
+
+接下来是这个方法，这个方法的作用是检查是否有元素满足括号内的条件，如果有的话就返回true，如果没有就返回为false
+
+接下来给个具体例子来说明一下：
+
+``` Java
+String[] itemList = {"banana", "bag", "ball", "comb", "band", "bath"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+boolean status = arrayList.stream()
+         .peek(a -> System.out.printf("判断元素：%s%n", a))
+         .anyMatch(a -> !a.startsWith("ba"));
+System.out.printf("数组里面是否有不符合规则的：%s", status);
+
+// 输出：
+// 判断元素：banana
+// 判断元素：bag
+// 判断元素：ball
+// 判断元素：comb
+// 数组里面是否有不符合规则的：true
+```
+可以看到，这个方法实现了一次**短路操作**，在判断满足条件的元素后直接返回`true`，这样就可以不用遍历整个数组
 
 ---
 ### LinkedList
