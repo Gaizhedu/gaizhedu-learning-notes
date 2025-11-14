@@ -33,7 +33,7 @@
        - [x] dropWhile()
        - [x] forEach()
        - [x] forEachOrdered()
-       - [ ] toArray()
+       - [x] toArray()
        - [ ] reduce()
        - [ ] collect()
        - [ ] min()
@@ -1790,6 +1790,41 @@ arrayList.stream()
 最后，便会有一个专门的线程（不一定是新的，有可能是主线程）来按照顺序取出元素并对其使用`action`
 
 也正因如此，`forEachOrdered`比`forEach`多了一系列的操作，所以会更费性能
+
+**toArray()**
+这个方法返回类型为Object，所以为**终端操作**
+
+接下来简单介绍这个方法，这个方法很简单，作用就是将当前的流转换为数组：
+
+``` Java
+String[] itemList = {"banana", "bag", "ball", "comb", "band", "bath"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+String[] newList =  arrayList.stream()
+         .takeWhile(a -> a.startsWith("ba"))
+         .toArray(String[]::new);
+System.out.printf("筛选后的数组为：%s", Arrays.toString(newList));
+
+// 输出：
+// 筛选后的数组为：[banana, bag, ball]
+```
+可以看到，这里将用takeWhile筛选后的流转换一个新的数组
+
+这里括号内的参数实际为：`类型[]::new`，是一种方法引用，不过这里不多阐述
+
+注意，如果没有在toArray的括号里面添加说明想要转换成什么类型的话，会默认转换成Object类型，这就导致了想要使用的时候必须进行强制类型转换
+
+##### 补充点：有何意义
+在上文的例子中可能有人看到了这一点：`Arrays.toString(newList)`
+
+很明显，这里是重新转换为字符串了
+
+可能就有人想问这样有什么意义，但事实上这里只是为了简单演示才使用这个转换的
+
+实际上，使用toArray转换为数组可以让我们使用流中的方法简化一系列操作
+
+假设我们想要筛选整个数组，那么原先的做法是使用for语句加上判断来查找，但是如果使用流只需要使用takeWhile就可以了
+
+这也就是为什么要使用toArray的原因：**简化操作**
 
 ---
 ### LinkedList
