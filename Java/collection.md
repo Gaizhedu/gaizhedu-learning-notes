@@ -1826,6 +1826,30 @@ System.out.printf("筛选后的数组为：%s", Arrays.toString(newList));
 
 这也就是为什么要使用toArray的原因：**简化操作**
 
+**min() & max()**
+这两个操作都属于终端操作，并且由于效果是很接近的，所以放到一起讲
+
+这个方法其实很简单，就是通过括号内的比较规则来比较出最小 / 最大的那个元素
+   
+举个很简单的例子：
+
+``` Java
+String[] itemList = {"banana", "bag", "ball", "comb", "band", "bath"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+Optional<String> newItem = arrayList.stream()
+         .takeWhile(a -> a.startsWith("ba"))
+         .min(Comparator.comparing(String::length));
+newItem.ifPresent(a -> System.out.printf("最小长度元素为：%s", a));
+
+// 输出：
+// 最小长度元素为：bag
+```
+max方法同理，返回的是最大的
+
+此处使用到了两个新东西(`Optional`和`ifPresent`)，这里只是为了介绍min的使用效果，所以不多介绍
+
+上面的这个代码排序的规则是根据元素字符串的长度来比较的（String::length），此处使用了方法引用
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
