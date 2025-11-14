@@ -36,8 +36,8 @@
        - [x] toArray()
        - [ ] reduce()
        - [ ] collect()
-       - [ ] min()
-       - [ ] max()
+       - [x] min()
+       - [x] max()
        - [ ] count()
        - [ ] anyMatch()
        - [ ] allMatch()
@@ -1830,7 +1830,7 @@ System.out.printf("筛选后的数组为：%s", Arrays.toString(newList));
 这两个操作都属于终端操作，并且由于效果是很接近的，所以放到一起讲
 
 这个方法其实很简单，就是通过括号内的比较规则来比较出最小 / 最大的那个元素
-   
+
 举个很简单的例子：
 
 ``` Java
@@ -1849,6 +1849,31 @@ max方法同理，返回的是最大的
 此处使用到了两个新东西(`Optional`和`ifPresent`)，这里只是为了介绍min的使用效果，所以不多介绍
 
 上面的这个代码排序的规则是根据元素字符串的长度来比较的（String::length），此处使用了方法引用
+
+**count()**
+该方法返回类型为long，故为终端操作
+
+接下来介绍count()
+
+count()这个方法十分简单，作用为计数：
+
+``` Java
+String[] itemList = {"banana", "bag", "ball", "comb", "band", "bath"};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+long howMany = arrayList.stream()
+         .takeWhile(a -> a.startsWith("ba"))
+         .count();
+System.out.printf("满足条件的个数：%s", howMany);
+
+// 输出：
+// 满足条件的个数：3
+```
+
+需要注意的一点是，这个方法返回的类型为long，**不是int！！！**
+
+这个方法有个很有意思的点，如果这个流来自一个大小已知的源，并且没有执行任何会修改的操作（比如filter或者takeWhile），那么会直接返回底层的size，时间复杂度为`O(1)`
+
+但如果有的话则需要遍历整个数组，时间复杂度会变为`O(n)`
 
 ---
 ### LinkedList
