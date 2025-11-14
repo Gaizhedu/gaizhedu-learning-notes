@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2025-11-14]
+- 新增stream的相关内容
+  * 新增forEachOrdered方法中有关为何有序的内容
+  * 新增有关toArray方法的相关内容
+  * 新增有关min和max的相关内容
+  * 新增count方法的相关内容v
+  * 新增有关anyMatch()的相关内容
+
 ## [2025-11-13]
 - 新增stream的相关内容
   * 新增有关takeWhile方法的相关内容
