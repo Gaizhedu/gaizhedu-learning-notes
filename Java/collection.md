@@ -40,7 +40,7 @@
        - [x] max()
        - [x] count()
        - [x] anyMatch()
-       - [ ] allMatch()
+       - [x] allMatch()
        - [ ] noneMatch()
        - [ ] findFirst()
        - [ ] findAny()
@@ -1899,6 +1899,22 @@ System.out.printf("数组里面是否有不符合规则的：%s", status);
 ```
 可以看到，这个方法实现了一次**短路操作**，在判断满足条件的元素后直接返回`true`，这样就可以不用遍历整个数组
 
+##### 补充点：关于空流
+现在假设这个流里面是没有任何东西的（也就是空流），这时对这个流进行操作怎么样呢？
+
+``` Java
+String[] itemList = {};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+boolean status = arrayList.stream()
+         .peek(a -> System.out.printf("判断元素：%s%n", a))
+         .anyMatch(a -> !a.startsWith("ba"));
+System.out.printf("数组里面是否有不符合规则的：%s", status);
+
+// 输出：
+// 数组里面是否有不符合规则的：false
+```
+可以看到，这里并没有执行peek的操作，而是直接返回false
+
 **allMatch()**
 该方法依旧为终端操作
 
@@ -1909,13 +1925,66 @@ System.out.printf("数组里面是否有不符合规则的：%s", status);
 List<String> lst = Arrays.asList("ba", "bag", "ball", "comb", "band", "bath");
 ArrayList<String> arrayList = new ArrayList<>(lst);
 boolean isContains = arrayList.stream()
-         .allMatch(s -> s.contains("ba"));
+         .allMatch(s -> s.startsWith("ba"));
 System.out.printf("是否全部为ba开头：%s", isContains);
 
 // 输出：
 // 是否全部为ba开头：false
 ```
 在上面这里例子中，我们判断该集合是否全部以`ba`作为开头，但是该集合中含有不以`ba`开头的元素，所以返回了`false`
+
+##### 补充点：关于空流
+在上文的`anyMatch`中，对空流执行操作会返回false，那么对空流使用allMatch()会怎么样呢
+
+``` Java
+String[] itemList = {};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+boolean status = arrayList.stream()
+         .peek(a -> System.out.printf("判断元素：%s%n", a))
+         .allMatch(a -> !a.startsWith("ba"));
+System.out.printf("数组里面是否有不符合规则的：%s", status);
+
+// 输出：
+// 数组里面是否有不符合规则的：true
+```
+可以看到，这里返回的是true，与上面的anyMatch是不同的
+
+
+**noneMatch()**
+该方法依旧为终端操作
+
+这个方法与上文的两个方法效果差不多的，主要的作用依旧为判断，返回类型依旧为boolean
+
+具体的用法是，如果不满足noneMatch条件内，那么返回true：
+
+举个例子：
+``` Java
+List<String> lst = Arrays.asList("ba", "bag", "ball", "comb", "band", "bath");
+ArrayList<String> arrayList = new ArrayList<>(lst);
+boolean isContains = arrayList.stream()
+         .noneMatch(s -> s.startsWith("s"));
+System.out.printf("是否不存在以s为开头：%s", isContains);
+
+// 输出：
+// 是否存在不以ba为开头：true
+```
+可以看到，这里输出为true，这说明没有以s开头的元素
+
+##### 补充点：关于空流
+这里补充一下如果是空流的是时候会出现什么情况：
+
+``` Java
+String[] itemList = {};
+ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(itemList));
+boolean status = arrayList.stream()
+         .peek(a -> System.out.printf("判断元素：%s%n", a))
+         .noneMatch(a -> a.startsWith("ba"));
+System.out.printf("数组里面是否有不符合规则的：%s", status);
+
+// 输出：
+// 数组里面是否有不符合规则的：true
+```
+可以看到，这里输出的结果为true，与上文的allMatch是一致的
 
 ---
 ### LinkedList
