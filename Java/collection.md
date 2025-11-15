@@ -41,8 +41,8 @@
        - [x] count()
        - [x] anyMatch()
        - [x] allMatch()
-       - [ ] noneMatch()
-       - [ ] findFirst()
+       - [x] noneMatch()
+       - [x] findFirst()
        - [ ] findAny()
        - [ ] gather()
        - [ ] toList()
@@ -1985,6 +1985,26 @@ System.out.printf("数组里面是否有不符合规则的：%s", status);
 // 数组里面是否有不符合规则的：true
 ```
 可以看到，这里输出的结果为true，与上文的allMatch是一致的
+
+**findFirst()**
+这个方法为终端操作
+
+接下来介绍findFirst方法，这个方法的作用是返回流里面第一个元素：
+
+``` Java
+List<String> lst = Arrays.asList("apple", "bath", "breath", "basic", "age", "application", "agreement");
+ArrayList<String> arrayList = new ArrayList<>(lst);
+Optional<String> find = arrayList.stream()
+         .filter(s -> s.startsWith("br"))
+         .findFirst();
+find.ifPresent(a -> System.out.printf("符合条件的第一个值为：%s", a));
+
+// 输出：
+// 符合条件的第一个值为：breath
+```
+可以看到，这里输出了筛选后的第一个元素
+
+由于返回类型为Optional，所以不用担心返回为空的情况
 
 ---
 ### LinkedList
