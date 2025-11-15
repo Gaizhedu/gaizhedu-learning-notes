@@ -12,7 +12,7 @@
      - [x] TODO removeIf()方法
      - [ ] TODO stream()方法
        - [x] filter()
-       - [ ] map()
+       - [x] map()
        - [ ] mapMulti()
        - [ ] mapMultiToInt()
        - [ ] mapMultiToLong()
@@ -2093,6 +2093,53 @@ abstract static class AbstractImmutableCollection<E> extends AbstractCollection<
 也就是在这里实现了不可变集合
 
 那么为什么要不可变呢？一方面是保证**线程安全**，另一方面是**防止不小心被修改**，最后**减少内存开支**
+
+**map()**
+这个方法为中间操作
+
+接下来介绍有关函数式编程的核心之一——map()以及有关的一系列方法
+
+首先简单介绍一下`map()`，这个方法的作用是**在不对原先流里面元素产生任何影响的情况下返回一个新的流**（无副作用）
+
+什么意思呢，简单来说就是在不对原先产生任何影响的情况下返回一个新的流
+
+举一个具体的例子来说明：
+
+``` Java
+List<Integer> lst = Arrays.asList(2, 3, 5, 6);
+ArrayList<Integer> arrayList = new ArrayList<>(lst);
+List<Integer> find = arrayList.stream()
+         .map(n -> n * n)
+         .toList();
+System.out.printf("新的集合为：%s%n", find);
+
+// 输出：
+// 新的集合为：[4, 9, 25, 36]
+```
+可以看到，这里返回了一个新的流，并且这个流的每一个元素都是由原先的流经过`map()`产生得来的
+
+当然，这个简单的例子可能没办法说明什么，接下来再举一个例子
+
+``` Java
+List<String> lst = Arrays.asList("apple", "banana", "grape");
+ArrayList<String> arrayList = new ArrayList<>(lst);
+List<String> find = arrayList.stream()
+         .map(n -> Character.toUpperCase(n.charAt(0)) + n.substring(1))
+         .toList();
+System.out.printf("新的集合为：%s%n", find);
+
+// 输出：
+// 新的集合为：[Apple, Banana, Grape]
+```
+可以看到，这里使用了一些操作使得每个单词的首字母大写
+
+具体是什么操作呢？首先获取到该单词的首字母`n.charAt(0)`，然后将其大写`Character.toUpperCase()`，在大写后就要拼接没有大写的部分了，说的直白点就是除去首字母的部分，那么对字符串操作我们可以使用到这个方法`n.substring(1)`，这个方法去除了第一个字母，也就是首字母
+
+最后将这两者拼起来皆可得到我们想要的结果
+
+如果使用传统的命令式编程，则需要对每一个操作都写出来（遍历，拆分，转大写）
+
+而使用函数式编程则直接对想要修改的地方直接修改即可，相对来讲会方便很多
 
 ---
 ### LinkedList
