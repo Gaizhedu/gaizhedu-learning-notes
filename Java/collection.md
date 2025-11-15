@@ -43,7 +43,7 @@
        - [x] allMatch()
        - [x] noneMatch()
        - [x] findFirst()
-       - [ ] findAny()
+       - [x] findAny()
        - [ ] gather()
        - [ ] toList()
      - [ ] TODO parallelStream()方法
@@ -2005,6 +2005,38 @@ find.ifPresent(a -> System.out.printf("符合条件的第一个值为：%s", a))
 可以看到，这里输出了筛选后的第一个元素
 
 由于返回类型为Optional，所以不用担心返回为空的情况
+
+**findAny()**
+该方法为终端操作
+
+接下来介绍这个方法，这个方法的作用与上一个方法`findFirst()`是差不多的，主要的区别是在选取方法上
+
+上一个方法返回的是找到的第一个满足条件的元素，而这个方法返回的虽然也是第一个满足条件的元素，但是是**最先被处理的第一个元素**
+
+举个简单的例子：
+``` Java
+List<String> lst = Arrays.asList("apple", "bath", "breath", "basic", "age", "application", "agreement");
+ArrayList<String> arrayList = new ArrayList<>(lst);
+Optional<String> find = arrayList.parallelStream()
+         .filter(s -> s.startsWith("ba"))
+         .findAny();
+find.ifPresent(a -> System.out.printf("符合条件的第一个值为：%s", a));
+
+// 输出：
+// 符合条件的第一个值为：basic
+// （这里输出是随机的，看哪个线程先处理完）
+```
+可以看到，这里输出的结果十分出人意料
+
+如果这里使用的是findFirst，那么返回的值将会是找到的第一个满足条件的元素，也就是`bath`
+
+诶，可能就有人会发现了，为什么自己测试的时候结果是相同的？其实很简单，这个方法只有在**并行流（parallelStream）**才有效果
+
+如果是在普通的流（顺序流stream）中，则会像正常一样输出
+
+为什么会这样呢？因为stream是一个有序的流，所有的元素会按照顺序处理，findAny虽然是输出第一个符合条件的处理元素，但由于顺序流是按顺序处理的，根本不会出现不按顺序的情况，所以`stream.findAny()`的效果其实与`stream.findFirst()`的效果是一样的
+
+而并行流就不一样了，这个流会把要处理的集合拆分成几分，分给一些线程处理，输出的内容纯粹看谁先处理完，这就导致输出完全随机，`findAny()`也就会输出最先处理的元素
 
 ---
 ### LinkedList
