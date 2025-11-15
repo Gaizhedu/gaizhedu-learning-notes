@@ -45,7 +45,7 @@
        - [x] findFirst()
        - [x] findAny()
        - [ ] gather()
-       - [ ] toList()
+       - [x] toList()
      - [ ] TODO parallelStream()方法
      - [x] TODO equals()方法
      - [x] TODO hashCode()方法
@@ -2037,6 +2037,62 @@ find.ifPresent(a -> System.out.printf("符合条件的第一个值为：%s", a))
 为什么会这样呢？因为stream是一个有序的流，所有的元素会按照顺序处理，findAny虽然是输出第一个符合条件的处理元素，但由于顺序流是按顺序处理的，根本不会出现不按顺序的情况，所以`stream.findAny()`的效果其实与`stream.findFirst()`的效果是一样的
 
 而并行流就不一样了，这个流会把要处理的集合拆分成几分，分给一些线程处理，输出的内容纯粹看谁先处理完，这就导致输出完全随机，`findAny()`也就会输出最先处理的元素
+
+**toList()**
+这个方法为终端操作
+
+接下来介绍这个方法，这个方法的作用很简单，将这个流打包为一个集合，之后返回给变量
+
+``` Java
+List<Integer> lst = Arrays.asList(15, 73, 128, 4, 196, 88, 51, 142);
+List<Integer> num = lst.stream()
+         .filter(s -> s % 3 == 0)
+         .toList();
+System.out.printf("集合中满足条件的元素有：%s%n", num);
+
+// 输出：
+// 集合中满足条件的元素有：[15, 51]
+```
+可以看到，这里输出的结果是一个集合，这个集合打包了满足条件的元素
+
+此处返回的集合是**不可变对象**，所以**不可以使用任何修改集合的方法尝试修改这个集合**，比如说add()，remove()
+
+如果试图修改，则会抛出报错`UnsupportedOperationException`
+``` Java
+List<Integer> lst = Arrays.asList(15, 73, 128, 4, 196, 88, 51, 142);
+List<Integer> num = lst.stream()
+         .filter(s -> s % 3 == 0)
+         .toList();
+System.out.printf("集合中满足条件的元素有：%s%n", num);
+num.add(2);
+
+// 输出：
+// 集合中满足条件的元素有：[15, 51]
+// Exception in thread "main" java.lang.UnsupportedOperationException
+```
+
+##### 补充点：为什么这里不可变
+可能有人就要问了，这里明明是`List接口`啊，为什么不可变呢？
+
+其实这个问题很简单，从Java 10开始，Java引进了一些不可变集合工厂方法，而`toList()`便是其中之一
+
+事实上`.toList()`返回的是`java.util.ImmutableCollections.ListN`，而这个子类直接继承自`AbstractImmutableList`，这个又继承了`AbstractList<E>`，进而实现了List接口
+
+这个抽象类重写了一些可以修改的方法，举个例子：
+
+``` Java
+static UnsupportedOperationException uoe() { return new UnsupportedOperationException(); }
+
+@jdk.internal.ValueBased
+abstract static class AbstractImmutableCollection<E> extends AbstractCollection<E> {
+   @Override public boolean add(E e) { throw uoe(); }
+}
+```
+这里重写了add方法，使其从之前的往集合里面添加元素变为丢出错误`UnsupportedOperationException`
+
+也就是在这里实现了不可变集合
+
+那么为什么要不可变呢？一方面是保证**线程安全**，另一方面是**防止不小心被修改**，最后**减少内存开支**
 
 ---
 ### LinkedList
