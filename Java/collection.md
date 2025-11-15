@@ -39,7 +39,7 @@
        - [x] min()
        - [x] max()
        - [x] count()
-       - [ ] anyMatch()
+       - [x] anyMatch()
        - [ ] allMatch()
        - [ ] noneMatch()
        - [ ] findFirst()
@@ -1898,6 +1898,24 @@ System.out.printf("数组里面是否有不符合规则的：%s", status);
 // 数组里面是否有不符合规则的：true
 ```
 可以看到，这个方法实现了一次**短路操作**，在判断满足条件的元素后直接返回`true`，这样就可以不用遍历整个数组
+
+**allMatch()**
+该方法依旧为终端操作
+
+这个方法与上文的`anyMatch()`效果差不多，一个是找到一个就直接输出true，一个是要所有都满足才会输出true
+
+举个简单的例子：
+``` Java
+List<String> lst = Arrays.asList("ba", "bag", "ball", "comb", "band", "bath");
+ArrayList<String> arrayList = new ArrayList<>(lst);
+boolean isContains = arrayList.stream()
+         .allMatch(s -> s.contains("ba"));
+System.out.printf("是否全部为ba开头：%s", isContains);
+
+// 输出：
+// 是否全部为ba开头：false
+```
+在上面这里例子中，我们判断该集合是否全部以`ba`作为开头，但是该集合中含有不以`ba`开头的元素，所以返回了`false`
 
 ---
 ### LinkedList
