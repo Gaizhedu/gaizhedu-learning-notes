@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [2025-11-15]
+- 新增stream接口的相关内容
+  * 新增有关allMatch方法的相关内容
+  * 新增有关noneMatch的相关内容
+  * 补充了anyMatch、allMatch、noneMatch中对于空流的处理
+  * 新增有关findAny方法的相关内容
+  * 新增了toList方法的相关内容
+    * 补充了不可变集合的相关内容
+  * 新增有关map方法的相关内容
+    * 介绍了部分函数式编程的内容
+
 ## [2025-11-14]
 - 新增stream的相关内容
   * 新增forEachOrdered方法中有关为何有序的内容
