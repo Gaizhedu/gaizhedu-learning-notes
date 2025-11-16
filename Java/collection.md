@@ -2182,6 +2182,39 @@ System.out.printf("平方后各个元素之和为：%d", numList);
 
 剩下的另外两个方法也是一样的道理，转换类型存在差异而已
 
+**flatMap()**
+该方法为中间操作
+
+接下来介绍一下这个方法
+
+这个方法的作用是将一个嵌套流扁平化处理
+
+或者更加准确的讲，**是将流里面的元素映射为子流，之后拍平，合并**
+
+举个例子：
+
+``` Java
+ArrayList<List<String>> arrayList = new ArrayList<>();
+arrayList.add(List.of("pear", "grape", "strawberry"));
+arrayList.add(List.of("lemon", "blueberry", "pomelo"));
+List<String> newList = arrayList.stream()
+         .flatMap(Collection::stream)
+         .toList();
+System.out.printf("扁平化集合后为：%s%n", newList);
+System.out.printf("未扁平化的结果：%s%n", arrayList);
+
+// 输出：
+// 扁平化集合后为：[pear, grape, strawberry, lemon, blueberry, pomelo]
+// 未扁平化的结果：[[pear, grape, strawberry], [lemon, blueberry, pomelo]]
+```
+可以看到，使用扁平化之后，原先的嵌套结构变成了一个单一的流，成功实现了扁平化
+
+这里可能就有人要问了：“为什么要实现扁平化？”
+
+其实很简单，如果不进行扁平化，那么就无法对原先里面的元素进行处理
+
+因为原先的结构是一个嵌套的结构
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
