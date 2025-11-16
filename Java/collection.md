@@ -20,10 +20,10 @@
        - [x] mapToInt()
        - [x] mapToLong()
        - [x] mapToDouble()
-       - [ ] flatMap()
-       - [ ] flatMapToInt()
-       - [ ] flatMapToLong()
-       - [ ] flatMapToDouble()
+       - [x] flatMap()
+       - [x] flatMapToInt()
+       - [x] flatMapToLong()
+       - [x] flatMapToDouble()
        - [x] distinct()
        - [x] sorted()
        - [x] peek()
@@ -2214,6 +2214,40 @@ System.out.printf("未扁平化的结果：%s%n", arrayList);
 其实很简单，如果不进行扁平化，那么就无法对原先里面的元素进行处理
 
 因为原先的结构是一个嵌套的结构
+
+**flatMapToInt() & flatMapToLong() & flatMapToDouble()**
+这几个方法都是属于中间操作
+
+这几个跟上文的mapToInt其实作用差不多，这里简单介绍一下
+
+``` Java
+List<Integer> numbers = List.of(2, 3);
+int listSum = numbers.stream()
+         .flatMapToInt(a -> IntStream.of(a * a, a * a * a))
+         .sum();
+System.out.printf("所有数字平方和立方后和为：%d%n", listSum);
+
+// 输出：
+// 所有数字平方和立方后和为：48
+```
+这里的例子将数字平方和立方，然后执行求和操作，由于这里所有类型均为int，没有执行任何装箱的操作，会更加简洁点
+
+虽然说原先这样子也可以：
+
+``` Java
+List<Integer> numbers = List.of(2, 3);
+int listSum = numbers.stream()
+         .flatMap(a -> Stream.of(a * a, a * a * a))
+         .mapToInt(Integer::intValue)
+         .sum();
+System.out.printf("所有数字平方和立方后和为：%d%n", listSum);
+
+// 输出：
+// 所有数字平方和立方后和为：48
+```
+诶，效果是一样的！但是性能上呢？由于后者需要不断装箱拆包，实际性能要弱于之前一步到位的`flatMapToInt()`
+
+另外的两个`flatMapToLong()`和`flatMapToDouble()`效果是一样的，只不过类型需要稍微改变一下，这里不过多提及
 
 ---
 ### LinkedList
