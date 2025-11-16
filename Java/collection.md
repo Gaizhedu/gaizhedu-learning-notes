@@ -2249,6 +2249,32 @@ System.out.printf("所有数字平方和立方后和为：%d%n", listSum);
 
 另外的两个`flatMapToLong()`和`flatMapToDouble()`效果是一样的，只不过类型需要稍微改变一下，这里不过多提及
 
+**mapMulti()**
+该方法为中间操作
+
+上文我们介绍了一个十分有用的方法，`flatMap()`，但是这个方法有一个很明显的缺点——**每次使用都创建一个新的流**
+
+这样就会导致在大数据使用时大量的性能浪费，所以我们要怎么解决这个问题呢？
+
+其实很简单，可以使用这个方法：`mapMulti()`
+
+我们使用一下之前的例子来说明：
+
+``` Java
+List<Integer> numbers = List.of(2, 3);
+int listSum = numbers.stream()
+         .mapMulti((a, out) -> {
+            out.accept(a * a);
+            out.accept(a * a * a);
+         })
+         .mapToInt(i -> (int) i)
+         .sum();
+System.out.printf("所有数字平方和立方后和为：%d%n", listSum);
+
+// 输出：
+// 所有数字平方和立方后和为：48
+```
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
