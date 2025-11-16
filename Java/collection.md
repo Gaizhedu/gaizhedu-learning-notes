@@ -17,9 +17,9 @@
        - [ ] mapMultiToInt()
        - [ ] mapMultiToLong()
        - [ ] mapMultiToDouble()
-       - [ ] mapToInt()
-       - [ ] mapToLong()
-       - [ ] mapToDouble()
+       - [x] mapToInt()
+       - [x] mapToLong()
+       - [x] mapToDouble()
        - [ ] flatMap()
        - [ ] flatMapToInt()
        - [ ] flatMapToLong()
@@ -2140,6 +2140,47 @@ System.out.printf("新的集合为：%s%n", find);
 如果使用传统的命令式编程，则需要对每一个操作都写出来（遍历，拆分，转大写）
 
 而使用函数式编程则直接对想要修改的地方直接修改即可，相对来讲会方便很多
+
+**mapToInt() & mapToLong() & mapToDouble()**
+这些方法均为中间操作，返回类型为IntStream等
+
+接下来介绍一下mapTo系列方法，这些方法与map()其实功能上差不多，都是将流里面的一个东西转变为另一个东西
+
+但是mapToInt()还多了一个转换为int类型的过程，这一细微的处理直接影响了很多操作
+
+举一个例子，假设我们需要返回该流里面所有数字的平方和，那么我们可以这样干：
+
+``` Java
+List<Integer> lst = Arrays.asList(2, 3, 4, 5, 6);
+int numList = lst.stream()
+         .map(n -> n * n)
+         .mapToInt(Integer::intValue)
+         .sum();
+System.out.printf("平方后各个元素之和为：%d", numList);
+
+// 输出：
+// 平方后各个元素之和为：90
+```
+
+可以看到，这里使用到了`.mapToInt(Integer::intValue)`，这里的这个方法引用的作用是将Integer类型拆包为int类型
+
+为什么要这么干呢？这是因为原先的map返回对象为Stream，而Stream是没有.sum这个方法的，而`.mapToInt(Integer::intValue)`将原先的流转换为`IntStream`，这个类型才有`.sum()`求和的方法
+
+但是，这样做其实是有点多此一举的，事实上可以直接这样写：
+
+``` Java
+List<Integer> lst = Arrays.asList(2, 3, 4, 5, 6);
+int numList = lst.stream()
+         .mapToInt(n -> n * n)
+         .sum();
+System.out.printf("平方后各个元素之和为：%d", numList);
+
+// 输出
+// 平方后各个元素之和为：90
+```
+这样直接用`.mapToInt()`代替原先的`.map()`，简化了一步转换
+
+剩下的另外两个方法也是一样的道理，转换类型存在差异而已
 
 ---
 ### LinkedList
