@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2025-11-16]
+- 新增stream接口的相关内容
+  * 新增有关mapTo系列方法的相关内容
+  * 新增有关flatMap方法的相关内容
+  * 新增有关flatMapTo系列的相关方法
+  * 新增有关mapMulti方法的相关内容
+
 ## [2025-11-15]
 - 新增stream接口的相关内容
   * 新增有关allMatch方法的相关内容
