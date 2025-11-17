@@ -14,9 +14,9 @@
        - [x] filter()
        - [x] map()
        - [x] mapMulti()
-       - [ ] mapMultiToInt()
-       - [ ] mapMultiToLong()
-       - [ ] mapMultiToDouble()
+       - [x] mapMultiToInt()
+       - [x] mapMultiToLong()
+       - [x] mapMultiToDouble()
        - [x] mapToInt()
        - [x] mapToLong()
        - [x] mapToDouble()
@@ -2296,6 +2296,35 @@ arrayList.stream()
 // 将每个数平方和开方得到：[4, 8, 9, 27, 16, 64, 25, 125, 36, 216]
 ```
 可以看到，这里的代码与之前的相比便显得相当简便，不用再次使用`mapToInt()`来转换其中的数
+
+**reduce()**
+这个方法为终端操作
+
+接下来来介绍这个方法
+
+这个方法的作用为整合整理，简单举一个例子来说明
+
+``` Java
+List<Integer> lst = Arrays.asList(2, 3, 4, 5, 6);
+ArrayList<Integer> arrayList = new ArrayList<>(lst);
+OptionalInt addAll = arrayList.stream()
+         .mapMultiToInt((a, b) -> {
+            if (a > 3) {
+               b.accept(a * a);
+            } else {
+               b.accept(a * a * a);
+            }
+         })
+         .reduce(Integer::sum);
+addAll.ifPresent(number -> System.out.printf("按条件相加总和为：%d", number));
+
+// 输出：
+// 按条件相加总和为：112
+```
+
+可以看到，此处输出了一个相应的把所有数字相加的内容，其实也就是reduce把所有的数字都整合合并
+
+实际上这个用法并不局限如此，还有很多很有用的用法，但这里限于篇幅所以不多补充
 
 ---
 ### LinkedList
