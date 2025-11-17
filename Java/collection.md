@@ -2277,6 +2277,26 @@ System.out.printf("所有数字平方和立方后和为：%d%n", listSum);
 
 可以看到，通过这个方法，我们十分简单地实现了我们想要的效果，并且在这一过程中没有创建任何的中间流，大大节省了效率
 
+**mapMultiToInt() & mapMultiToLong() & mapMultiToDouble()**
+这些方法都是中间操作
+
+这些操作的作用跟之前的`mapToInt()`和`flatMapToInt()`效果差不多，这里直接通过例子来说明一下：
+
+``` Java
+List<Integer> lst = Arrays.asList(1, 2, 3, 4, 5);
+ArrayList<Integer> arrayList = new ArrayList<>(lst);
+arrayList.stream()
+         .mapMultiToInt((a, b) -> {
+            b.accept(a * a);
+            b.accept(a * a * a);
+         })
+         .forEach(System.out::println);
+
+// 输出：
+// 将每个数平方和开方得到：[4, 8, 9, 27, 16, 64, 25, 125, 36, 216]
+```
+可以看到，这里的代码与之前的相比便显得相当简便，不用再次使用`mapToInt()`来转换其中的数
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
