@@ -13,7 +13,7 @@
      - [ ] TODO stream()方法
        - [x] filter()
        - [x] map()
-       - [ ] mapMulti()
+       - [x] mapMulti()
        - [ ] mapMultiToInt()
        - [ ] mapMultiToLong()
        - [ ] mapMultiToDouble()
@@ -2274,6 +2274,8 @@ System.out.printf("所有数字平方和立方后和为：%d%n", listSum);
 // 输出：
 // 所有数字平方和立方后和为：48
 ```
+
+可以看到，通过这个方法，我们十分简单地实现了我们想要的效果，并且在这一过程中没有创建任何的中间流，大大节省了效率
 
 ---
 ### LinkedList
