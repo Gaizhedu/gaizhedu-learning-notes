@@ -2326,6 +2326,15 @@ addAll.ifPresent(number -> System.out.printf("按条件相加总和为：%d", nu
 
 实际上这个用法并不局限如此，还有很多很有用的用法，但这里限于篇幅所以不多补充
 
+**collect()**
+这个方法为终端操作
+
+接下来介绍一下这个方法
+
+collect()的作用较多，并且该操作可以理解为Stream API的核心
+
+接下来将分别对这几个方法来介绍
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
