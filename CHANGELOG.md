@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2025-11-18]
+- 新增stream接口的collect的相关内容
+
 ## [2025-11-17]
 - 新增stream接口的相关内容
   * 新增了mapMulti方法的相关内容
