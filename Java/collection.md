@@ -2335,6 +2335,229 @@ collect()的作用较多，并且该操作可以理解为Stream API的核心
 
 接下来将分别对这几个方法来介绍
 
+首先第一个方法为**collect(toList())**
+
+这个方法的作用实际与Java 16中出现的方法`.toList()`是一致的，相关的内容可以参照`.toList()`的内容，这里简单通过一个例子说明
+
+``` Java
+List<String> list = new ArrayList<>(Arrays.asList("Apple", "Orange", "banana", "strawberry", "Watermelon", "Ackee"));
+List<String> afterFilter = list.stream()
+         .filter(s -> Character.isUpperCase(s.charAt(0)))
+         .collect(Collectors.toList());
+System.out.printf("筛选后新集合为：%s", afterFilter);
+
+// 输出：
+// 筛选后新集合为：[Apple, Orange, Watermelon, Ackee]
+```
+我们可以与`.toList()`稍微对比一下：
+
+``` Java
+List<String> list = new ArrayList<>(Arrays.asList("Apple", "Orange", "banana", "strawberry", "Watermelon", "Ackee"));
+List<String> afterFilter = list.stream()
+         .filter(s -> Character.isUpperCase(s.charAt(0)))
+         .toList();
+System.out.printf("筛选后新集合为：%s", afterFilter);
+
+// 输出：
+// 筛选后新集合为：[Apple, Orange, Watermelon, Ackee]
+```
+可以看到，这里的结果是完全相同的
+
+从这两个方法的返回类型中可以看出，这两个方法的作用都是将流里面的元素整合到一个新的集合中并返回
+
+---
+接下来是**collect(Collectors.toSet())**
+
+这个方法的作用是将流里面的所有元素收集起来返回一个Set类型的集合
+
+从这一点上看便可以发现这个集合的特性便是不接受重复元素
+
+接下来通过一个例子来说明
+
+``` Java
+List<String> list = new ArrayList<>(Arrays.asList("Apple", "Orange", "banana", "strawberry", "Watermelon", "Ackee"));
+Set<String> afterFilter = list.stream()
+         .filter(s -> Character.isUpperCase(s.charAt(0)))
+         .map(s -> s.substring(0, 1))
+         .collect(Collectors.toSet());
+System.out.printf("筛选后新集合为：%s", afterFilter);
+
+// 输出：
+// 筛选后新集合为：[A, W, O]
+```
+可以看到这里筛选后的结果并没有重复的元素
+
+---
+接下来是**collect(toMap())**
+
+这个方法的作用是返回一个Map类型的集合，在介绍这个方法的具体使用之前，需要先对其各个参数进行介绍
+
+这个方法有四个可选参数：
+``` Java
+toMap(Function<? super T, ? extends K> keyMapper,
+Function<? super T, ? extends U> valueMapper,
+BinaryOperator<U> mergeFunction,
+Supplier<M> mapFactory)
+```
+
+不过这个版本不是很常用，一般会使用三个参数的版本
+
+> 事实上可以精简为两个参数，但是这样就不安全了
+
+这里逐一介绍四个参数
+
+首先是第一个参数：`Function<? super T, ? extends K> keyMapper`
+
+这里使用到了`PECS原则`，简单讲就是让函数可以接受更通用的输入，让输出可以返回更加具体的类型
+
+不过这里不多介绍，用十分简单的话来讲，第一个参数代表这个`Map`的键
+
+接下来是第二个参数：`Function<? super T, ? extends U> valueMapper`
+
+这里代表这个键对应的值
+
+第三个参数是为：`BinaryOperator<U> mergeFunction`，需要注意的是这个参数**相当重要**的，用于确保不会抛出`IllegalStateException`
+
+为什么很重要，当使用`toMap()`的时候只有两个参数（keyMapper和valueMapper），假设现在有一个键为`A`，那么接下来又传入一个新的键`A`，由于键不可以相等，所以此时程序会抛出报错`IllegalStateException`，代表这一行为是不合法的
+
+但是我们不可能说完全避免这种只有一个参数的情况，这也就是第三个参数存在的意义：合理处理重复的键
+
+> 例子会在介绍完四个参数后提供
+
+那么接下来是第四个参数`Supplier<M> mapFactory)`
+
+这个参数的作用是规定返回的Map是什么类型，一般默认为`HashMap`
+
+那么在介绍完这四个参数后，就可以用一个实际的例子来说明了
+
+> 返回一个map，使得其键为这个单词的第一个字母，且单词为首字母大写，若键重复则选择最后出现一个
+
+实现如下：
+
+``` Java
+List<String> list = new ArrayList<>(Arrays.asList("blueberry", "Apple", "Orange", "Ackee", "acerola", "Banana"));
+TreeMap<String, String> afterFilter = list.stream()
+         .filter(s -> Character.isUpperCase(s.charAt(0)))
+         .collect(Collectors.toMap(
+               s -> s.substring(0, 1),
+               s -> s,
+               (oldVal, newVal) -> newVal,
+               TreeMap::new
+         ));
+System.out.printf("筛选后新集合为：%s", afterFilter);
+
+// 输出：
+// 筛选后新集合为：{A=Ackee, B=Banana, O=Orange}
+```
+
+上面这串代码中先用`.filter()`筛选出首字母大写的单词
+
+接下来的`toMap()`中，第一个参数提取出首字母，第二个参数为这个单词本身，第三个参数为遇到同键的时候选择后出现的单词，第四个参数规定返回类型为`TreeMap`
+
+---
+接下来是**collect(Collectors.joining())**
+
+这个方法的作用是拼接字符串，返回类型为`String`
+
+这个方法有三个方法重载，参数分别为空参，带一个参数，带三个参数
+
+如果为空参，那么会直接将流里面的字符串全部拼在一起
+
+如果为一个参数：
+``` Java
+joining(CharSequence delimiter)
+```
+这个参数将规定每个字符串在拼接的时候用什么拼接
+
+如果为三个参数：
+``` Java
+joining(CharSequence delimiter,
+CharSequence prefix,
+CharSequence suffix)
+```
+第一个参数与上文相同，而第二个和第三个参数分别规定了前缀和后缀
+
+接下来通过一个例子来说明：
+``` Java
+List<String> list = new ArrayList<>(Arrays.asList("blueberry", "Apple", "Orange", "Ackee", "acerola", "Banana"));
+String afterFilter = list.stream()
+         .filter(s -> Character.isUpperCase(s.charAt(0)))
+         .collect(Collectors.joining(", ","[","]"));
+System.out.printf("筛选后新集合为：%s", afterFilter);
+
+// 输出：
+// 筛选后新集合为：[Apple, Orange, Ackee, Banana]
+```
+可以看到，这里被规范为一般集合输出的方式
+
+---
+接下来是**collect(Collectors.groupingBy)**
+
+这个方法的作用是通过一个高效的分组器来对输入的元素进行分组
+
+这个方法有三个不同参数的重载，接下来分别介绍每个重载
+
+首先是第一个重载
+
+``` Java
+groupingBy(Function<? super T, ? extends K> classifier)
+```
+这个重载有一个参数，这个参数决定了其分组的标准
+
+接下来是第二个重载
+
+``` Java
+groupingBy(Function<? super T, ? extends K> classifier,
+Collector<? super T, A, D> downstream)
+```
+
+第二个重载新增一个了参数用于决定收集到的元素要如何处理
+
+通过源代码可以发现，假设我们这里不填（等价于只有一个参数的形式）
+
+``` Java
+groupingBy(Function<? super T, ? extends K> classifier) {
+   return groupingBy(classifier, toList());
+}
+```
+那么这里默认的处理方式是转换成一个新的集合`toList()`
+
+接下来是有三个参数的重载
+``` Java
+groupingBy(Function<? super T, ? extends K> classifier,
+Supplier<M> mapFactory,
+Collector<? super T, A, D> downstream)
+```
+这里相较于前文的两个参数多了一个用于规范最后输出类型的参数
+
+需要特别注意的一点是此处原本的第二个参数是放到最后的
+
+接下来通过一个简单的例子来说明一下：
+
+``` Java
+Random random = new Random();
+ArrayList<Integer> arrayList = new ArrayList<>();
+for (int i = 0; i < 5; i++) {
+   arrayList.add(random.nextInt(1,600));
+}
+Map<String, List<Integer>> afterFilter = arrayList.stream()
+         .sorted()
+         .collect(Collectors.groupingBy(s -> {
+            if (s < 200) return "<200";
+            else if (s < 400) return "<400";
+            else return ">400";
+         },TreeMap::new,Collectors.toList()));
+System.out.printf("分组后为：%s", afterFilter);
+
+// 输出：
+// 分组后为：{<200=[51, 88], <400=[367], >400=[536, 549]}
+```
+这里的运行逻辑是这样的，首先先将元素排序，之后通过`groupingBy()`分别分组
+
+这里分组的标准是这样的，假设小于200则进入一组，如果大于200并且小于400则进入第二组，如果都不满足（也就是大于400）则进入最后一组
+
+接下来是要求返回一个TreeMap（去重和排序），由于我们并不需要继续对里面的元素进行第二次处理，所以这里默认即可：`Collectors.toList()`
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
