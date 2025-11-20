@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2025-11-20]
+- 新增：新增gather的相关内容
+  * 介绍了Gatherer.windowFixed的相关内容
+
 ## [2025-11-19]
 - 新增：有关collect方法的相关内容
   * 介绍了其高频使用的五个方法
