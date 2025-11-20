@@ -2558,6 +2558,34 @@ System.out.printf("分组后为：%s", afterFilter);
 
 接下来是要求返回一个TreeMap（去重和排序），由于我们并不需要继续对里面的元素进行第二次处理，所以这里默认即可：`Collectors.toList()`
 
+**gather()**
+这个方法为终端操作
+
+gather的作用是对流里面的元素进行转换
+
+接下来简单说明一下具体的用途：
+
+由于源代码里面写的内容是`gather(Gatherer<? super T, ?, R> gatherer)`
+
+这提醒我们应该使用Gatherer接口的一些方法
+
+接下来来简单介绍一下里面一些常用的方法
+
+首先是第一个`Gatherers.windowFixed()`
+
+这个方法的作用是将流里面的元素按照规定的数量进行分割
+
+``` Java
+List<String> list = new ArrayList<>(Arrays.asList("Apple","banana","Grape","Peach", "plum"));
+List<List<String>> newList = list.stream().gather(Gatherers.windowFixed(3))
+         .toList();
+System.out.println(newList);
+
+// 输出：
+// [[Apple, banana, Grape], [Peach, plum]]
+```
+可以看到，这里规定的数字是3，所以按照每3个为一组的顺序分割，如果最后不满三个也是成一组
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
