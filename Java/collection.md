@@ -2632,6 +2632,27 @@ if (element > sonListElement - 1 || element < 0) {
 
 而这里是通过创建子集合来实现的翻页效果
 
+接下来介绍`Gatherers.windowSliding()`
+
+这个方法的作用是，收集n个元素为一组，之后每次减去最前面一个元素，新增后一个元素，并返回一个新的集合
+
+说白了就是以n为单位一点一点往集合最后挪过去
+
+``` Java
+List<String> list = new ArrayList<>(Arrays.asList("Apple", "Apricot", "Blueberry",
+         "Cherry"));
+List<List<String>> newList = list.stream().gather(Gatherers.windowSliding(2))
+         .toList();
+System.out.println(newList);
+
+
+// 输出：
+// [[Apple, Apricot], [Apricot, Blueberry], [Blueberry, Cherry]]
+```
+可以看到，这里首先收集两个元素作为一组，之后减去第一个元素`Apple`，新增后一个元素`Blueberry`
+
+以此类推直到集合结束
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
