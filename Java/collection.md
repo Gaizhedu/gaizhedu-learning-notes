@@ -2586,6 +2586,52 @@ System.out.println(newList);
 ```
 可以看到，这里规定的数字是3，所以按照每3个为一组的顺序分割，如果最后不满三个也是成一组
 
+具体用途可以用于翻页
+
+假设我们现在想要做出一个简单的翻页效果，那么我们可以直接将这里面的每个东西按数量分别分组，之后直接查询即可
+
+这里简单写一个例子来说明一下：
+
+``` Java
+final int maxElements = 3;
+Scanner input = new Scanner(System.in);
+List<String> list = new ArrayList<>(Arrays.asList("Apple", "Apricot", "Avocado",
+         "Banana", "Blueberry", "Blackberry",
+         "Cherry", "Coconut", "Cranberry",
+         "Date", "Dragonfruit"));
+List<List<String>> newList = list.stream().gather(Gatherers.windowFixed(maxElements))
+         .toList();
+
+System.out.printf("输入查询的页数（最大不超过%d）：", newList.size());
+int page = input.nextInt() - 1;
+if (page > newList.size() - 1 || page < 0) {
+   System.out.printf("输入页码超出范围！（最大为%d）", newList.size());
+}
+// 获取子集合可获取到的最大元素
+int sonListElement = newList.get(page).size();
+
+System.out.printf("输入查询的第几个元素（最大不超过%d）：", sonListElement);
+int element = input.nextInt() - 1;
+
+if (element > sonListElement - 1 || element < 0) {
+   System.out.printf("输入数字超出范围！（最大为%d）", maxElements);
+} else {
+   System.out.printf("查找的内容为：%s", newList.get(page).get(element));
+}
+
+// 输入：
+// 输入查询的页数（最大不超过4）：3
+// 输入查询的第几个元素（最大不超过3）：1
+// 
+// 输出：
+// 查找的内容为：Cherry
+```
+可以看到，这里使用了`Gatherers.windowFixed(maxElements)`来实现了将指定数量的元素放到一页的效果
+
+之前在介绍`limit()`和`skip()`的时候，也实现了翻页的效果，但是那个翻页原理是通过跳过一定的元素来实现的翻页
+
+而这里是通过创建子集合来实现的翻页效果
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
