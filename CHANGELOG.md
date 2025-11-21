@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2025-11-21]
+- 新增：新增gather的相关内容
+  * 新增有关windowFixed的相关内容
+  * 新增有关windowSliding的相关内容
+
 ## [2025-11-20]
 - 新增：新增gather的相关内容
   * 介绍了Gatherer.windowFixed的相关内容
