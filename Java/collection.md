@@ -2781,6 +2781,62 @@ System.out.printf("正常的处理：%s", newList);
 
 这里的副作用来自于`.add()`，由于`ArrayList`并不是线程安全的，试图并发add可能导致出现一些奇奇怪怪的问题
 
+**spliterator()**
+这个方法为中间操作
+
+这个方法的作用是分割和遍历，也就是说这个方法可以遍历元素和分割流
+
+这个方法有很多方法可以使用，接下来简单介绍一下：
+
+首先第一个是**trySplit()**
+
+这个方法的作用是将当前流从中间分割，并且分为两个新的Spliterator
+
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8));
+Spliterator<Integer> oldStream = list.stream().spliterator();
+Spliterator<Integer> newSplit = oldStream
+         .trySplit();
+if (newSplit != null) {
+   System.out.println("拆分成功！");
+   System.out.printf("原先预计大小为：%s%n", oldStream.estimateSize());
+   System.out.printf("当前分割预计大小为：%s%n", newSplit.estimateSize());
+
+   System.out.printf("%n当前oldStream包含了：");
+   oldStream.forEachRemaining(s -> System.out.printf("%s ", s));
+
+   System.out.printf("%n当前newSplit包含了：");
+   newSplit.forEachRemaining(s -> System.out.printf("%s ", s));
+}
+
+// 输出：
+// 拆分成功！
+// 原先预计大小为：4
+// 当前分割预计大小为：4
+//
+// 当前oldStream包含了：5 6 7 8 
+// 当前newSplit包含了：1 2 3 4 
+```
+可以看到，这里trySplit将原本的流分割成了两个新的部分
+
+如果这里只有奇数个元素，那么分割出去的newSplit就只有（（向下取整）（总数 / 2））个元素，例如总共有7个，那么oldStream会分到4个，而newSplit会分到3个元素
+
+接下来看具体的实现，由于trySplit来自接口Spliterator，所以具体实现得看对应的使用
+
+这里以ArrayList为例子：
+
+``` Java
+public ArrayListSpliterator trySplit() {
+   int hi = getFence(), lo = index, mid = (lo + hi) >>> 1;
+   return (lo >= mid) ? null : // divide range in half unless too small
+         new ArrayListSpliterator(lo, index = mid, expectedModCount);
+}
+```
+其中hi为集合的边界，lo为一开始的位置，此处使用了>>>1来代替除以2，避免了溢出的情况
+
+接下来是三元表达式判断条件，如果不满足则直接返回null，满足则返回一个新的`ArrayListSpliterator`（其实也就是Spliterator）
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
