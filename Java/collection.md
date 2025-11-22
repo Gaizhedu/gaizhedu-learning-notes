@@ -1,4 +1,4 @@
-
+[TOC]
 [TODO]
 1. List接口
    - [x] ArrayList
@@ -34,8 +34,8 @@
        - [x] forEach()
        - [x] forEachOrdered()
        - [x] toArray()
-       - [ ] reduce()
-       - [ ] collect()
+       - [x] reduce()
+       - [x] collect()
        - [x] min()
        - [x] max()
        - [x] count()
@@ -2652,6 +2652,79 @@ System.out.println(newList);
 可以看到，这里首先收集两个元素作为一组，之后减去第一个元素`Apple`，新增后一个元素`Blueberry`
 
 以此类推直到集合结束
+
+接下来介绍`Gatherers.mapConcurrent()`
+
+这个方法有两个参数，不过在讲这两个参数的作用之前我们需要先介绍一下这个方法是干什么用的
+
+`Gatherers.mapConcurrent()`的作用是，并发处理多个元素
+
+简单来说就是一次性处理多个元素
+
+接下来介绍参数：
+``` Java
+mapConcurrent(
+final int maxConcurrency,
+final Function<? super T, ? extends R> mapper)
+```
+第一个参数为`maxConcurrency`意思是可以同时执行的操作的数量
+
+第二个为`mapper`，意思是每个元素要执行的操作
+
+接下来通过一个简单的例子来说明：
+
+``` Java
+List<String> ids = Arrays.asList("A", "B", "C", "D", "E");
+long start = System.currentTimeMillis();
+List<String> users = ids.stream()
+         .gather(Gatherers.mapConcurrent(2, s -> {
+            try {
+               Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+            }
+            return "User" + s;
+         }))
+         .toList();
+System.out.println(users);
+System.out.println("耗时: " + (System.currentTimeMillis() - start) + " ms");
+
+
+// 输出：
+// [UserA, UserB, UserC, UserD, UserE]
+// 耗时: 1521 ms
+```
+可以看到，这里在每次处理时要求`sleep`500ms后才执行处理
+
+而这里最大并发数为2，意味着可以同时运行2个任务，而一共5个元素只需要处理3次即可，所以总时长便是~1500ms
+
+假设不使用并发处理呢？
+
+``` Java
+List<String> ids = Arrays.asList("A", "B", "C", "D", "E");
+long start = System.currentTimeMillis();
+List<String> users = ids.stream()
+         .map(s -> {
+            try {
+               Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+            }
+            return "User" + s;
+         })
+         .toList();
+System.out.println(users);
+System.out.println("耗时: " + (System.currentTimeMillis() - start) + " ms");
+
+// 输出：
+// [UserA, UserB, UserC, UserD, UserE]
+// 耗时: 2505 ms
+```
+可以看到，这里是一个操作结束后才会执行下一个操作，总花费时间便为5 x 500ms
+
+那么这时候就有人要问了，诶，那么这个这么好用，是不是`maxConcurrency`越大越好呢？
+
+当然不是！越大意味着要同时消耗的资源就越多，所以一般10~100就够用了
+
+并且这个操作只适合I/O 密集型的任务，如果只是为了计算的话，建议使用并行流
 
 ---
 ### LinkedList
