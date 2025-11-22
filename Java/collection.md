@@ -10,7 +10,7 @@
      - [ ] TODO spliterator()方法
      - [x] TODO forEach()方法
      - [x] TODO removeIf()方法
-     - [ ] TODO stream()方法
+     - [x] TODO stream()方法
        - [x] filter()
        - [x] map()
        - [x] mapMulti()
@@ -44,9 +44,9 @@
        - [x] noneMatch()
        - [x] findFirst()
        - [x] findAny()
-       - [ ] gather()
+       - [x] gather()
        - [x] toList()
-     - [ ] TODO parallelStream()方法
+     - [x] TODO parallelStream()方法
      - [x] TODO equals()方法
      - [x] TODO hashCode()方法
      - [x] TODO clone()方法
@@ -2725,6 +2725,61 @@ System.out.println("耗时: " + (System.currentTimeMillis() - start) + " ms");
 当然不是！越大意味着要同时消耗的资源就越多，所以一般10~100就够用了
 
 并且这个操作只适合I/O 密集型的任务，如果只是为了计算的话，建议使用并行流
+
+**parallelStream()**
+这个方法为中间操作
+
+这个方法为**并发流**，具体的使用方法与上文的`stream()`完全一致，所以之类不再花时间介绍
+
+不过需要注意的一点是，由于这是并发流的原因，有些依照顺序处理的方法可能会出现一些小小的**偏差**
+
+这里简单举一个例子来说明：
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1,2,3,4,5,6));
+list.parallelStream()
+         .forEach(System.out::println);
+
+// （示例）输出：
+// 4
+// 6
+// 5
+// 2
+// 3
+// 1
+```
+可以看到，这里输出**完全不按照顺序**，为什么加上一个示例呢？因为这个输出的内容是完全随机的，没办法预测到的
+
+特别需要注意的一点是，使用这个方法必须做到**无副作用和线程安全**
+
+如果有副作用会怎么样呢？
+``` Java
+ArrayList<Integer> arrayList = new ArrayList<>();
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+list.parallelStream()
+         .forEach(s -> arrayList.add(s * s));
+System.out.printf("在并发流里面使用带有副作用的lambda：%s", arrayList);
+
+// 输出：
+// 在并发流里面使用带有副作用的lambda：[16, 36, 25, 4, 9, 1]
+```
+可以看到，这里无法预测输出是什么结果
+
+但如果真的要这样处理得怎么办呢？
+
+可以使用map和toList：
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+List<Integer> newList = list.parallelStream()
+         .map(s -> s * s)
+         .toList();
+System.out.printf("正常的处理：%s", newList);
+
+// 输出：
+// 正常的处理：[1, 4, 9, 16, 25, 36]
+```
+
+这里的副作用来自于`.add()`，由于`ArrayList`并不是线程安全的，试图并发add可能导致出现一些奇奇怪怪的问题
 
 ---
 ### LinkedList
