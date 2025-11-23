@@ -2933,6 +2933,142 @@ spliterator.forEachRemaining(x -> System.out.println(x * x * x));
 
 这也说明了在使用`forEachRemaining`后，这个`spliterator`便直接结束了
 
+接下来是`characteristics()`
+
+这个方法的作用是获取到该spliterator的位掩码
+
+##### 补充点：位掩码（Bitmask）
+那么是什么是位掩码（Bitmask）呢？
+
+简单来讲就是通过一个数字的二进制的0和1来存储指定的布尔信息
+
+Java中characteristics为int类型，该类型为32位
+
+用二进制表示便是
+``` Java
+00000000 00000000 00000000 00000000
+```
+这里每一位便是一个“开关”，总共可以表示**32种布尔状态**
+
+我们以spliterator中的SIZED为例，在spliterator.java中可以找到其位掩码所代表的值：
+
+``` Java
+public static final int SIZED = 0x00000040;
+```
+可以看到，这里是一个十六进制数，简单换算一下可以得到为十进制的`64`和二进制的`1000000`
+
+这里1在第7位，意味着在32位中第七位代表`SIZED`的状态
+
+也就是当出现以下情况的时候（其他位不计，只看第七位），就代表这个spliterator有`SIZED`属性
+``` Java
+00000000 00000000 00000000 01000000
+```
+---
+在补充完位掩码的相关内容后，便开始介绍这个方法的具体用途
+
+上面的也提及到说这个方法的作用是返回该spliterator的位掩码
+
+我们简单通过一个例子来说明：
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+Spliterator<Integer> spliterator = list.stream().spliterator();
+int characteristics = spliterator.characteristics();
+System.out.printf("位掩码：%d (0x%X)%n", characteristics, characteristics);
+
+// 输出：
+// 位掩码：16464 (0x4050)
+```
+很好，我们成功获取到了一个位掩码，那么接下来要怎么计算到这个spliterator有什么属性呢？
+
+从上文我们可以知道，要想判断是否有该属性，只需要在二进制的这个位为1，即可
+
+那么我们便需要找到一个可以满足以下条件的运算符
+
+当a与b同为1时，返回1，当a与b任意一个出现0的时候，返回0
+
+稍微思考一下便可以想起位运算符：按位与（&）
+
+如此，我们便可以这样计算：
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+Spliterator<Integer> spliterator = list.stream().spliterator();
+int characteristics = spliterator.characteristics();
+System.out.printf("位掩码：%d (0x%X)%n", characteristics, characteristics);
+
+System.out.println("ORDERED: " + ((characteristics & Spliterator.ORDERED) != 0));
+System.out.println("SORTED: " + ((characteristics & Spliterator.SORTED) != 0));
+System.out.println("SIZED: " + ((characteristics & Spliterator.SIZED) != 0));
+System.out.println("SUBSIZED: " + ((characteristics & Spliterator.SUBSIZED) != 0));
+// 此处仅列出几个，剩下的会在之后介绍
+
+// 输出：
+// 位掩码：16464 (0x4050)
+// ORDERED: true
+// SORTED: false
+// SIZED: true
+// SUBSIZED: true
+```
+可以看到，这里spliterator有以下属性：`ORDERED`、`SIZED`、`SUBSIZED`
+
+##### 补充点：关于属性
+虽然我们获取到这个spliterator的属性，但是我们还是不知道这些属性有什么具体的用途
+
+那么接下来便来具体的介绍这些属性的作用，分别代表了该spliterator有什么特点
+
+在介绍的时候会顺带附上其十六进制码，以及对应的二进制位数，来源均来自`spliterator.java`
+
+**ORDERED**
+ORDERED的十六进制码为：`0x00000010`，二进制为：`10000`
+
+这个属性用于表明该spliterator顺序是否会保持插入顺序
+
+假设这个属性为true，那么元素在处理的时候会与插入的顺序保持一致，即使并行处理也会保持顺序
+
+在多次执行的时候顺序均一致
+
+**SIZED**
+SIZED的十六进制码为：`0x00000040`，二进制为：`1000000`
+
+这个属性用于表示是否可以查询到精确大小
+
+如果为true，则会返回精确的大小，如果为false，一般在使用`estimateSize()`返回大小的时候会返回long.MAX_VALUE，当然也有可能返回一个随机的值
+
+具体参照这里：
+
+``` Java
+Returns an estimate of the number of elements that would be
+encountered by a forEachRemaining traversal, or returns
+Long#MAX_VALUE if infinite, unknown, or too expensive to compute.
+```
+
+**SUBSIZED**
+SIZED的十六进制码为：`0x00004000`，二进制为：`100000000000000（1在第15位）`
+
+这个属性表示子分割是否知道具体大小
+
+利用这个属性可以预测在并行任务中的处理时间
+
+**DISTINCT**
+DISTINCT的十六进制码为：`0x00000001`，二进制为：`1`
+
+这个属性表示spliterator中是否元素唯一
+
+**SORTED**
+SORTED的十六进制码为：`0x00000004`，二进制为：`100`
+
+这个属性表示该spliterator是否元素是否已排序
+
+**IMMUTABLE**
+IMMUTABLE的十六进制码为：`0x00000400`，二进制为：`10000000000（1在第11位）`
+
+这个属性表示该spliterator是否不可变（也就是能不能使用add、remove这些方法来修改）
+
+**CONCURRENT**
+CONCURRENT的十六进制码为：`0x00001000`，二进制为：`1000000000000（1在第13位）`
+
+这个属性表示该spliterator是否并发安全
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
