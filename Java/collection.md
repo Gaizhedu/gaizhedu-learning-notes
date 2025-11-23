@@ -2909,6 +2909,29 @@ System.out.printf("该Spliterator估计长度为：%d", streamSize);
 ```
 可以看到，这里返回的结果是 (2^63) - 1，也就是64位整数的极限，这也说明了不是是准确的
 
+接下来是**forEachRemaining**
+
+这个方法的作用是遍历`Spliterator`里面的元素
+
+需要注意的一点是，使用`forEachRemaining`之后，这个`Spliterator`便会被消费，之后若试图再次使用`forEachRemaining`便不会输出任何内容
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+Spliterator<Integer> spliterator = list.stream().spliterator();
+spliterator.forEachRemaining(x -> System.out.println(x * x));
+spliterator.forEachRemaining(x -> System.out.println(x * x * x));
+
+// 输出：
+// 1
+// 4
+// 9
+// 16
+// 25
+// 36
+```
+此处可以看到，在第一次输出数的平方后，再次使用试图输出数的立方时是没有任何效果的
+
+这也说明了在使用`forEachRemaining`后，这个`spliterator`便直接结束了
 
 ---
 ### LinkedList
