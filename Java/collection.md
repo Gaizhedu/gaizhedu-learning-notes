@@ -2782,9 +2782,9 @@ System.out.printf("正常的处理：%s", newList);
 这里的副作用来自于`.add()`，由于`ArrayList`并不是线程安全的，试图并发add可能导致出现一些奇奇怪怪的问题
 
 **spliterator()**
-这个方法为中间操作
+该方法是一个终端操作
 
-这个方法的作用是分割和遍历，也就是说这个方法可以遍历元素和分割流
+该方法常见便是返回一个spliterator对象，而这个对象提供遍历和分割的能力
 
 这个方法有很多方法可以使用，接下来简单介绍一下：
 
@@ -2800,7 +2800,7 @@ Spliterator<Integer> newSplit = oldStream
          .trySplit();
 if (newSplit != null) {
    System.out.println("拆分成功！");
-   System.out.printf("原先预计大小为：%s%n", oldStream.estimateSize());
+   System.out.printf("分割后oldStream预计大小为：%s%n", oldStream.estimateSize());
    System.out.printf("当前分割预计大小为：%s%n", newSplit.estimateSize());
 
    System.out.printf("%n当前oldStream包含了：");
@@ -2812,7 +2812,7 @@ if (newSplit != null) {
 
 // 输出：
 // 拆分成功！
-// 原先预计大小为：4
+// 分割后oldStream预计大小为：4
 // 当前分割预计大小为：4
 //
 // 当前oldStream包含了：5 6 7 8 
@@ -2836,6 +2836,79 @@ public ArrayListSpliterator trySplit() {
 其中hi为集合的边界，lo为一开始的位置，此处使用了>>>1来代替除以2，避免了溢出的情况
 
 接下来是三元表达式判断条件，如果不满足则直接返回null，满足则返回一个新的`ArrayListSpliterator`（其实也就是Spliterator）
+
+接下来是`estimateSize()`
+
+这个方法的作用是返回该Spliterator估计还能返回的长度
+
+上文在trySplit的例子中也有使用到这个方法，这里简单举一个例子来说明：
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+Spliterator<Integer> oldStream = list.stream().spliterator();
+long estimateSize = oldStream
+         .estimateSize();
+System.out.printf("该Spliterator估计还能返回的长度为：%d", estimateSize);
+
+// 输出：
+// 该Spliterator估计还能返回的长度为：7
+```
+
+从`ArrayList.java`也可以很轻松找到对应的实现：
+
+``` Java
+public long estimateSize() {
+   return getFence() - index;
+}
+```
+可以看到，这里是实际的返回是最右端（getFence()）和最开始的差（index）
+
+##### 补充点：精确求值
+在ArrayList这里`estimateSize`是返回精确值的，我们可以称之为**SIZED**
+
+可以通过如下操作来获取是否为精确的
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+Spliterator<Integer> spliterator = list.stream().spliterator();
+Boolean isSized = spliterator
+         .hasCharacteristics(Spliterator.SIZED);
+System.out.printf("该Spliterator是否为精确的（SIZED）：%s", isSized);
+
+// 输出
+// 该Spliterator是否为精确的（SIZED）：true
+```
+> 具体内容请参照hasCharacteristics的内容
+
+如果这里为精确的，那么便可以使用`estimateSize`得到精确值
+
+如果不为精确的，那么可能会出现一些偏差
+
+例如这里：
+``` Java
+Stream<Integer> stream = Stream.iterate(0, n -> n + 1).limit(5);
+Spliterator<Integer> spliterator = stream.spliterator();
+Boolean isSized = spliterator
+         .hasCharacteristics(Spliterator.SIZED);
+System.out.printf("该Spliterator是否为精确的（SIZED）：%s", isSized);
+
+// 输出：
+// 该Spliterator是否为精确的（SIZED）：false
+```
+
+可以看到，这里结果为false，也就是说不是精确的，假设我们现在试图用estimateSize获取长度，那么会怎么样？
+
+``` Java
+Stream<Integer> stream = Stream.iterate(0, n -> n + 1).limit(5);
+Spliterator<Integer> spliterator = stream.spliterator();
+long streamSize = spliterator
+         .estimateSize();
+System.out.printf("该Spliterator估计长度为：%d", streamSize);
+
+// 输出：
+// 该Spliterator估计长度为：9223372036854775807
+```
+可以看到，这里返回的结果是 (2^63) - 1，也就是64位整数的极限，这也说明了不是是准确的
+
 
 ---
 ### LinkedList
