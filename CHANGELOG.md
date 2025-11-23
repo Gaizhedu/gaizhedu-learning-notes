@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2025-11-23]
+- 新增：spliterator的相关内容
+  * 新增有关estimateSize的相关内容
+  * 新增有关forEachRemaining的相关内容
+  * 新增有关characteristics的相关内容
+    * 补充了位掩码的相关内容
+    * 补充了spliterator中各个属性代表的含义
+
 ## [2025-11-22]
 - 新增：gather的相关内容
   * 新增有关mapConcurrent的相关内容
