@@ -3095,6 +3095,21 @@ System.out.printf("该spliterator是否有属性SIZED：%s", isSized);
 ```
 通过这样便可以更加简便地判断出这个spliterator到底有什么属性
 
+接下来是**tryAdvance()**
+
+这个方法的作用是尝试执行一个操作并返回是否执行成功的布尔值
+
+需要注意的是，每次执行这个操作都会使得这个元素被消费掉，无法再次使用
+
+我们可以借此来简单实现一个遍历的操作：
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+Spliterator<Integer> spliterator = list.stream().spliterator();
+while (spliterator.tryAdvance(System.out::println));
+```
+如果tryAdvance成功执行括号内的操作，那么会返回True，这就导致了可以将这个语句放进判断中，直到该spliterator内元素全部被消耗完
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
