@@ -3110,6 +3110,34 @@ while (spliterator.tryAdvance(System.out::println));
 ```
 如果tryAdvance成功执行括号内的操作，那么会返回True，这就导致了可以将这个语句放进判断中，直到该spliterator内元素全部被消耗完
 
+接下来是**getExactSizeIfKnown()**
+
+这个方法的作用是：如果该spliterator具有SIZED属性，那么返回其精确的数量，如果没有，则返回-1
+
+举一个简单的例子来说明一下：
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+Spliterator<Integer> spliterator = list.stream().spliterator();
+long size = spliterator.getExactSizeIfKnown();
+System.out.printf("其精确数量为：%d", size);
+
+// 输出：
+// 其精确数量为：6
+```
+可以看到，这里输出为精确的数量
+
+但如果没有SIZED这个属性，那么会是这个结果：
+
+``` Java
+Spliterator<Integer> spliterator = Stream.iterate(1,n -> n + 1).limit(100).spliterator();
+long size = spliterator.getExactSizeIfKnown();
+System.out.printf("其精确数量为：%d", size);
+
+// 输出：
+// 其精确数量为：-1
+```
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
