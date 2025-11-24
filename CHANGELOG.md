@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2025-11-24]
+- 新增：spliterator的相关内容
+  * 新增有关hasCharacteristics的相关内容
+  * 新增有关tryAdvance方法的相关内容
+  * 新增有关getExactSizeIfKnown方法的相关内容
+
 ## [2025-11-23]
 - 新增：spliterator的相关内容
   * 新增有关estimateSize的相关内容
