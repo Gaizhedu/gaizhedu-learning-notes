@@ -3069,6 +3069,32 @@ CONCURRENT的十六进制码为：`0x00001000`，二进制为：`1000000000000�
 
 这个属性表示该spliterator是否并发安全
 
+接下来是**hasCharacteristics()**
+
+这个方法的作用是帮我们计算是否有该属性
+
+相当于帮我们做了一次按位与的计算
+
+通过源代码中，也可以看到实际上便是如此：
+
+``` Java
+default boolean hasCharacteristics(int characteristics) {
+   return (characteristics() & characteristics) == characteristics;
+}
+```
+接下来通过一个具体的例子来说明一下如何使用：
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+Spliterator<Integer> spliterator = list.stream().spliterator();
+boolean isSized = spliterator.hasCharacteristics(Spliterator.SIZED);
+System.out.printf("该spliterator是否有属性SIZED：%s", isSized);
+
+// 输出：
+// 该spliterator是否有属性SIZED：true
+```
+通过这样便可以更加简便地判断出这个spliterator到底有什么属性
+
 ---
 ### LinkedList
 接下来讲讲LinkedList
