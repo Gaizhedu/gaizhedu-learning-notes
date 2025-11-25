@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2025-11-25]
+- 新增有关Map接口的相关内容
+
 ## [2025-11-24]
 - 新增：spliterator的相关内容
   * 新增有关hasCharacteristics的相关内容
