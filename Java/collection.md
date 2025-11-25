@@ -7,7 +7,7 @@
      - [x] TODO contains()方法
      - [x] TODO retainAll()方法
      - [x] TODO toArray()方法
-     - [ ] TODO spliterator()方法
+     - [x] TODO spliterator()方法
      - [x] TODO forEach()方法
      - [x] TODO removeIf()方法
      - [x] TODO stream()方法
@@ -60,20 +60,14 @@
    - [ ] （拓展）LinkedHashSet
    - [ ] （拓展）ConcurrentSkipListSet
    - [ ] （拓展）CopyOnWriteArraySet 
-3. Map接口
-   - [ ] HashMap
-   - [ ] TreeMap
-   - [ ] （拓展）LinkedHashMap
-   - [ ] （拓展）ConcurrentHashMap
-   - [ ] （拓展）WeakHashMap 
-4. （拓展）Queue接口
+3. （拓展）Queue接口
    - [ ] ArrayDeque
    - [ ] LinkedList
    - [ ] PriorityQueue
    - [ ] ConcurrentLinkedQueue
    - [ ] ArrayBlockingQueue
    - [ ] DelayQueue
-5. （扩展）配套工具
+4. （扩展）配套工具
    - [ ] 迭代器（Iterator）
    - [ ] 集成工具类（Collections）
 
