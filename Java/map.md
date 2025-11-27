@@ -48,3 +48,24 @@ System.out.println(map.get(1));
 
 在上面的例子中，我们通过get获取到名字为1的键对应的值
 
+接下来，既然我们可以查询值，为了不产生报错，要怎么确定是否存在对应的键？
+
+这时候我们便可以使用到这个方法了：`containsKey()`和`containsValue()`
+
+这两个方法的作用便是查找该map中是否存在对应的键和值
+
+``` Java
+Map<Integer, String> map = new HashMap<>();
+map.put(1, "Hello");
+System.out.printf("是否存在键 1：%s%n", map.containsKey(1));
+System.out.printf("是否存在值 Hello：%s", map.containsValue("Hello"));
+
+// 输出：
+// 是否存在键 1：true
+// 是否存在值 Hello：true
+```
+从这个例子中也可以看到，这里检测到了该map是否存在对应的键`1`和值`Hello`
+
+需要注意的一点是这里并不是必须要键对应的值，只需要存在这个值即可
+
+
