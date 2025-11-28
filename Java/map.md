@@ -21,8 +21,8 @@
 - [x] put  
 - [ ] putAll  
 - [ ] putIfAbsent  
-- [ ] remove  
-- [ ] replace  
+- [x] remove  
+- [x] replace  
 - [ ] replaceAll  
 - [ ] size  
 - [ ] values  
@@ -220,3 +220,16 @@ System.out.printf("替换后的值：%s%n", map.get(1));
 // 替换后的值：Hello
 ```
 在上文中，`oldValue`为`World`，与值`Hello`不相等，所以不会触发替换
+
+接下来是`size()`
+
+这个方法的作用相当简单，返回当前map的长度
+
+``` Java
+Map<Integer, String> map = new HashMap<>();
+map.put(1, "Hello");
+System.out.printf("当前Map的长度：%d", map.size());
+
+// 输出：
+// 当前Map的长度：1
+```
