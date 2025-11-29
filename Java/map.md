@@ -310,6 +310,44 @@ System.out.printf("当前Map的所有键和对应的值：%s", map.entrySet());
 
 与上文的`keySet`类似，具体的实现需要参照具体的实现类
 
+### isEmpty()
+接下来是**isEmpty()**
+
+这个方法的作用是检测该Map是否为空
+
+签名如下
+``` Java
+boolean isEmpty();
+```
+可以看到，这里的返回类型为boolean
+
+``` Java
+Map<Integer, String> map = new HashMap<>();
+map.put(1, "Hello");
+map.put(3, "Apple");
+map.put(2, "Pear");
+map.put(5, "Banana");
+System.out.printf("当前Map的所有键和对应的值：%s", map.isEmpty());
+
+// 输出：
+// 当前Map是否为空：false
+```
+
+该方法的具体实现需要看具体的实现类
+
+事实上，这个方法的实现相对比较简单
+
+以下为HashMap中的实现：
+
+``` Java
+public boolean isEmpty() {
+   return size == 0;
+}
+```
+可以看到，这里的代码实现为检测该Map的长度
+
+如果为0，则说明是空的，返回`true`，反之返回`false`
+
 ## HashMap
 
 接下来介绍一下这个实现类
