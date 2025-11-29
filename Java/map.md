@@ -15,7 +15,7 @@
   - [x] containsValue
   - [x] values
   - [x] keySet 
-  - [ ] entrySet 
+  - [x] entrySet 
   - [ ] isEmpty  
   - [ ] putAll
   - [ ] getOrDefault
@@ -283,6 +283,32 @@ System.out.printf("当前Map的所有键：%s", map.keySet());
 // 当前Map的所有值：[1, 2, 3, 5]
 ```
 可以看到，这里返回的内容便是这个Map中所有的键的集合
+
+### entrySet()
+接下来介绍这个方法
+
+该方法的作用为返回这个Map中所有的键和其对应的值
+
+``` Java
+Set<Map.Entry<K, V>> entrySet();
+```
+从签名中可以看到，返回类型为Set
+
+接下来通过一个例子来说明：
+
+``` Java
+Map<Integer, String> map = new HashMap<>();
+map.put(1, "Hello");
+map.put(3, "Apple");
+map.put(2, "Pear");
+map.put(5, "Banana");
+System.out.printf("当前Map的所有键和对应的值：%s", map.entrySet());
+
+// 输出：
+// 当前Map的所有键和对应的值：[1=Hello, 2=Pear, 3=Apple, 5=Banana]
+```
+
+与上文的`keySet`类似，具体的实现需要参照具体的实现类
 
 ## HashMap
 
