@@ -16,8 +16,8 @@
   - [x] values
   - [x] keySet 
   - [x] entrySet 
-  - [ ] isEmpty  
-  - [ ] putAll
+  - [x] isEmpty  
+  - [x] putAll
   - [ ] getOrDefault
 - 进阶内容
   - [ ] compute  
@@ -347,6 +347,30 @@ public boolean isEmpty() {
 可以看到，这里的代码实现为检测该Map的长度
 
 如果为0，则说明是空的，返回`true`，反之返回`false`
+
+### putAll()
+接下来是这个方法
+
+这个方法的作用实际与`addAll()`有点类似，可以理解为批量执行`put()`
+
+签名如下：
+``` Java
+void putAll(Map<? extends K, ? extends V> m)
+```
+我们可以看到，这里的参数里面需要放一个Map
+
+下面是实际例子：
+``` Java
+Map<Integer, String> map = new HashMap<>();
+map.putAll(Map.of(1,"Apple",2,"Blueberry",3,"Cherry"));
+System.out.printf("当前Map的所有键和对应的值为：%s", map.entrySet());
+
+// 输出：
+// 当前Map的所有键和对应的值为：[1=Apple, 2=Blueberry, 3=Cherry]
+```
+从输出可以看到，我们这里成功将所有的键和值放进去对应的Map
+
+奇数为键，偶数为对应的值
 
 ## HashMap
 
