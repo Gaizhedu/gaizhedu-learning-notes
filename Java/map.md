@@ -5,27 +5,30 @@
    - [ ] （拓展）ConcurrentHashMap
    - [ ] （拓展）WeakHashMap 
 
-- [ ] compute  
-- [ ] computeIfAbsent  
-- [ ] computeIfPresent  
-- [x] containsKey  
-- [x] containsValue  
-- [ ] entrySet  
-- [ ] equals  
-- [x] get  
-- [ ] getOrDefault  
-- [x] hashCode  
-- [ ] isEmpty  
-- [ ] keySet  
-- [ ] merge  
-- [x] put  
-- [ ] putAll  
-- [ ] putIfAbsent  
-- [x] remove  
-- [x] replace  
-- [ ] replaceAll  
-- [x] size  
-- [ ] values
+- 基础：
+  - [x] put
+  - [x] get
+  - [x] remove
+  - [x] replace
+  - [x] size 
+  - [x] containsKey
+  - [x] containsValue
+  - [x] values
+  - [x] keySet 
+  - [ ] entrySet 
+  - [ ] isEmpty  
+  - [ ] putAll
+  - [ ] getOrDefault
+- 进阶内容
+  - [ ] compute  
+  - [ ] computeIfAbsent  
+  - [ ] computeIfPresent
+  - [ ] equals
+  - [ ] merge 
+  - [ ] putIfAbsent   
+  - [ ] replaceAll
+  - [x] remove（双参数）
+  - [x] replace（三参数）
 
 # Map
 这份笔记将讲述一下Map接口的相关内容
@@ -40,17 +43,15 @@ ConcurrentHashMap：线程安全，但是不支持null
 WeakHashMap：一种弱引用的Map 
 ```
 
-## HashMap
+## 可用方法
+这里将介绍该接口的一些基础方法和进阶方法
 
-接下来介绍一下这个实现类
+对于日常使用，可以仅掌握基础方法
 
-那么在介绍这个实现类之前需要先介绍一下Map的基本组成
+### put() & get()
+首先是最常用的方法 **put()**和 **get()**
 
-Map的组成主要由键和值构成
-
-常见的一个方法为：`map.put`
-
-这个方法可以将一个键与一个值绑定，举个例子：
+put()方法可以将一个键与一个值绑定，举个例子：
 
 ``` Java
 Map<Integer, String> map = new HashMap<>();
@@ -64,15 +65,16 @@ System.out.println(map.get(1));
 
 在声明类型的时候需要在泛型里面填写键和值对应的数据类型
 
-其中的两个方法为：`map.put()`和`map.get()`
+接下来是**get()**方法
 
-很明显，put的作用是绑定键和值，而get的作用是获取键对应的值
+这个方法的作用是获取键对应的值
 
 在上面的例子中，我们通过get获取到名字为1的键对应的值
 
+### containsKey() & containsValue()
 接下来，既然我们可以查询值，为了不产生报错，要怎么确定是否存在对应的键？
 
-这时候我们便可以使用到这个方法了：`containsKey()`和`containsValue()`
+这时候我们便可以使用到这个方法了：**containsKey()**和**containsValue()**
 
 这两个方法的作用便是查找该map中是否存在对应的键和值
 
@@ -90,7 +92,9 @@ System.out.printf("是否存在值 Hello：%s", map.containsValue("Hello"));
 
 需要注意的一点是这里并不是必须要键对应的值，只需要存在这个值即可
 
-接下来介绍一下一些用于删除和替换的方法：`remove()`和`replace()`
+### remove() & replace()
+
+接下来介绍一下用于删除和替换的方法：**remove()**和**replace()**
 
 首先先看签名：
 
@@ -176,7 +180,7 @@ default boolean remove(Object key, Object value) {
 ```
 这个方法的实现是在`Map.java`这个接口里面的，并不依靠具体实现类的实现
 
-接下来是`replace()`
+接下来是**replace()**
 
 这个方法的作用是将指定的键的值进行替换：
 
@@ -220,7 +224,9 @@ System.out.printf("替换后的值：%s%n", map.get(1));
 ```
 在上文中，`oldValue`为`World`，与值`Hello`不相等，所以不会触发替换
 
-接下来是`size()`
+
+### size()
+接下来是**size()**
 
 这个方法的作用相当简单，返回当前map的长度
 
@@ -233,6 +239,7 @@ System.out.printf("当前Map的长度：%d", map.size());
 // 当前Map的长度：1
 ```
 
+### value()
 接下来介绍一下**value()**
 
 这个方法的作用是返回所有值的一个集合
@@ -251,3 +258,39 @@ System.out.printf("当前Map的所有值：%s", map.values());
 // 当前Map的所有值：[Hello, Pear, Apple, Banana]
 ```
 需要注意的是，在HashMap中使用该方法的时候返回的值是无序的，而在TreeMap中则是有序的
+
+### keySet()
+接下来介绍一下**keySet()**
+
+这个方法的作用是以集合的形式返回该Map中所有的键
+
+签名如下：
+``` Java
+Set<K> keySet();
+```
+这个方法的具体实现需要看具体的实现类如何实现
+
+例子如下：
+``` Java
+Map<Integer, String> map = new HashMap<>();
+map.put(1, "Hello");
+map.put(3, "Apple");
+map.put(2, "Pear");
+map.put(5, "Banana");
+System.out.printf("当前Map的所有键：%s", map.keySet());
+
+// 输出：
+// 当前Map的所有值：[1, 2, 3, 5]
+```
+可以看到，这里返回的内容便是这个Map中所有的键的集合
+
+## HashMap
+
+接下来介绍一下这个实现类
+
+那么在介绍这个实现类之前需要先介绍一下Map的基本组成
+
+Map的组成主要由键和值构成
+
+
+
