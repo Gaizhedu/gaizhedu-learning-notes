@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## [2025-11-29]
+- 新增有关map的相关内容
+  * 新增有关value()方法的相关内容
+  * 新增有关keySet的相关内容
+  * 新增有关entrySet的相关内容
+  * 新增有关isEmpty方法的内容
+  * 新增有关putAll的相关内容
+  * 新增有关getOrDefault方法的相关内容
+
 ## [2025-11-28]
 - 新增有关size的相关内容
 
