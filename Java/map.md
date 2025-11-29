@@ -24,9 +24,8 @@
 - [x] remove  
 - [x] replace  
 - [ ] replaceAll  
-- [ ] size  
-- [ ] values  
-- [ ] toString
+- [x] size  
+- [ ] values
 
 # Map
 这份笔记将讲述一下Map接口的相关内容
@@ -233,3 +232,22 @@ System.out.printf("当前Map的长度：%d", map.size());
 // 输出：
 // 当前Map的长度：1
 ```
+
+接下来介绍一下**value()**
+
+这个方法的作用是返回所有值的一个集合
+
+具体使用例子如下：
+
+``` Java
+Map<Integer, String> map = new HashMap<>();
+map.put(1, "Hello");
+map.put(3, "Apple");
+map.put(2, "Pear");
+map.put(5, "Banana");
+System.out.printf("当前Map的所有值：%s", map.values());
+
+// 输出：
+// 当前Map的所有值：[Hello, Pear, Apple, Banana]
+```
+需要注意的是，在HashMap中使用该方法的时候返回的值是无序的，而在TreeMap中则是有序的
