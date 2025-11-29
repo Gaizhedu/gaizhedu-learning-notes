@@ -18,7 +18,7 @@
   - [x] entrySet 
   - [x] isEmpty  
   - [x] putAll
-  - [ ] getOrDefault
+  - [x] getOrDefault
 - 进阶内容
   - [ ] compute  
   - [ ] computeIfAbsent  
@@ -371,6 +371,51 @@ System.out.printf("当前Map的所有键和对应的值为：%s", map.entrySet()
 从输出可以看到，我们这里成功将所有的键和值放进去对应的Map
 
 奇数为键，偶数为对应的值
+
+### getOrDefault()
+接下来是这个方法
+
+这个方法可以简单理解为`get()`的加强版
+
+签名如下：
+``` Java
+default V getOrDefault(Object key, V defaultValue)
+```
+这个方法的实现是写在`Map.java`里面的
+
+我们可以看到这里有两个参数，第一个参数与`get()`一样，为键，而第二个参数`defaultValue`指的是若该键不存在时返回的内容
+
+具体实现如下：
+
+``` Java
+default V getOrDefault(Object key, V defaultValue) {
+V v;
+return (((v = get(key)) != null) || containsKey(key))
+   ? v
+   : defaultValue;
+}
+```
+可以看到，整个方法的实现就只有两个语句
+
+一个为声明，而另一个为一段三元表达式
+
+这段三元表达式的内容为，如果使用get()可以获取到对应的键的值，并且该值不为`null`，或者包含该键，则返回对应的值，如果不存在该键，或者值为null，那么返回设定的默认值`defaultValue`
+
+实际例子如下：
+``` Java
+Map<Integer, String> map = new HashMap<>();
+System.out.println();
+map.putAll(Map.of(1,"Apple",2,"Blueberry",3,"Cherry"));
+System.out.printf("当前Map键的值为：%s%n", map.getOrDefault(1,"没有值"));
+System.out.printf("若不存在该键则返回第二个参数：%s%n", map.getOrDefault(9,"没有值"));
+
+// 输出：
+// 当前Map键的值为：Apple
+// 若不存在该键则返回第二个参数：没有值
+```
+在上面的例子中，第一次输出存在对应的键`1`，返回了对应的内容
+
+而第二次输出由于没有对应的键，返回的内容为第二个参数的内容
 
 ## HashMap
 
