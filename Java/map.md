@@ -44,11 +44,14 @@ WeakHashMap：一种弱引用的Map
 ```
 
 ## 可用方法
+
 这里将介绍该接口的一些基础方法和进阶方法
 
 对于日常使用，可以仅掌握基础方法
 
-### put() & get()
+### 基础方法
+
+#### put() & get()
 首先是最常用的方法 **put()**和 **get()**
 
 put()方法可以将一个键与一个值绑定，举个例子：
@@ -92,7 +95,7 @@ System.out.printf("是否存在值 Hello：%s", map.containsValue("Hello"));
 
 需要注意的一点是这里并不是必须要键对应的值，只需要存在这个值即可
 
-### remove() & replace()
+#### remove() & replace()
 
 接下来介绍一下用于删除和替换的方法：**remove()**和**replace()**
 
@@ -225,7 +228,7 @@ System.out.printf("替换后的值：%s%n", map.get(1));
 在上文中，`oldValue`为`World`，与值`Hello`不相等，所以不会触发替换
 
 
-### size()
+#### size()
 接下来是**size()**
 
 这个方法的作用相当简单，返回当前map的长度
@@ -239,7 +242,7 @@ System.out.printf("当前Map的长度：%d", map.size());
 // 当前Map的长度：1
 ```
 
-### value()
+#### value()
 接下来介绍一下**value()**
 
 这个方法的作用是返回所有值的一个集合
@@ -259,7 +262,7 @@ System.out.printf("当前Map的所有值：%s", map.values());
 ```
 需要注意的是，在HashMap中使用该方法的时候返回的值是无序的，而在TreeMap中则是有序的
 
-### keySet()
+#### keySet()
 接下来介绍一下**keySet()**
 
 这个方法的作用是以集合的形式返回该Map中所有的键
@@ -284,7 +287,7 @@ System.out.printf("当前Map的所有键：%s", map.keySet());
 ```
 可以看到，这里返回的内容便是这个Map中所有的键的集合
 
-### entrySet()
+#### entrySet()
 接下来介绍这个方法
 
 该方法的作用为返回这个Map中所有的键和其对应的值
@@ -310,7 +313,7 @@ System.out.printf("当前Map的所有键和对应的值：%s", map.entrySet());
 
 与上文的`keySet`类似，具体的实现需要参照具体的实现类
 
-### isEmpty()
+#### isEmpty()
 接下来是**isEmpty()**
 
 这个方法的作用是检测该Map是否为空
@@ -348,7 +351,7 @@ public boolean isEmpty() {
 
 如果为0，则说明是空的，返回`true`，反之返回`false`
 
-### putAll()
+#### putAll()
 接下来是这个方法
 
 这个方法的作用实际与`addAll()`有点类似，可以理解为批量执行`put()`
@@ -372,7 +375,7 @@ System.out.printf("当前Map的所有键和对应的值为：%s", map.entrySet()
 
 奇数为键，偶数为对应的值
 
-### getOrDefault()
+#### getOrDefault()
 接下来是这个方法
 
 这个方法可以简单理解为`get()`的加强版
