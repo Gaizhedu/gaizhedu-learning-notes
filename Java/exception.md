@@ -27,5 +27,57 @@ Java中使用异常处理可以巧妙的应对一些错误的发生，防止在�
 
 这个方法的基本结构如下：
 ``` Java
-
+try {
+    // 代码
+} catch (Exception e) {
+    // 遇到错误执行什么
+}
 ```
+
+从这个片段中可以看到，假设我们的代码执行时抛出了错误e，那么便会执行`catch`花括号内的代码片段
+
+如果有多个错误需要捕获，那么可以使用多个catch语句
+``` Java
+try {
+    // 代码
+} catch (IOException e) {
+    // 遇到错误执行什么
+} catch (ArrayIndexOutOfBoundsException e) {
+    // 遇到错误执行什么
+}
+```
+如果你有很多个错误需要捕获，并且希望其同时以相同的操作来处理，那么可以这么写：
+
+``` Java
+try {
+    // 代码
+} catch (IOException | ArrayIndexOutOfBoundsException e) {
+    // 遇到这两种异常中的一种便执行什么
+}
+```
+
+接下来给出一个实际例子来说明：
+
+``` Java
+List<String> list = new ArrayList<>(Arrays.asList("1","2","3","4","5"));
+try {
+    for (int i = 0; i < 10; i++) {
+        System.out.println(list.get(i));
+    }
+} catch (IndexOutOfBoundsException e) {
+    System.err.println("数组出现了越界的现象");
+}
+// 输出：
+// 1
+// 2
+// 3
+// 4
+// 5
+// 数组出现了越界的现象
+```
+可以看到，在捕获到数组越界的情况后，没有像往常一样直接抛出错误，而是输出对应的内容
+
+除了这个基本的结构外，我们还可以加上一个`finally`块
+
+`finally`块的作用是无论try发生异常，catch是否执行，都执行里面的内容
+
