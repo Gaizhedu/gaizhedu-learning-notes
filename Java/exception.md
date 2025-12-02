@@ -104,3 +104,83 @@ try(FileInputStream fileInputStream = new FileInputStream("test.txt");
 可以理解为在圆括号中声明的变量都是`final`的
 
 前文也提及到了，try-with-resource会在使用完文件后自动关闭文件，有效地防止了传统try-catch语句到最后忘记关闭文件的问题
+
+## throw和throws
+接下来介绍这方面的内容
+
+首先先大概介绍这两个的作用
+
+`throw`：直接抛出一个异常，在官方库中很多地方都会看到
+
+`throws`：声明可能会出现的异常，这些声明的异常有些是必须要处理，有些则可以不用处理
+
+---
+首先是**throw**
+
+作用为抛出一个异常，这个异常如果在main中被抛出则会直接中断当前程序的运行
+
+``` Java
+int[] ints = {1,2,3,4,5};
+for (int i = 0; i < ints.length + 1; i++) {
+    if(i == 2){
+        throw new RuntimeException("遍历到第三个了");
+    }
+    System.out.println(ints[i]);
+}
+
+// 输出：
+// 1
+// 2
+// Exception in thread "main" java.lang.RuntimeException: 遍历到第三个了
+```
+
+如果这个异常被catch捕获到了，那么不会中断程序
+
+``` Java
+int[] ints = {1,2,3,4,5};
+try {
+    for (int i = 0; i < ints.length + 1; i++) {
+        if(i == 2){
+            throw new RuntimeException("遍历到第三个了");
+        }
+        System.out.println(ints[i]);
+    }
+} catch (RuntimeException e){
+    System.out.println("成功捕获丢出的异常");
+}
+System.out.println("程序继续运行");
+
+// 输出：
+// 1
+// 2
+// 成功捕获丢出的异常
+// 程序继续运行
+```
+
+可以看到，这里异常被捕获了，程序并没有中断，而是继续执行
+
+---
+接下来是**throws**，这个的作用是声明可能会出现的异常
+
+接下来先简单给个例子：
+``` Java
+public static void main(String[] args) throws RuntimeException {
+    int[] ints = {1,2,3,4,5};
+    try {
+        for (int i = 0; i < ints.length + 1; i++) {
+            if(i == 2){
+                throw new RuntimeException("遍历到第三个了");
+            }
+            System.out.println(ints[i]);
+        }
+    } catch (RuntimeException e){
+        System.out.println("成功捕获丢出的异常");
+    }
+    System.out.println("程序继续运行");
+}
+```
+在上面这个例子中，标明可能会出现RuntimeException的异常
+
+不过这里`RuntimeException`属于非受检异常，所以其实有没有标都是无所谓的
+
+但是受检异常就必须标明
