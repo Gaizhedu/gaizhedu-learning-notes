@@ -81,6 +81,9 @@ try {
 
 `finally`块的作用是无论try发生异常，catch是否执行，都执行里面的内容
 
+### 补充点：关于finally的执行顺序
+这里补充一下有关finally执行顺序的内容
+
 ## try-with-resource
 接下来是try-with-resource，这个方法的作用是让资源使用后可以自动关闭
 
