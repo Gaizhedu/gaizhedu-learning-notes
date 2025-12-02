@@ -81,3 +81,26 @@ try {
 
 `finally`块的作用是无论try发生异常，catch是否执行，都执行里面的内容
 
+## try-with-resource
+接下来是try-with-resource，这个方法的作用是让资源使用后可以自动关闭
+
+举个例子：
+
+``` Java
+try(FileInputStream fileInputStream = new FileInputStream("test.txt");
+    BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))){
+    String line;
+    while ((line = reader.readLine()) != null) {
+        System.out.println(line);
+    }
+} catch (IOException e){
+    System.out.println("文件不存在");
+}
+```
+使用try-with-resource的结构是把需要使用的资源放到try后面的括号内
+
+这里需要注意的几点是，如果你已经在括号内声明了，那么就没办法在花括号内再次声明
+
+可以理解为在圆括号中声明的变量都是`final`的
+
+前文也提及到了，try-with-resource会在使用完文件后自动关闭文件，有效地防止了传统try-catch语句到最后忘记关闭文件的问题
