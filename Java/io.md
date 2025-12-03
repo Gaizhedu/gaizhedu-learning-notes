@@ -184,3 +184,48 @@ try (InputStreamReader isr = new InputStreamReader(new FileInputStream("src/test
 // 43
 ```
 可以看到，这里每读取50个字符便停止，之后进入下一次的读取
+
+那么第二种方法是什么呢？
+
+### BufferedReader
+第二种方法是使用BufferedReader
+
+这个方法有两种签名：
+
+``` Java
+public BufferedReader(Reader in)
+
+public BufferedReader(Reader in, int sz)
+```
+
+BufferedReader是一个自带char数组的缓冲类（默认大小为8192）
+
+如果想要修改默认大小，可以选择带有两个参数的签名，并修改第二个参数的大小
+
+接下来给出一个实际的例子：
+
+``` Java
+try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("src/test.txt"), StandardCharsets.UTF_8))) {
+    String reading;
+    while ((reading = br.readLine()) != null) {
+        System.out.println(reading);
+    }
+}
+// 输出：
+// 雪地爆裂，喷出整片沸腾的海。
+// 海水未落，已在空中凝成千座尖锐高山，刺穿星空。
+// 星群碎裂，残光拧成一道炽白银河，横劈山体。
+// 山崩时没有声音，只涌出深黑的雪，覆盖了海的源头。
+// 银河骤然倒卷，把自己塞进一粒冰晶——
+// 冰晶坠入虚空，炸成一片静止的海，
+// 而雪，正从海底升起，烧穿天顶。
+```
+这里使用了`BufferedReader`特有的一个方法：`readLine()`
+
+作用为读取一行文本，不包括行终止符（例如\n或者\r\n）
+
+不过需要注意的一点是，如果读取的时候遇到了空白行，那么会显示空白内容，而不是`null`
+
+由于readLine并不会保留换行符，如果想要保留这些符号，得使用read(char[])来处理
+
+至此，有关读取文件的部分已经完成
