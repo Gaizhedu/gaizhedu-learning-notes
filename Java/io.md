@@ -71,3 +71,116 @@ try (FileInputStream fis = new FileInputStream("src/test.txt")) {
 上面虽然我们输出了一些内容，但那些内容我们**完全看不懂**，需要转换成我们可以看懂的内容
 
 这时候便可以介绍下一个实现类了
+
+### InputStreamReader
+这个方法的签名如下：
+``` Java
+public InputStreamReader(InputStream in, Charset cs)
+```
+其中第一个代表传入的内容，第二个代表用什么方式解码
+
+我们以之前的内容为例子：
+
+``` Java
+try (InputStreamReader isr = new InputStreamReader(new FileInputStream("src/test.txt"), StandardCharsets.UTF_8)) {
+    int reading;
+    while ((reading = isr.read()) != -1) {
+        System.out.println(reading);
+    }
+}
+
+// 输出：
+// 38634
+// 22320
+// 29190
+// 35010
+// 65292
+// 21943
+```
+诶，这里为什么输出还是无意义的数字呢？实际上这里输出的内容为Unicode的十进制码
+
+那我们要怎么转换成中文呢？有两种方法，第一种方法为通过强制转换来转换：
+
+``` Java
+try (InputStreamReader isr = new InputStreamReader(new FileInputStream("src/test.txt"), StandardCharsets.UTF_8)) {
+    int reading;
+    while ((reading = isr.read()) != -1) {
+        // 从int转换为char
+        System.out.println((char)reading);
+    }
+}
+
+// 输出（片段）：
+// 雪
+// 地
+// 爆
+// 裂
+// ，
+// 喷
+// 出
+// 整
+// 片
+// 沸
+// 腾
+// 的
+// 海
+// 。
+```
+
+或者是：
+``` Java
+try (InputStreamReader isr = new InputStreamReader(new FileInputStream("src/test.txt"), StandardCharsets.UTF_8)) {
+    int reading;
+    char[] buffer = new char[1024];
+    while ((reading = isr.read(buffer)) != -1) {
+        // 从int转换为char
+        System.out.println(new String(buffer,0,reading));
+    }
+}
+
+// 输出：
+// 雪地爆裂，喷出整片沸腾的海。
+// 海水未落，已在空中凝成千座尖锐高山，刺穿星空。
+// 星群碎裂，残光拧成一道炽白银河，横劈山体。
+// 山崩时没有声音，只涌出深黑的雪，覆盖了海的源头。
+// 银河骤然倒卷，把自己塞进一粒冰晶——
+// 冰晶坠入虚空，炸成一片静止的海，
+// 而雪，正从海底升起，烧穿天顶。
+```
+这种写法是什么意思呢？
+
+首先新建一个长度1024字符的char数组，之后`isr.read(buffer)`，代表每次读入1024个字符
+
+这样的好处是可以一次性读取多个字符，如果是`isr.read()`，那么一次读取一个字符就太慢了
+
+接下来是`new String(buffer,0,reading)`，代表创建一个新的字符串，字符串内容为buffer的内容，读取顺序从0开始读取，从reading结束
+
+由于我们这里这段文字的长度小于1024，所以会直接读取一整段，如果大于1024，那么会分为多次进行读取
+
+我们可以通过这个例子来说明读取多次的效果：
+``` Java
+try (InputStreamReader isr = new InputStreamReader(new FileInputStream("src/test.txt"), StandardCharsets.UTF_8)) {
+    int reading;
+    char[] buffer = new char[50];
+    while ((reading = isr.read(buffer)) != -1) {
+        // 从int转换为char
+        System.out.println(new String(buffer,0,reading));
+        System.out.println(reading);
+    }
+}
+
+// 输出：
+// 雪地爆裂，喷出整片沸腾的海。
+// 海水未落，已在空中凝成千座尖锐高山，刺穿星空。
+// 星群碎裂，残光拧成
+// 50
+// 一道炽白银河，横劈山体。
+// 山崩时没有声音，只涌出深黑的雪，覆盖了海的源头。
+// 银河骤然倒卷，把自己
+// 50
+// 塞进一粒冰晶——
+// 冰晶坠入虚空，炸成一片静止的海，
+// 而雪，正从海底升起，烧穿天顶。
+// 43
+```
+可以看到，这里每读取50个字符便停止，之后进入下一次的读取
