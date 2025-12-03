@@ -84,6 +84,24 @@ try {
 ### 补充点：关于finally的执行顺序
 这里补充一下有关finally执行顺序的内容
 
+#### try - catch -finally
+
+首先让我们看这段代码：
+``` Java
+try {
+    throw new Exception("丢出一个异常");
+} catch (Exception e){
+    System.out.println("成功捕获丢出的异常");
+} finally {
+    System.out.println("try结束");
+}
+
+// 输出：
+// 成功捕获丢出的异常
+// try结束
+```
+可以看到，这里在捕获到异常后会先执行catch，再执行finally
+
 ## try-with-resource
 接下来是try-with-resource，这个方法的作用是让资源使用后可以自动关闭
 
