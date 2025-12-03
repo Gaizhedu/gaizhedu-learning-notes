@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2025-12-03]
+- 新增有关异常处理的相关内容
+  * 新增有关finally执行顺序的相关内容
+- 新增有关IO接口的相关办法
+  * 新增有关FileInputStream的相关内容
+  * 新增有关InputStreamReader的相关内容
+  * 新增有关BufferedReader的相关内容
+
 ## [2025-12-02]
 - 新增有关异常处理的相关内容
   * 新增有关try-with-resource的内容
