@@ -229,3 +229,9 @@ try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputS
 由于readLine并不会保留换行符，如果想要保留这些符号，得使用read(char[])来处理
 
 至此，有关读取文件的部分已经完成
+
+## 写入文件
+
+既然有读取文件，那便有写入文件的操作，接下来将介绍一下写入的部分操作
+
+首先通过一个简单的例子来说明一下：
