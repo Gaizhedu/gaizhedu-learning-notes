@@ -239,24 +239,30 @@ try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputS
 ``` Java
 try (FileOutputStream fos = new FileOutputStream("src/test.txt", true)) {
     fos.write("Hello！".getBytes());
+} catch (FileNotFoundException e) {
+    System.out.println("找不到写入文件");
 } finally {
-    System.out.println("成功写入！");
+    System.out.println("已完成操作");
 }
 ```
 
 ``` Java
 try (FileWriter fw = new FileWriter("src/test.txt", true)) {
-    fw.write("Hello！");
+    fw.write("Hello");
+} catch (FileNotFoundException e) {
+    System.out.println("找不到写入文件");
 } finally {
-    System.out.println("成功写入！");
+    System.out.println("已完成操作");
 }
 ```
 
 ``` Java
 try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/test.txt", true))) {
     bw.write("Hello！");
+} catch (FileNotFoundException e) {
+    System.out.println("找不到写入文件");
 } finally {
-    System.out.println("成功写入！");
+    System.out.println("已完成操作");
 }
 ```
 上面的三个例子都实现了文件的写入，但是实际有一些不同，接下来将逐一开始介绍
@@ -304,10 +310,12 @@ Hello!
 接下来从例子开始分析：
 
 ``` Java
-try (FileOutputStream fos = new FileOutputStream("src/test.txt", true)) {
-    fos.write("Hello！".getBytes());
+try (FileWriter fw = new FileWriter("src/test.txt", true)) {
+    fw.write("Hello");
+} catch (FileNotFoundException e) {
+    System.out.println("找不到写入文件");
 } finally {
-    System.out.println("成功写入！");
+    System.out.println("已完成操作");
 }
 ```
 
@@ -355,3 +363,40 @@ public FileOutputStream(String name, boolean append)
 只有一个参数的版本，三元表达式默认为false，而使用两个参数的版本则将这个交由append决定
 
 ---
+### FileWriter
+我们从上面的例子中可以看到，对于日常的文件写入，`FileOutputStream`并不是很方便
+
+为什么说不是很方便呢？假设我们想要写入一个字符串，那么我们需要将这个字符串通过`.getBytes()`来转换成正确的格式，并且如果想要让其正确显示文本，还得考虑编码的问题
+
+**这太麻烦了！**
+
+那么如果我们想要往一个文档里面写入字符串，要怎么办才可以比较轻松呢？
+
+其实很简单，我们可以使用**FileWriter**
+
+``` Java
+try (FileWriter fw = new FileWriter("src/test.txt", true)) {
+    fw.write("Hello");
+} catch (FileNotFoundException e) {
+    System.out.println("找不到写入文件");
+} finally {
+    System.out.println("已完成操作");
+}
+```
+
+FileWriter的作用是以文本的形式，将对应的字符串或者字符数据写入文件，
+
+简单来说就是可以不用自己转换了！
+
+在Java11以后，FileWriter会自动处理编码（默认为UTF-8）
+
+当然，如果需要，也可以自己设置：
+
+``` Java
+FileWriter fw = new FileWriter("src/test.txt", StandardCharsets.UTF_8, true)
+```
+
+具体签名如下：
+``` Java
+FileWriter(String fileName, Charset charset, boolean append)
+```
