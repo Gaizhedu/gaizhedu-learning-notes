@@ -235,3 +235,123 @@ try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputS
 既然有读取文件，那便有写入文件的操作，接下来将介绍一下写入的部分操作
 
 首先通过一个简单的例子来说明一下：
+
+``` Java
+try (FileOutputStream fos = new FileOutputStream("src/test.txt", true)) {
+    fos.write("Hello！".getBytes());
+} finally {
+    System.out.println("成功写入！");
+}
+```
+
+``` Java
+try (FileWriter fw = new FileWriter("src/test.txt", true)) {
+    fw.write("Hello！");
+} finally {
+    System.out.println("成功写入！");
+}
+```
+
+``` Java
+try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/test.txt", true))) {
+    bw.write("Hello！");
+} finally {
+    System.out.println("成功写入！");
+}
+```
+上面的三个例子都实现了文件的写入，但是实际有一些不同，接下来将逐一开始介绍
+
+### FileOutputStream
+首先是最基本的**FileOutputStream**
+
+这个方法的作用是以字节的形式写入文件，一般用于**图片，音频**这些用字节表示的文件
+
+首先先看签名，由于`FileOutputStream`的重载方法的数量相当多，这里只介绍一些比较常见的
+
+比较常见的有这两个：
+``` Java
+public FileOutputStream(String name)
+
+public FileOutputStream(String name, boolean append)
+```
+这两个签名的区别主要在第二个参数上
+
+第二个参数的意思是是否以追加模式写入
+
+什么是追加模式呢？
+
+假设这是我原来的文本内容
+``` test.txt
+Hello!This is test.
+```
+
+如果我选择了追加模式写入，那么会变成这个结果
+
+``` test.txt
+Hello!This is test.Hello!
+```
+但如果我选择没有参数的版本，或者是在第二个参数选择了`false`
+
+那么会是这个结果：
+
+``` test.txt
+Hello!
+```
+可以看到，这里原本的内容不见了，只剩下我们写入的内容了，换言之就是将原本的内容清空，而后将新内容写入
+
+那么我们要怎么写入文件呢？
+
+接下来从例子开始分析：
+
+``` Java
+try (FileOutputStream fos = new FileOutputStream("src/test.txt", true)) {
+    fos.write("Hello！".getBytes());
+} finally {
+    System.out.println("成功写入！");
+}
+```
+
+可以很明显的看到写入文件使用了`write()`
+
+需要特别注意的一点是，由于`FileOutputStream`写入的内容为字节，所以括号内要填的内容为数字
+
+诶，这里可能有人要问了，为什么上面例子写的是字符串呢？实际上是因为后面加上了`.getBytes()`的原因
+
+这个方法的作用是返回该字符串在当前编码中的编码
+
+在Java10以后，如果没写指定编码，那么会默认为`UTF-8`，相当于下面的这个语句
+
+``` Java
+fos.write("Hello！".getBytes(StandardCharsets.UTF_8));
+```
+
+如果使用的Java版本小于10，那么则需要加这个语句，但如果大于10，那么可以选择不加
+
+由于这里使用了`try-with-resource`结构，所以是没有`.close()`的
+
+如果不是该结构的话，那么还需要在末尾加一句`.close()`
+
+> FileOutputStream基础部分只需要认识write()和close()即可，
+> 其他的一些方法（例如：getChannel()和getFD()）并不在这里的探讨范围
+
+#### 补充点：有关源代码
+事实上，我们从源代码中可以发现一些有趣的点：
+
+``` Java
+public FileOutputStream(String name) 
+    throws FileNotFoundException 
+{
+    this(name != null ? new File(name) : null, false);
+}
+
+public FileOutputStream(String name, boolean append)
+    throws FileNotFoundException
+{
+    this(name != null ? new File(name) : null, append);
+}
+```
+可以看到，这里的两个方法的实现实际上没有太大差别，唯一的一个不同点在三元表达式上
+
+只有一个参数的版本，三元表达式默认为false，而使用两个参数的版本则将这个交由append决定
+
+---
