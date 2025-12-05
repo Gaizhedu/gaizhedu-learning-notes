@@ -400,3 +400,39 @@ FileWriter fw = new FileWriter("src/test.txt", StandardCharsets.UTF_8, true)
 ``` Java
 FileWriter(String fileName, Charset charset, boolean append)
 ```
+
+### BufferedWriter
+接下来是**BufferedWriter**，这个方法有什么作用呢？
+
+实际上，如果从实现的角度看，这个方法的作用跟`FileWriter`的作用是一样的
+
+那么这个方法有什么作用呢？其实很简单，这个方法多了一个缓冲的作用
+
+这样说可能有点晕晕的，我们不妨举个例子来说明
+
+假设你有一天心潮澎湃，想要使用`FileWriter`把《红楼梦》复制到一个新的文件，假设写入成功，那么会执行多少次IO操作呢？
+
+> 虽然说有人会认为这玩意没缓存，但其实FileWriter底层是有缓存的
+
+答案是差不多200多次，那么我们如果使用BufferedWriter呢？只需要大约90次
+
+这是为什么呢？答案是因为BufferedWriter里面有一个缓存区，默认为8192字节大小
+
+缓存区的意思在之前也提及到了，简单来说就是不同于之前的来一个操作一次，有缓存区是写满才操作一次
+
+这样做的好处是可以大大减少操作次数，提高效率
+
+``` Java
+try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/test.txt", true))) {
+    bw.write("Hello！");
+} catch (FileNotFoundException e) {
+    System.out.println("找不到写入文件");
+} finally {
+    System.out.println("已完成操作");
+}
+```
+这个方法的签名如下：
+``` Java
+public BufferedWriter(Writer out, int sz)
+```
+第二个参数代表缓冲区的大小，可以自己设置
