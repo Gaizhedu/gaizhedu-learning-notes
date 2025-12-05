@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2025-12-05]
+- 新增有关IO操作的相关内容
+  * 新增有关FileOutputStream的相关内容
+  * 新增有关FileWriter的相关内容
+  * 新增有关BufferedWriter的相关内容
+
 ## [2025-12-04]
 - 新增有关写入文件的相关内容
 
