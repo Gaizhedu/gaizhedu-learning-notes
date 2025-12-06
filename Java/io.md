@@ -257,6 +257,15 @@ try (FileWriter fw = new FileWriter("src/test.txt", true)) {
 ```
 
 ``` Java
+try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("src/test",true),StandardCharsets.UTF_8)){
+    osw.write("Hello！");
+    System.out.println("已完成操作");   
+} catch (IOException e) {
+    throw new RuntimeException(e);
+}
+```
+
+``` Java
 try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/test.txt", true))) {
     bw.write("Hello！");
     System.out.println("已完成操作");
@@ -400,33 +409,64 @@ FileWriter fw = new FileWriter("src/test.txt", StandardCharsets.UTF_8, true)
 FileWriter(String fileName, Charset charset, boolean append)
 ```
 
+### OutputStreamWriter
+接下来介绍这个类
+
+这个类的作用是将字符按照指定的编码转换为对应的字节，然后写入到输出流中
+
+构造方法如下：
+
+``` Java
+OutputStreamWriter(OutputStream out)
+
+OutputStreamWriter(OutputStream out, Charset cs)
+```
+第一个参数的意思是转换后的字节存放的输出流的位置
+
+接下来让我们通过例子来理解：
+
+``` Java
+try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("src/test",true),StandardCharsets.UTF_8)){
+    osw.write("Hello！");
+} catch (IOException e) {
+    throw new RuntimeException(e);
+}
+```
+这里使用了OutputStreamWriter + FileOutputStream的嵌套结构
+
+内部的FileOutputStream作为写入的输出流
+
+由于这个类的构造方法依旧支持`Charset`，一般建议显式写上编码
+
+写入的方法与其他方法无异
+
 ### BufferedWriter
 接下来是**BufferedWriter**，这个类有什么作用呢？
 
-实际上，如果从实现的角度看，这个类的作用跟`FileWriter`的作用是一样的
+实际上，如果从实现的角度看，这个类的作用跟`OutputStreamWriter`的作用是一样的
 
 那么这个类有什么作用呢？其实很简单，这个类多了一个缓冲的作用
 
 这样说可能有点晕晕的，我们不妨举个例子来说明
 
-假设你有一天心潮澎湃，想要使用`FileWriter`把《红楼梦》复制到一个新的文件，假设写入成功，那么会执行多少次IO操作呢？
+假设你有一天心潮澎湃，想要使用`OutputStreamWriter`把《红楼梦》复制到一个新的文件，假设写入成功，那么会执行多少次IO操作呢？
 
-> 虽然说有人会认为这玩意没缓存，但其实FileWriter底层是有缓存的
+> 虽然说有人会认为这玩意没缓存，但其实OutputStreamWriter底层是有缓存的
 
-答案是差不多200多次，那么我们如果使用BufferedWriter呢？只需要大约90次
+答案是差不多200多次，那么我们如果使用`BufferedWriter`呢？只需要大约90次
 
-这是为什么呢？答案是因为BufferedWriter里面有一个缓存区，默认为8192字节大小
+这是为什么呢？答案是因为`BufferedWriter`里面有一个缓存区，默认为8192字节大小
 
 缓存区的意思在之前也提及到了，简单来说就是不同于之前的来一个操作一次，有缓存区是写满才操作一次
 
 这样做的好处是可以大大减少操作次数，提高效率
 
 ``` Java
-try (FileWriter fw = new FileWriter("src/test.txt", true)) {
-    fw.write("Hello！");
+try(BufferedWriter osw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/test",true),StandardCharsets.UTF_8))){
+    osw.write("Hello！");
     System.out.println("已完成操作");
 } catch (IOException e) {
-    System.out.println("找不到写入文件");
+    throw new RuntimeException(e);
 }
 ```
 这个类的构造方法如下：
