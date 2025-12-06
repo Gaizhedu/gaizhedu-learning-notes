@@ -10,6 +10,8 @@ System.out.println(System.getProperty("user.dir"));
 
 使用上面这个语句便可以获得自己当前的工作目录，这一点很重要
 
+Java 的I/O分为两种流，一种是用于处理二进制的**字节流**和用于处理文本的**字符流**
+
 ## 读取文件
 首先先从读取文件开始，我们这里通过一个例子来逐步讲解
 
@@ -47,7 +49,7 @@ br.close();
 ### FileInputStream
 首先是最基本的**FileInputStream**
 
-这个方法的作用很简单，以字节的形式读取本地文件，读取范围为0~255，读取完成的时候返回 **-1**
+这是一个类，以字节的形式读取本地文件，读取范围为0~255，读取完成的时候返回 **-1**
 
 举一个例子：
 ``` Java
@@ -73,7 +75,7 @@ try (FileInputStream fis = new FileInputStream("src/test.txt")) {
 这时候便可以介绍下一个实现类了
 
 ### InputStreamReader
-这个方法的签名如下：
+这个类的构造方法如下：
 ``` Java
 public InputStreamReader(InputStream in, Charset cs)
 ```
@@ -190,7 +192,7 @@ try (InputStreamReader isr = new InputStreamReader(new FileInputStream("src/test
 ### BufferedReader
 第二种方法是使用BufferedReader
 
-这个方法有两种签名：
+这个类有两种签名：
 
 ``` Java
 public BufferedReader(Reader in)
@@ -198,9 +200,9 @@ public BufferedReader(Reader in)
 public BufferedReader(Reader in, int sz)
 ```
 
-BufferedReader是一个自带char数组的缓冲类（默认大小为8192）
+BufferedReader内部维护一个缓冲区，默认大小为8192
 
-如果想要修改默认大小，可以选择带有两个参数的签名，并修改第二个参数的大小
+如果想要修改默认大小，可以选择带有两个参数的构造方法，并修改第二个参数的大小
 
 接下来给出一个实际的例子：
 
@@ -224,9 +226,9 @@ try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputS
 
 作用为读取一行文本，不包括行终止符（例如\n或者\r\n）
 
-不过需要注意的一点是，如果读取的时候遇到了空白行，那么会显示空白内容，而不是`null`
+不过需要注意的一点是，如果读取的时候遇到了空白行，那么会显示空白内容，而不是`null`，如果文件读取到最后一行，则会返回`null`
 
-由于readLine并不会保留换行符，如果想要保留这些符号，得使用read(char[])来处理
+由于readLine并不会保留行终止符，如果想要保留这些符号，得使用read(char[])来处理
 
 至此，有关读取文件的部分已经完成
 
@@ -239,30 +241,27 @@ try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputS
 ``` Java
 try (FileOutputStream fos = new FileOutputStream("src/test.txt", true)) {
     fos.write("Hello！".getBytes());
-} catch (FileNotFoundException e) {
-    System.out.println("找不到写入文件");
-} finally {
     System.out.println("已完成操作");
-}
+} catch (IOException e) {
+    System.out.println("找不到写入文件");
+}   
 ```
 
 ``` Java
 try (FileWriter fw = new FileWriter("src/test.txt", true)) {
-    fw.write("Hello");
-} catch (FileNotFoundException e) {
-    System.out.println("找不到写入文件");
-} finally {
+    fw.write("Hello！");
     System.out.println("已完成操作");
+} catch (IOException e) {
+    System.out.println("找不到写入文件");
 }
 ```
 
 ``` Java
 try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/test.txt", true))) {
     bw.write("Hello！");
-} catch (FileNotFoundException e) {
-    System.out.println("找不到写入文件");
-} finally {
     System.out.println("已完成操作");
+} catch (IOException e) {
+    System.out.println("找不到写入文件");
 }
 ```
 上面的三个例子都实现了文件的写入，但是实际有一些不同，接下来将逐一开始介绍
@@ -270,9 +269,9 @@ try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/test.txt", true)
 ### FileOutputStream
 首先是最基本的**FileOutputStream**
 
-这个方法的作用是以字节的形式写入文件，一般用于**图片，音频**这些用字节表示的文件
+这个类的作用是以字节的形式写入文件，一般用于**图片，音频**这些用字节表示的文件
 
-首先先看签名，由于`FileOutputStream`的重载方法的数量相当多，这里只介绍一些比较常见的
+首先先看构造方法，由于`FileOutputStream`的重载方法的数量相当多，这里只介绍一些比较常见的
 
 比较常见的有这两个：
 ``` Java
@@ -280,7 +279,7 @@ public FileOutputStream(String name)
 
 public FileOutputStream(String name, boolean append)
 ```
-这两个签名的区别主要在第二个参数上
+这两个构造方法的区别主要在第二个参数上
 
 第二个参数的意思是是否以追加模式写入
 
@@ -311,11 +310,10 @@ Hello!
 
 ``` Java
 try (FileWriter fw = new FileWriter("src/test.txt", true)) {
-    fw.write("Hello");
-} catch (FileNotFoundException e) {
-    System.out.println("找不到写入文件");
-} finally {
+    fw.write("Hello！");
     System.out.println("已完成操作");
+} catch (IOException e) {
+    System.out.println("找不到写入文件");
 }
 ```
 
@@ -358,12 +356,14 @@ public FileOutputStream(String name, boolean append)
     this(name != null ? new File(name) : null, append);
 }
 ```
-可以看到，这里的两个方法的实现实际上没有太大差别，唯一的一个不同点在三元表达式上
+可以看到，这里的两个类的实现实际上没有太大差别，唯一的一个不同点在三元表达式上
 
 只有一个参数的版本，三元表达式默认为false，而使用两个参数的版本则将这个交由append决定
 
 ---
 ### FileWriter
+> FileWriter是一个历史遗留的类，因为没办法显式处理编码（Java 11才支持），即使还在使用Java 8，也不建议学这个类
+> 但如果使用新版本Java，可以跳过这部分内容
 我们从上面的例子中可以看到，对于日常的文件写入，`FileOutputStream`并不是很方便
 
 为什么说不是很方便呢？假设我们想要写入一个字符串，那么我们需要将这个字符串通过`.getBytes()`来转换成正确的格式，并且如果想要让其正确显示文本，还得考虑编码的问题
@@ -376,11 +376,10 @@ public FileOutputStream(String name, boolean append)
 
 ``` Java
 try (FileWriter fw = new FileWriter("src/test.txt", true)) {
-    fw.write("Hello");
-} catch (FileNotFoundException e) {
-    System.out.println("找不到写入文件");
-} finally {
+    fw.write("Hello！");
     System.out.println("已完成操作");
+} catch (IOException e) {
+    System.out.println("找不到写入文件");
 }
 ```
 
@@ -396,17 +395,17 @@ FileWriter的作用是以文本的形式，将对应的字符串或者字符数�
 FileWriter fw = new FileWriter("src/test.txt", StandardCharsets.UTF_8, true)
 ```
 
-具体签名如下：
+具体构造方法如下：
 ``` Java
 FileWriter(String fileName, Charset charset, boolean append)
 ```
 
 ### BufferedWriter
-接下来是**BufferedWriter**，这个方法有什么作用呢？
+接下来是**BufferedWriter**，这个类有什么作用呢？
 
-实际上，如果从实现的角度看，这个方法的作用跟`FileWriter`的作用是一样的
+实际上，如果从实现的角度看，这个类的作用跟`FileWriter`的作用是一样的
 
-那么这个方法有什么作用呢？其实很简单，这个方法多了一个缓冲的作用
+那么这个类有什么作用呢？其实很简单，这个类多了一个缓冲的作用
 
 这样说可能有点晕晕的，我们不妨举个例子来说明
 
@@ -423,15 +422,14 @@ FileWriter(String fileName, Charset charset, boolean append)
 这样做的好处是可以大大减少操作次数，提高效率
 
 ``` Java
-try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/test.txt", true))) {
-    bw.write("Hello！");
-} catch (FileNotFoundException e) {
-    System.out.println("找不到写入文件");
-} finally {
+try (FileWriter fw = new FileWriter("src/test.txt", true)) {
+    fw.write("Hello！");
     System.out.println("已完成操作");
+} catch (IOException e) {
+    System.out.println("找不到写入文件");
 }
 ```
-这个方法的签名如下：
+这个类的构造方法如下：
 ``` Java
 public BufferedWriter(Writer out, int sz)
 ```
