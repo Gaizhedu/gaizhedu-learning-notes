@@ -474,3 +474,86 @@ try(BufferedWriter osw = new BufferedWriter(new OutputStreamWriter(new FileOutpu
 public BufferedWriter(Writer out, int sz)
 ```
 第二个参数代表缓冲区的大小，可以自己设置
+
+## NIO
+接下来将介绍有关NIO的内容
+
+那么为什么要有NIO呢
+
+我们从一个经典的问题开始，假设你有一个服务器，并且使用传统的方法来写
+
+每个客户端连接代表一个线程，那么现在有10000个并发连接，这意味着需要10000个线程
+
+每个线程默认占用1MB，10000个就需要10G内存
+
+单单连接就需要10G内存了，这里面还有很多是什么操作都没有的，单单占个位
+
+那么要怎么解决呢？这便是著名的**C10K问题**
+
+传统的阻塞IO(Blocking I/O，下文简称为BIO)便有这样的问题，那么NIO是怎么做的呢？
+
+我们试想一下，假设现在有个银行叫做BIO，无论来多少客人就分配一个柜员来办理业务，这很明显不符合常理
+
+现实是怎么样的呢？是当你有业务要办理的时候，才会分配柜员，NIO也是这么干的，只有需要操作的时候才会分配线程
+
+### 基本模式
+NIO的基本模式与BIO不太一样
+
+如果我们需要读取一个文件，在BIO里面可以将这个文件的内容读成字符流输出出来，但是在NIO里面，你需要这么干
+
+``` Java
+创建一个Buffer -> 通过Channel读取数据到Buffer -> 调用filp() -> 从Buffer中读取数据 -> 清空Buffer
+```
+
+在理解完NIO的流程后，我们开始介绍，依旧通过一个例子来说明：
+
+``` Java
+try(FileChannel fileChannel = FileChannel.open(
+        Paths.get("src/test.txt"), StandardOpenOption.READ
+)){
+    ByteBuffer buffer = ByteBuffer.allocate(1024);
+    StringBuilder stringBuilder = new StringBuilder();
+
+    while (fileChannel.read(buffer) != -1){
+        buffer.flip();
+
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+        stringBuilder.append(new String(bytes));
+
+        buffer.clear();
+    }
+    System.out.printf("文件内容为：%s", stringBuilder);
+} catch (IOException e) {
+    throw new RuntimeException(e);
+}
+```
+接下来开始介绍NIO
+
+如果你需要使用NIO来进行任何的读写操作，一般需要创建一个Channel和一个Buffer
+
+如果需要读，需要用Channel读取数据，然后再传到Buffer里面
+
+如果需要写，则需要先在Buffer中写数据，在传到Channel里面去
+
+#### Buffer
+接下来介绍一下Buffer
+
+Buffer是一个用于存储的字符数组，在上面的例子中它是这样被创建的：
+
+``` Java
+ByteBuffer buffer = ByteBuffer.allocate(1024);
+```
+这里的ByteBuffer是ByteBuffer的一个类型，除此之外还有IntBuffer，CharBuffer等
+
+那么后面的`.allocate()`是什么意思呢？这个方法的作用是为ByteBuffer分配空间
+
+Buffer有三个关键属性，分别是`capacity`、`position`和`limit`
+
+其中`capactiy`代表这个Buffer最大能存的数据大小
+
+而`position`代表下一个要读取或写入的位置
+
+最后是`limit`，最大可以读取或者最大可以写的位置
+
+很明显可以看到，`.allocate()`关联的是`capactiy`属性
