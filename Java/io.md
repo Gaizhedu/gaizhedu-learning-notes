@@ -597,9 +597,53 @@ public final int remaining() {
 ```
 可以看到，`remaining()`返回的值实际上是`limit`和`position`的差值
 
-在上面的例子中，这个方法使用在创建字符数组中
+在上面的例子中，这个方法使用在创建字节数组中
 ``` Java
 byte[] bytes = new byte[buffer.remaining()];
 ```
 
 这个字符数组的作用与后面的一个方法息息相关
+
+### get()
+在介绍完上面的`remaining()`后，就可以介绍接下来的方法`get()`了
+
+在上面的例子中，这个方法出现在创建字节数组的下一行
+
+``` Java
+byte[] bytes = new byte[buffer.remaining()];
+buffer.get(bytes);
+```
+那么这个方法有什么作用呢？
+
+这个方法的作用是，从当前的`position`开始，往后读取数据
+
+> 说道理就是put的反向操作，所以这里笔记的顺序是有点小问题的，但是调整就太过麻烦了，耦合度太高了
+
+这个方法有以下常见的签名：
+
+``` Java
+byte get()
+
+ByteBuffer get(byte[] dst)
+
+ByteBuffer get(byte[] dst, int offset, int length)
+```
+我们上面的例子使用的是第二种重载
+
+第一个重载的作用是读一个字节，如果需要读取多个字节，可以使用循环，但是这样的开销很大
+
+所以一般建议使用批量读取的形式，也就是第二种重载
+
+而第三个重载还带有两个额外的参数
+
+`offest`代表的是写入的起始位置，而`length`代表的是读取的长度，`dst`代表写入的数组
+
+上面的例子中，`dst`为我们创建的字节数组
+
+事实上`get(byte[] dst)`复用了三个参数的版本
+
+``` Java
+public ByteBuffer get(byte[] dst) {
+    return get(dst, 0, dst.length);
+}
+```
