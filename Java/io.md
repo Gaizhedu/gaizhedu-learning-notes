@@ -536,7 +536,7 @@ try(FileChannel fileChannel = FileChannel.open(
 
 如果需要写，则需要先在Buffer中写数据，在传到Channel里面去
 
-#### Buffer
+### Buffer
 接下来介绍一下Buffer
 
 Buffer是一个用于存储的字符数组，在上面的例子中它是这样被创建的：
@@ -557,3 +557,25 @@ Buffer有三个关键属性，分别是`capacity`、`position`和`limit`
 最后是`limit`，最大可以读取或者最大可以写的位置
 
 很明显可以看到，`.allocate()`关联的是`capactiy`属性
+
+### filp() & put()
+接下来看到这里：
+``` Java
+buffer.flip();
+```
+
+这个方法的作用是将`Buffer`切换为读模式
+
+由于Buffer是没办法分辨写了多少和能写多少，如果没有flip()，那么便会出现读到错误数据的情况
+
+在上文也提到了，Buffer有三个属性，而这里的flip与这三个属性关联较大
+
+如果使用`.filp()`切换为读模式，那么此时这个`Buffer`的`limit`会被设置为`position`的值
+
+而后`position`会设置为0，也就是从头开始读
+
+这样做的好处是可以使得Buffer在读取的时候最大值刚好为写入的最大值，避免了越界的情况发生
+
+另外一个为`put()`为切换为写模式
+
+`position`会被设定为`原来多少+写入的大小`
