@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2025-12-07]
+- 新增有关IO操作中有关NIO的相关内容
+  * 介绍了Buffer的相关内容
+  * 介绍了.allocate()的作用
+  * 新增有关flip()和put()的相关内容
+  * 新增有关remaining()的相关内容
+  * 新增有关get()方法的相关内容
+
 ## [2025-12-06]
 - 新增OutputStreamWriter的相关内容
 
