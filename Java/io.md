@@ -579,3 +579,27 @@ buffer.flip();
 另外一个为`put()`为切换为写模式
 
 `position`会被设定为`原来多少+写入的大小`
+
+### remaining()
+remaining()的作用与当前Buffer的模式相关
+
+在写模式下，这个方法返回的是还能**写多少字节**
+
+而在读模式下，这个方法返回的是还有**多少有效数据可读**
+
+这个方法的源代码很简单：
+
+``` Java
+public final int remaining() {
+    int rem = limit - position;
+    return rem > 0 ? rem : 0;
+}
+```
+可以看到，`remaining()`返回的值实际上是`limit`和`position`的差值
+
+在上面的例子中，这个方法使用在创建字符数组中
+``` Java
+byte[] bytes = new byte[buffer.remaining()];
+```
+
+这个字符数组的作用与后面的一个方法息息相关
