@@ -655,3 +655,16 @@ public ByteBuffer get(byte[] dst) {
 
 这样的作用是保持后续的buffer可以再次复用，不会读取到之前的垃圾数据
 
+### Channel
+接下来介绍Channel的内容
+
+Channel的作用相当于一个运输的通路，只有通过这个通路，Buffer里面的数据才能运输
+
+在上面的例子中，我们创建了一个Channel，这个Channel是Channel的子类
+
+``` Java
+FileChannel fileChannel = FileChannel.open(
+        Paths.get("src/test.txt"), StandardOpenOption.READ
+)
+```
+上面这个例子属于NIO2的写法，如果需要使用NIO的写法，则需要写成这样：
