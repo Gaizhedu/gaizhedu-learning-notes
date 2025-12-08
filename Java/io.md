@@ -647,3 +647,11 @@ public ByteBuffer get(byte[] dst) {
     return get(dst, 0, dst.length);
 }
 ```
+
+### clear()
+在例子中的最后，使用到了这个方法：`buffer.clear()`
+
+这个方法的作用是清空Buffer中的所有内容
+
+这样的作用是保持后续的buffer可以再次复用，不会读取到之前的垃圾数据
+
