@@ -668,3 +668,18 @@ FileChannel fileChannel = FileChannel.open(
 )
 ```
 上面这个例子属于NIO2的写法，如果需要使用NIO的写法，则需要写成这样：
+``` Java
+FileInputStream fis = new FileInputStream("src/test.txt");
+fileChannel = fis.getChannel();
+```
+
+其中getChannel的作用依旧为创建一个通道
+
+需要注意的是，这里fis为`FileInputStream`为输入流，意味着读取数据给JVM，所以下面的Channel可以起着读取的作用
+
+如果要写入可以这样使用输出流`FileOutputStream`
+
+``` Java
+FileOutputStream fis = new FileOutputStream("src/test.txt");
+fileChannel = fis.getChannel();
+```
