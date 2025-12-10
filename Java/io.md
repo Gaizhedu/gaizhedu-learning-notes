@@ -683,3 +683,17 @@ fileChannel = fis.getChannel();
 FileOutputStream fis = new FileOutputStream("src/test.txt");
 fileChannel = fis.getChannel();
 ```
+
+#### read()
+接下来介绍一下read()
+
+这个方法的作用为读取数据到指定的buffer里面
+
+上面的例子中这个方法在这里出现：
+
+``` Java
+while (fileChannel.read(buffer) != -1)
+```
+每次读取到的数据为一个整数，这个整数代表本次成功读取的字节数
+
+如果为-1，意味着文件读完了，也就跳出循环了
