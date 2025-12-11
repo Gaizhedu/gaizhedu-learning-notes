@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2025-12-11]
+- 新增有关Lambda的相关内容
+  * 新增有关Function的相关内容
+  * 新增有关Predicate的相关内容
+  * 新增有关Consumer的部分内容
+
 ## [2025-12-10]
 - 新增有关Channel的相关内容
   * 新增有关read()的相关内容
