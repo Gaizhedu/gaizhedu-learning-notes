@@ -2,4 +2,112 @@
 这篇笔记将介绍有关Lambda表达式的相关内容
 
 ## 基础语法
-Lambda可以看做是一种匿名函数，可以理解为这是个没有函数名称的函数，
+Lambda可以看做是一种匿名函数，可以理解为这是个没有函数名称的函数
+
+其基本的语法如下：
+
+``` Java
+(a) -> b;
+(a) -> {b;}
+```
+
+这意味着Lambda可以选择单一一个参数或者是一个代码块
+
+在上面中，圆括号内的`a`代表了参数列表
+
+后面的`b`代表了一段表达式或是一个代码块
+
+举个例子：
+
+假设我们现在需要使用`.sort()`来定义一个自定义排序规则，那么我们可以这么写
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(3,2,5,1,4,6,7,9,8));
+list.sort((a,b) -> b - a);
+System.out.println(list);
+
+// 输出：
+// [9, 8, 7, 6, 5, 4, 3, 2, 1]
+```
+
+可以看到，此处定义了一个排序的规则，此处结果>0，说明b应该在a的前面，如果<0，说明a应该在b的前面
+
+假设没有使用Lambda表达式，那么要怎么去写相同的逻辑呢？
+
+如果我们使用传统的方法，那么就需要使用到匿名类，写法如下：
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(3,2,5,1,4,6,7,9,8));
+list.sort(new Comparator<Integer>() {
+    @Override
+    public int compare(Integer o1, Integer o2) {
+        return o2 - o1;
+    }
+});
+System.out.println(list);
+
+// 输出：
+// [9, 8, 7, 6, 5, 4, 3, 2, 1]
+```
+传统写法相对于Lambda写法，不仅写法更加复杂，而且可读性也比Lambda要低
+
+Lambda表达式诞生的一个目的就是简化这些复杂的表达
+
+## 函数式接口
+在介绍为Lambda表达式的基础语法后，接下来讲一下有关函数式接口的相关内容
+
+为什么要介绍这个内容呢？一个很重要的原因就是Java是一种**强类型**的语言
+
+而Lambda本质是匿名函数，所以必须知道这个函数的签名
+
+那么Java中有那些函数式接口呢？主要有这四个
+
+``` Java
+Function<T, R>
+Predicate<T>
+Consumer<T>
+Supplier<T>
+```
+
+哪里可以看到这些函数式接口呢？一般来讲，如果一个方法的签名里面带有这些函数式接口，便意味着可以使用Lambda表达式
+
+我们举个例子，在上文排序的例子中，`.sort()`的签名如下
+
+``` Java
+default void sort(Comparator<? super E> c)
+```
+
+此处的`Comparator<? super E> c`便是一个函数式接口
+
+再例如一些`Stream API`中的方法：
+
+``` Java
+map(Function<? super T, ? extends R> mapper);
+
+forEach(Consumer<? super T> action);
+```
+从签名中不难看出，这些都是函数式接口，这也就是为什么这些方法可以使用Lambda表达式的原因
+
+但是这些函数式接口有什么作用呢？
+
+
+### Function
+首先是第一个`Function<T, R>`
+
+这个接口的作用是，输入类型为T，通过**一些转换**后输出一个类型为R的值
+
+举个例子，`stream.map()`
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(3,2,5,1,4,6,7,9,8));
+List<String> newString = list.stream()
+        .map(a -> a.toString())
+        .toList();
+System.out.println(newString);
+
+// 输出：
+// [3, 2, 5, 1, 4, 6, 7, 9, 8]
+```
+在上面这个例子中，Function的T和R分别为`Integer`和`String`
+
+也就是`Function<Integer, String>`
