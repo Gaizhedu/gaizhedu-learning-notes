@@ -111,3 +111,23 @@ System.out.println(newString);
 在上面这个例子中，Function的T和R分别为`Integer`和`String`
 
 也就是`Function<Integer, String>`
+
+### Predicate
+接下来是`Predicate<T>`
+
+这个接口的作用是**判断**，
+
+一个比较经典的例子为`stream.filter()`
+
+具体签名如下：`filter(Predicate<? super T> predicate)`
+
+``` Java
+List<Integer> newString = list.stream()
+        .filter(a -> a > 5)
+        .toList();
+System.out.println(newString);
+
+// 输出：
+// [6, 7, 9, 8]
+```
+在上面的例子中，如果输入的参数a>5，则返回true，也就是只有大于5的数字才能被过滤
