@@ -131,3 +131,34 @@ System.out.println(newString);
 // [6, 7, 9, 8]
 ```
 在上面的例子中，如果输入的参数a>5，则返回true，也就是只有大于5的数字才能被过滤
+
+### Consumer
+接下来介绍一下`Consumer<T>`
+
+这个函数式接口的作用是接受一个输入，而后输出一个操作，不返回任何结果
+
+举个例子，`stream.forEach()`
+
+方法签名如下
+``` Java
+forEach(Consumer<? super T> action)
+```
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(3, 2, 5, 1, 4, 6, 7, 9, 8));
+list.stream().forEach(System.out::println);
+
+// 输出：
+// 3
+// 2
+// 5
+// 1
+// 4
+// 6
+// 7
+// 9
+// 8
+```
+可以看到，此处对list中的元素挨个执行了`System.out::println`
+
+满足了输入内容为值，输出为一个操作，并且没有返回任何值
