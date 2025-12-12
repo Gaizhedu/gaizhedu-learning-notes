@@ -240,7 +240,7 @@ final int a = 1;
 
 此处整数a是没办法被修改的
 
-什么是`Effective final`呢？简单来说就是没有通过final修饰，但是后续也没有被修改的变量
+什么是`Effective final（有效final）`呢？简单来说就是没有通过final修饰，但是后续也没有被修改的变量
 
 例如说
 ``` Java
@@ -249,4 +249,46 @@ public static void main(String[] args) {
     System.out.println(a);
 }
 ```
-可以看到，在上面的例子中，变量a始终都没有被修改过，可以视为`final`，我们称这种变量为`Effective final`
+可以看到，在上面的例子中，变量a始终都没有被修改过，可以视为`final`，我们称这种变量为`Effective final`（也就是有效final）
+
+---
+接下来正式讲一下Lambda捕获
+
+什么叫做Lambda捕获呢？简单来讲就是在Lambda表达式中，语句使用到了外部作用域的变量
+
+例如：
+``` Java
+int num = 2;
+Function<Integer, Integer> function = (s -> s * num);
+List<Integer> list = new ArrayList<>(Arrays.asList(1,2,3,4,5));
+list.stream().map(function).forEach(System.out::println);
+
+// 输出：
+// 2
+// 4
+// 6
+// 8
+// 10
+```
+可以看到，在上面的例子中，我们在Lambda语句中使用到了外部变量`num`
+
+这个变量在声明后便没有再次被修改，所以可以看作是`Effective final`的
+
+如果试图修改会发生什么？
+``` Java
+int num = 2;
+num = 3;
+Function<Integer, Integer> function = (s -> s * num);
+List<Integer> list = new ArrayList<>(Arrays.asList(1,2,3,4,5));
+list.stream().map(function).forEach(System.out::println);
+```
+事实上，如果你试图运行上面的代码，会发现是没办法编译的
+
+在IntelliJ IDEA中，Lambda表达式中的num会被标记为错误：`lambda 表达式中使用的变量应为 final 或有效 final`
+
+### 为什么要求为final或有效final
+首先我们需要明确一个点，局部变量的位置是在栈上，这意味着局部变量是会在方法结束后被销毁的
+
+而Lambda对象存活的时间可能很久，如果试图引用可变局部变量，那么当方法结束后，局部变量被销毁，此时便会出现数据不一致，或者是悬空引用的情况
+
+所以，Lambda捕获的变量必须为final或者有效final
