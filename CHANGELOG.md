@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2025-12-12]
+- 新增有关Lambda的相关内容
+  * 新增有关Supplier的相关内容
+  * 新增有关方法引用的相关内容
+  * 新增有关Effective final的相关内容
+
 ## [2025-12-11]
 - 新增有关Lambda的相关内容
   * 新增有关Function的相关内容
