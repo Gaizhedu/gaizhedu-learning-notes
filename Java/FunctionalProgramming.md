@@ -3,17 +3,6 @@
 
 基础部分的函数式编程主要分为这两大块
 
-- [x] filter()
-- [x] map()
-- [x] mapToInt()
-- [x] sorted()
-- [x] peek()
-- [x] limit()
-- [x] skip()
-- [x] forEach()
-- [x] reduce()
-- [x] toList()
-
 - Lambda
 - Stream
 
