@@ -162,3 +162,27 @@ list.stream().forEach(System.out::println);
 可以看到，此处对list中的元素挨个执行了`System.out::println`
 
 满足了输入内容为值，输出为一个操作，并且没有返回任何值
+
+### Supplier
+接下来介绍一下Supplier<T>
+
+这个接口的作用是**不接受任何元素，生成并输出一个新的值**
+
+举个例子，`Stream.generate()`
+
+``` Java
+Stream<Integer> stream = Stream.generate(() -> new Random().nextInt(100));
+stream.limit(5).forEach(System.out::println);
+
+// 输出：
+// 25
+// 38
+// 3
+// 91
+// 43
+```
+
+这个方法的签名为：
+``` Java
+generate(Supplier<? extends T> s)
+```
