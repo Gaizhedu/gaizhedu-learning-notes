@@ -225,3 +225,28 @@ list.stream().map(String::toUpperCase).forEach(System.out::println);
 // WORLD
 ```
 可以看到，相较于传统的写法，使用方法引用会让整体的代码变得更加紧凑
+
+## Lambda捕获
+在介绍这一部分的内容之前，我们需要介绍一下`Effective final`的内容
+
+### Effective final
+我们知道，如果想要将一个变量设置为不可修改，可以在声明的时候在前面加上`final`
+
+例如：
+
+``` Java
+final int a = 1;
+```
+
+此处整数a是没办法被修改的
+
+什么是`Effective final`呢？简单来说就是没有通过final修饰，但是后续也没有被修改的变量
+
+例如说
+``` Java
+public static void main(String[] args) {
+    int a = 1;
+    System.out.println(a);
+}
+```
+可以看到，在上面的例子中，变量a始终都没有被修改过，可以视为`final`，我们称这种变量为`Effective final`
