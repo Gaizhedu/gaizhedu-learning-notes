@@ -186,3 +186,42 @@ stream.limit(5).forEach(System.out::println);
 ``` Java
 generate(Supplier<? extends T> s)
 ```
+
+## 方法引用
+接下来要介绍的内容为方法引用，这一部分可以理解为Lambda的一个**语法糖**
+
+简单举个例子，以往我们想要将List中的元素通过流打印出来，可以这么写：
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1,2,3,4,5));
+list.stream().forEach(s -> System.out.println(s));
+```
+
+可以看到，这里使用了一个Lambda表达式
+
+虽然这样是可以运行的，但为了打印创建一个临时变量`s`感觉有点多余
+
+所以我们可以使用到方法引用：
+
+``` Java
+List<Integer> list = new ArrayList<>(Arrays.asList(1,2,3,4,5));
+list.stream().forEach(System.out::println);
+```
+
+具体使用方法如下：
+
+``` Java
+类名::实例方法名
+```
+
+假设我们需要将所有的字符串全部大写，我们可以这样操作：
+
+``` Java
+List<String> list = new ArrayList<>(Arrays.asList("hello","world"));
+list.stream().map(String::toUpperCase).forEach(System.out::println);
+
+// 输出：
+// HELLO
+// WORLD
+```
+可以看到，相较于传统的写法，使用方法引用会让整体的代码变得更加紧凑
