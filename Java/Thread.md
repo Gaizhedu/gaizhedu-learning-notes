@@ -172,3 +172,82 @@ service.shutdown();
 - TERMINATED 线程执行完毕，或者无法捕获异常而结束
 
 如果想要查看当前线程的状态，可以使用`.getState()`：
+
+## 锁
+假设现在有一幅画，A正在画画，还没画完B就在画板上画，于是这两者都不乐意
+
+换到线程，有A线程和B线程，A线程想要修改变量C，B线程也要修改变量C，这就导致最后程序不知道要选哪个线程修改的变量C
+
+什么是锁呢？锁可以防止以上的事情发生
+
+假设A线程开始修改变量C，修改的时候把C上锁，B试图修改变量C，但是因为上锁没办法修改，等到A线程修改完把锁打开，线程B才可以修改
+
+这样就把一个同时操作的工作转换成了一个带有前后顺序的操作
+
+那么Java中有什么锁呢？
+
+主要有这些锁：
+
+- synchronized 内置锁，自动加锁和释放
+- ReentrantLock 显式锁，需要手动释放
+- ReentrantReadWriteLock 读写锁，多个读线程可以同时读
+- AtomicInteger 乐观锁，基于
+
+接下来通过一个例子来实际说明锁的作用
+
+假设用户想要分5次在银行取款，每次20块
+
+``` Java
+class Bank{
+    private int total = 1000;
+
+    public void withdraw(int amount){
+        if (total >= amount){
+            total -= amount;
+        }
+        System.out.printf("剩余余额：%d\n", total);
+    }
+}
+
+public class MyBank {
+    public static void main(String[] args) {
+        int count = 0;
+        ExecutorService service = Executors.newFixedThreadPool(10);
+        Bank bank = new Bank();
+        for (int i = 0; i < 5; i++) {
+            service.submit(() -> bank.withdraw(20));
+        }
+        System.out.printf("一共执行的次数：%d%n", count);
+        service.shutdown();
+    }
+}
+
+// 输出：
+// 一共执行的次数：5
+// 剩余余额：920
+// 剩余余额：940
+// 剩余余额：920
+// 剩余余额：920
+// 剩余余额：940
+```
+可以看到，在输出中剩余余额是不正确的，并没有出现我们预期的状态，也就是分别取5次，每次减少20
+
+如果有锁呢？
+
+``` Java
+public synchronized void withdraw(int amount){
+    if (total >= amount){
+        total -= amount;
+    }
+    System.out.printf("剩余余额：%d\n", total);
+}
+
+// 输出：
+// 一共执行的次数：5
+// 剩余余额：980
+// 剩余余额：960
+// 剩余余额：940
+// 剩余余额：920
+// 剩余余额：900
+```
+可以看到，此处便不会出现上文线程冲突的情况了，这也就是锁的一大用途，解决线程冲突的问题
