@@ -251,3 +251,91 @@ public synchronized void withdraw(int amount){
 // 剩余余额：900
 ```
 可以看到，此处便不会出现上文线程冲突的情况了，这也就是锁的一大用途，解决线程冲突的问题
+
+## 原子操作
+接下来介绍原子操作
+
+那么什么是原子操作呢？简单来说就是一个操作开始执行，就必须完整执行完，不可以中途停止
+
+举一个简单的例子
+
+``` Java
+int count = 0;
+count++;
+```
+在上面这个例子中，这个自增的操作**并不是一个原子操作**
+
+为什么呢？事实上我们可以将这个操作看为三步
+
+1. 读，CPU读取`count`的值
+2. 加，`count`自增
+3. 写，把自增的值写回`count`
+
+如果有两个不同的线程同时执行这一操作，那么就有可能导致值发生错误
+
+那么要怎么让操作变成原子的呢？其实很简单，只需要使用`java.util.concurrent.atomic`这个工具包中的原子类即可
+
+``` Java
+public static void add(AtomicInteger integer){
+    System.out.println(integer.addAndGet(100));
+}
+
+public static void main(String[] args) throws InterruptedException {
+    ExecutorService service = Executors.newFixedThreadPool(10);
+    AtomicInteger integer = new AtomicInteger(1000);
+    for (int i = 0; i < 20; i++) {
+        service.submit(() -> {
+            add(integer);
+        });
+    }
+    service.shutdown();
+    if (!service.awaitTermination(5, TimeUnit.SECONDS)) {
+        service.shutdownNow();
+    }
+    System.out.println("最终值为：" + integer.get());
+}
+
+// 输出：
+// 1100
+// 1300
+// 1400
+// 1200
+// 1500
+// 最终值为：1500
+```
+在上面的例子中，这一句负责声明原子类整数，并设定初始值为1000
+
+``` Java
+AtomicInteger integer = new AtomicInteger(1000);
+```
+
+接下来的for循环，这个代码块代表创建5个线程，每个线程都提交一次任务，属于并发操作
+
+> 实际上你可以把add()方法打印的部分稍微修改一下
+>
+> System.out.println(Thread.currentThread().getName() + ": " + integer.addAndGet(100));
+>
+> 这样在打印的时候便会把线程名称也打印出来
+>
+> 输出：
+> pool-1-thread-4: 1500
+> pool-1-thread-3: 1400
+> pool-1-thread-5: 1200
+> pool-1-thread-1: 1300
+> pool-1-thread-2: 1100
+> 最终值为：1500
+
+这里为了保证这些线程可以在主线程完成前完成，加了一个定时的语句：
+
+``` Java
+if (!service.awaitTermination(5, TimeUnit.SECONDS)) {
+    service.shutdownNow();
+}
+```
+如果等待5秒后线程没有完成，那么就中断所有任务
+
+反之则说明线程已完成任务，可以正常结束
+
+这样做的目的是，主线程需要等待所有工作线程完成它们的任务后，才能安全地读取共享状态，否则就有可能出现最后数据不对的情况
+
+## 线程安全
