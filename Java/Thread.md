@@ -261,6 +261,42 @@ public synchronized void withdraw(int amount){
 
 互斥性意味着同一时刻只有一个线程才能拥有这个锁
 
+这个锁有一些有意思的特性
+
+#### 定时
+使用这个锁可以来设定时间，如果时间到还没有获取到锁，则自动放弃
+
+``` Java
+if (lock.tryLock(3, TimeUnit.SECONDS)){
+    try {
+
+    } catch (Exception e){
+
+    } finally {
+        lock.unlock();
+    }
+}
+```
+在上面这个语句中，`lock.tryLock(3, TimeUnit.SECONDS)`代表在三秒内试图获取到锁，如果不获取到锁，则自动跳过
+
+可以用于一些需要让用户等待的场景，防止一直获取不到锁导致卡住
+
+#### 中断
+使用ReetrantLock还可以中断操作
+
+``` Java
+ReentrantLock lock = new ReentrantLock();
+try {
+    lock.lockInterruptibly();
+} catch (InterruptedException e){
+    Thread.currentThread().interrupt();
+} finally {
+    lock.unlock();
+}
+```
+在上面这里使用到了`lock.lockInterruptibly()`，这个方法的作用是试图获取锁，但是与以往的方法不同，这个方法可以被其他线程中断，也就是当其他线程调用了`interrupt()`的时候，会抛出`InterruptedException`来中断等待
+
+后面的`Thread.currentThread().interrupt()`是恢复状态，因为抛出错误的时候线程的中断状态会被自动清除，如果不使用这个的话可能会导致一些逻辑发生错误
 
 ## 原子操作
 接下来介绍原子操作
