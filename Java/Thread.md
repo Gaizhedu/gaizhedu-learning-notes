@@ -475,3 +475,8 @@ if (!service.awaitTermination(5, TimeUnit.SECONDS)) {
 这个方法的作用是唤醒指定的线程，比如说A线程因为生产满了导致进入等待状态，而B线程便可以在消耗后唤醒A线程
 
 而`notifyAll()`的作用是唤醒所有处于等待状态的线程
+
+## Callable
+接下来介绍`Callable`接口
+
+这个接口的功能与Runnable接口类似，都用于表示一个可以在线程中执行的任务
