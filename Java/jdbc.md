@@ -38,6 +38,11 @@ ResultSet rs = stmt.executeQuery("SELECT id, name FROM users")
 ```
 
 ## executeQuery
+executeQuery()的作用为执行查询语句，并返回其结果集
+
+如果用于执行不为查询操作的操作，那么会抛出`SQLException`
+
+需要注意的一点是，每次查询后都要执行一次`next()`来确保游标移动
 
 ## next
 
