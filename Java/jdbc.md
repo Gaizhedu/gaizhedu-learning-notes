@@ -14,6 +14,18 @@ Class.forName()是一个用于动态加载数据库的方法，基本用法是�
 所以现在不再需要显式调用`Class.forName()`
 
 ## getConnection
+DriverManager.getConnection()是获取数据库连接的核心方法
+
+这个方法签名如下：
+``` Java
+public static Connection getConnection(String url, String user, String password) throws SQLException
+```
+
+其中第一个参数代表数据库的地址，而第二个参数代表账户名称，第三个参数代表密码
+
+由于该方法可能抛出`SQLException`，所以必须处理
+
+为了确保及时关闭连接，所以要使用`try-with-resources`来自动关闭资源
 
 ## createStatement
 
