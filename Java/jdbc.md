@@ -28,6 +28,14 @@ public static Connection getConnection(String url, String user, String password)
 为了确保及时关闭连接，所以要使用`try-with-resources`来自动关闭资源
 
 ## createStatement
+这个方法的作用是创建一个`Statement`对象，这个对象的作用是向数据库发送SQL语句
+
+通过Statement，可以执行一些静态的SQL语句
+
+``` Java
+Statement stmt = conn.createStatement();
+ResultSet rs = stmt.executeQuery("SELECT id, name FROM users")
+```
 
 ## executeQuery
 
