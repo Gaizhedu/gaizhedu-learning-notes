@@ -52,6 +52,9 @@ next()的作用是将游标下移一行，如果有有效行，则返回`true`�
 需要注意的一点是，在读取第一行数据的时候必须要先使用一次next()才能读取
 
 ## close
+`close()`方法用于释放数据库连接及相关资源，`Connection`，`Statement`，`ResultSet`需要使用调用`close()`
+
+为什么需要使用close呢？一个比较大的原因是防止资源泄漏和避免连接耗尽
 
 ### isClose()
 
