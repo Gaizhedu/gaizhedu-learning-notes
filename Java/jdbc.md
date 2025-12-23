@@ -56,13 +56,16 @@ next()的作用是将游标下移一行，如果有有效行，则返回`true`�
 
 为什么需要使用close呢？一个比较大的原因是防止资源泄漏和避免连接耗尽
 
-### isClose()
+### isClosed()
+这个方法的作用是判断该对象是否关闭。如果为true则为关闭，否则为打开状态
 
 ## Properties
+Properties是一个常见的类，主要的作用是处理键值对形式的配置信息
 
-## setProperty
+所有的键和值都是字符串类型，并且线程安全，可以使用`setProperty`方法来设置键值对，用`getProperty`来获取指定键的值
 
 ## executeUpdate
+executeUpdate用于执行不返回结果集的 SQL 语句，例如`INSERT`、`UPDATE`、`DELETE`，不能用于查询！
 
 ## execute
 
