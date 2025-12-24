@@ -68,6 +68,9 @@ Properties是一个常见的类，主要的作用是处理键值对形式的配�
 executeUpdate用于执行不返回结果集的 SQL 语句，例如`INSERT`、`UPDATE`、`DELETE`，不能用于查询！
 
 ## execute
+execute是一个通用的执行语句，用于执行所有类型的SQL语句
+
+使用起来更复杂，通常只在SQL 语句类型未知或需要处理多结果集/混合结果时才使用
 
 ## prepareStatement
 
