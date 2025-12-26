@@ -420,6 +420,56 @@ System.out.printf("若不存在该键则返回第二个参数：%s%n", map.getOr
 
 而第二次输出由于没有对应的键，返回的内容为第二个参数的内容
 
+### compute
+接下来介绍一下这个方法
+
+这个方法的作用是指定一个键的这个键的值，然后通过一些计算（BiFunction）来更新这个值
+
+这个方法签名如下：
+
+``` Java
+default V compute(K key,
+            BiFunction<? super K, ? super V, ? extends V> remappingFunction)
+```
+可以看到，这个方法有两个参数，第一个参数用于指定是哪一个键，而第二个参数指的是对这个键的参数要进行什么操作
+
+下面举一个例子来说明：
+
+``` Java
+Map<Integer, String> map = new HashMap<>();
+map.put(1, "第一个元素");
+map.put(2, "第二个元素");
+System.out.println(map.get(1));
+map.compute(1, (k, v) -> v + "（追加的字符串）");
+System.out.println(map.get(1));
+
+// 输出：
+// 第一个元素
+// 第一个元素（追加的字符串）
+```
+在上面这个例子中，第一个键的值被更新为原先值加上一段字符串
+
+同时我们可以看到，在上面的例子中，`BiFunction`中的内容我们只是用到了第二个`v`，第一个参数`k`代表键，可以在日志中显示哪一个键被修改了
+
+我们再次提供一个例子来说明这个方法的作用
+
+``` Java
+Map<String, Integer> map = new HashMap<>();
+List<String> list = new ArrayList<>(List.of("A","C","B","A","B","C","A","A","B","C","B","A","C","C","A","B","C","A","B","C"));
+for (String s : list) {
+   map.compute(s, (k, v) -> (v == null) ? 1 : v + 1);
+}
+System.out.println(map);
+
+// 输出：
+// {A=7, B=6, C=7}
+```
+这是一个简单的计数器装置，运行原理是，如果map中没有数组中的元素（也就是`null`），则设置这个单词为键，并且值为1（起到起始化的作用）
+
+如果再一次出现这个键，则值+1
+
+这样便实现了一个基础的计数器
+
 ## HashMap
 
 接下来介绍一下这个实现类
