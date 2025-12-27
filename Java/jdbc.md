@@ -76,6 +76,14 @@ execute是一个通用的执行语句，用于执行所有类型的SQL语句
 这个方法的作用是执行SQL语句，一般推荐使用这个方法来执行SQL语句，可以防止SQL注入，并且类型安全
 
 ## setString
+这个方法的作用是设置参数占位符为字符串类型的值。
+
+签名如下
+``` Java
+void setString(int parameterIndex, String x) throws SQLException;
+```
+
+需要注意的一点是，第一个参数从1开始，第二个参数代表设置的字符为
 
 ## addBatch
 
