@@ -20,9 +20,9 @@
   - [x] putAll
   - [x] getOrDefault
 - 进阶内容
-  - [ ] compute  
-  - [ ] computeIfAbsent  
-  - [ ] computeIfPresent
+  - [x] compute  
+  - [x] computeIfAbsent  
+  - [x] computeIfPresent
   - [ ] equals
   - [ ] merge 
   - [ ] putIfAbsent   
@@ -493,6 +493,44 @@ System.out.println(map);
 假设我们有很多个物品，物品有10000种类别，但我们只会取10个物品出来并分类
 
 很明显，在这种情况下选择创建10000个键是十分不合理的行为，真正的做法是使用`computeIfAbsent`，如果没有则自动创建对应的键，以及自动创建该类别，这样，至多只需要10个类别即可完成任务，相较于之前的10000个减少了很多资源的浪费
+
+## computeIfPresent
+上文的`computeIfAbsent`是没有对应的键才进行操作，这个方法的作用是有对应的键才进行操作
+
+签名如下：
+``` Java
+default V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction)
+```
+
+> 此处为BiFunction的原因是只有当键和值都存在时才会根据第二个参数来计算新的值
+> 而BiFunction便是接收两个值，输入一个值的类型
+
+我们举一个例子：
+``` Java
+// 初始化 Map
+Map<String, Boolean> map = new HashMap<>();
+// 初始化购买清单
+List<String> shoppingList = new ArrayList<>(List.of("Apple","Strawberry","Watermelon"));
+// 将购买清单里面的物品放入Map中，并设置值为false
+for (String item : shoppingList) {
+   map.compute(item, (k, v) -> v != null);
+}
+// 设置今日特价商品
+List<String> specialPrice = new ArrayList<>(List.of("Apple","Banana","Grape"));
+// 通过 computeIfPresent 方法来判断是否有制定的键，如果有制定的键，则设置值为true
+for (String item : specialPrice){
+   map.computeIfPresent(item, (k, v) -> true);
+}
+// 最后查找是否有为 true 的值
+System.out.printf("今日是否有特价商品在购买清单中：%s",map.containsValue(true));
+
+/* 输出：
+今日是否有特价商品在购买清单中：true
+*/
+```
+在上面的例子中，我们实现了一个判断购买清单中是否存在今日特价商品的例子
+
+使用的思路是先将购买清单中的物品放入Map中，并设置为键，而后利用`computeIfPresent`只能在有的键中执行`BiFunction`的特性，实现对指定物品的筛选
 
 ## HashMap
 
