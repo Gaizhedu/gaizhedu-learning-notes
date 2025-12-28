@@ -470,6 +470,30 @@ System.out.println(map);
 
 这样便实现了一个基础的计数器
 
+## computeIfAbsent
+`computeIfAbsent`的作用是将获取指定的key值，如果该key的值不存在，则利用其映射函数计算一个新的值，并放入Map中
+
+签名如下：
+``` Java
+default V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction)
+```
+
+``` Java
+Map<Integer, Integer> map = new HashMap<>();
+map.computeIfAbsent(1,(k) -> k * 2);
+System.out.println(map);
+
+// 输出：
+// {1=2}
+```
+可以看到，`map`没有键1，意味着没有对应的值，所以通过第二个参数计算得出一个新的值，并放入map中
+
+这个方法的一个特性便是**免初始化**，这一特点使得该方法可以用于很多领域
+
+假设我们有很多个物品，物品有10000种类别，但我们只会取10个物品出来并分类
+
+很明显，在这种情况下选择创建10000个键是十分不合理的行为，真正的做法是使用`computeIfAbsent`，如果没有则自动创建对应的键，以及自动创建该类别，这样，至多只需要10个类别即可完成任务，相较于之前的10000个减少了很多资源的浪费
+
 ## HashMap
 
 接下来介绍一下这个实现类
