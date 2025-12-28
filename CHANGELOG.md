@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2025-12-28]
+- 新增Map的相关内容
+  * 新增computeIfAbsent的相关内容
+  * 新增computeIfPresent的相关内容
+  * 新增有关equals方法的相关内容
+
 ## [2025-12-27]
 - 新增有关数据库的相关内容
 
