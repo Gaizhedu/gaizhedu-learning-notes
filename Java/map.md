@@ -532,6 +532,35 @@ System.out.printf("今日是否有特价商品在购买清单中：%s",map.conta
 
 使用的思路是先将购买清单中的物品放入Map中，并设置为键，而后利用`computeIfPresent`只能在有的键中执行`BiFunction`的特性，实现对指定物品的筛选
 
+## equals
+`equals`方法的作用是比价两个Map的键值对是否相等
+
+签名如下：
+``` Java
+boolean equals(Object o);
+```
+
+接下来通过一个例子来说明
+
+``` Java
+// 初始化 两个Map，一个保存折扣过的商品，一个保存当前折扣的商品
+Map<String, Boolean> pastDiscountedProducts = Map.of("Apple",true, "Banana",true, "Grape",true);
+
+Map<String, Boolean> specialPrice = Map.of("Apple",true, "Banana",true, "Grape",true);
+// 通过 equals 方法来比较两个 Map 是否相等
+if (specialPrice.equals(pastDiscountedProducts)){
+   System.out.println("这次的打折活动之前也有过一次");
+} else {
+   System.out.println("这次的打折活动从未有过");
+}
+
+/* 
+输出：
+这次的打折活动之前也有过一次
+*/
+```
+上面例子比较了两个Map的键值对，需要注意的一点是，比较仅比较是否相同，顺序是可以不一致的
+
 ## HashMap
 
 接下来介绍一下这个实现类
