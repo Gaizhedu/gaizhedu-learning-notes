@@ -23,8 +23,8 @@
   - [x] compute  
   - [x] computeIfAbsent  
   - [x] computeIfPresent
-  - [ ] equals
-  - [ ] merge 
+  - [x] equals
+  - [x] merge 
   - [ ] putIfAbsent   
   - [ ] replaceAll
   - [x] remove（双参数）
@@ -560,6 +560,37 @@ if (specialPrice.equals(pastDiscountedProducts)){
 */
 ```
 上面例子比较了两个Map的键值对，需要注意的一点是，比较仅比较是否相同，顺序是可以不一致的
+
+## merge
+这个方法的作用是更新或插入键值对
+
+方法签名如下：
+``` Java
+V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction)
+```
+
+这个方法的具体作用是，如果`key`存在，并且这个`key`的值不为空，则执行后面的`BiFunction`
+
+如果`key`不存在，则将这个`key`和第二个参数的`value`放入Map中
+
+举一个例子来说明：
+
+``` Java
+// 初始化一个 Map 用于存储物品
+Map<String, Integer> inventory = new HashMap<>(Map.of("Apple", 1, "Banana", 1, "Grape", 1));
+// 初始化物品列表
+List<String> newItems = new ArrayList<>(List.of("Apple", "Pineapple", "Banana", "Strawberry"));
+// 将新的物品添加到存储的 Map 当中
+for (String item : newItems) {
+   inventory.merge(item, 1, Integer::sum);
+}
+System.out.printf("当前拥有的物品有：%s", inventory);
+```
+在上面这里例子中，`merge`的具体使用位于`inventory.merge(item, 1, Integer::sum);`
+
+实际的意思是，如果指定的键存在（也就是这里有存货），则运行后面的`Integer::sum`，这里相加的值为原先`key`的值与第二个参数`value`相加
+
+如果指定的键不存在，则直接将新的键和`value`放入Map中
 
 ## HashMap
 
