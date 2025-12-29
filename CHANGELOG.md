@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2025-12-29]
+- 新增Map的相关内容
+  * 新增有关putIfAbsent的相关内容
+  * 新增今日更新内容
+
 ## [2025-12-28]
 - 新增Map的相关内容
   * 新增computeIfAbsent的相关内容
