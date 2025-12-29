@@ -585,12 +585,39 @@ for (String item : newItems) {
    inventory.merge(item, 1, Integer::sum);
 }
 System.out.printf("当前拥有的物品有：%s", inventory);
+
+/*
+输出：
+当前拥有的物品有：{Pineapple=1, Apple=2, Strawberry=1, Grape=1, Banana=2}
+*/
 ```
 在上面这里例子中，`merge`的具体使用位于`inventory.merge(item, 1, Integer::sum);`
 
 实际的意思是，如果指定的键存在（也就是这里有存货），则运行后面的`Integer::sum`，这里相加的值为原先`key`的值与第二个参数`value`相加
 
 如果指定的键不存在，则直接将新的键和`value`放入Map中
+
+## putIfAbsent
+这个方法的作用是，只有Map中没有指定的键的时候，才会将这个键值对放入Map中
+
+具体的例子如下：
+``` Java
+// 初始化一个 Map 用于存储物品
+Map<String, Boolean> inventory = new HashMap<>(Map.of("Apple", true, "Banana", true, "Grape", true));
+// 初始化物品列表
+List<String> newItems = new ArrayList<>(List.of("Apple", "Pineapple", "Banana", "Strawberry"));
+// 将新的物品添加到存储的 Map 当中
+for (String item : newItems) {
+   inventory.putIfAbsent(item, true);
+}
+System.out.printf("当前拥有的物品有：%s", inventory);
+
+/*
+输出：
+当前拥有的物品有：{Apple=true, Pineapple=true, Grape=true, Strawberry=true, Banana=true}
+*/
+```
+在上面的例子中，只有检测到不存在的键才会将对应的键值对放入Map中
 
 ## HashMap
 
