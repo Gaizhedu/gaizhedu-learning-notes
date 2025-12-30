@@ -25,7 +25,7 @@
   - [x] computeIfPresent
   - [x] equals
   - [x] merge 
-  - [ ] putIfAbsent   
+  - [x] putIfAbsent   
   - [ ] replaceAll
   - [x] remove（双参数）
   - [x] replace（三参数）
@@ -618,6 +618,29 @@ System.out.printf("当前拥有的物品有：%s", inventory);
 */
 ```
 在上面的例子中，只有检测到不存在的键才会将对应的键值对放入Map中
+
+## replaceAll
+这个方法的作用是，将该Map中所有的值进行批量操作
+
+方法签名如下：
+
+``` Java
+void replaceAll(BiFunction<? super K, ? super V, ? extends V> function)
+```
+
+通过一个简单的例子来说明：
+``` Java
+// 初始化一个 Map 用于存储物品
+Map<String, Integer> inventory = new HashMap<>(Map.of("Apple", 1, "Banana", 1, "Grape", 1));
+// 将所有的值都增加1
+inventory.replaceAll((k,v)-> ++v);
+System.out.printf("当前拥有的物品有：%s", inventory);
+
+/*
+输出：
+当前拥有的物品有：{Apple=2, Grape=2, Banana=2}
+*/
+```
 
 ## HashMap
 
