@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2025-12-30]
+- 新增Map的相关内容
+  * 新增replaceAll的相关内容
+  * 新增HashMap的相关内容
+  * 新增TreeMap的相关内容
+
 ## [2025-12-29]
 - 新增Map的相关内容
   * 新增有关putIfAbsent的相关内容
