@@ -1,5 +1,5 @@
 - Map接口
-   - [ ] HashMap
+   - [x] HashMap
    - [ ] TreeMap
    - [ ] （拓展）LinkedHashMap
    - [ ] （拓展）ConcurrentHashMap
@@ -26,7 +26,7 @@
   - [x] equals
   - [x] merge 
   - [x] putIfAbsent   
-  - [ ] replaceAll
+  - [x] replaceAll
   - [x] remove（双参数）
   - [x] replace（三参数）
 
@@ -643,12 +643,8 @@ System.out.printf("当前拥有的物品有：%s", inventory);
 ```
 
 ## HashMap
+HashMap是Map的一个实现类，用于存储键值对，底层实现为哈希表，默认初始容量为16，负载因子为0.75
 
-接下来介绍一下这个实现类
+这个实现类并不是线程安全的。插入的顺序为随机顺序
 
-那么在介绍这个实现类之前需要先介绍一下Map的基本组成
-
-Map的组成主要由键和值构成
-
-
-
+其他内容可以参照HashSet的内容
