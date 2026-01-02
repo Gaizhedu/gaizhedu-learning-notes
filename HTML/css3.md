@@ -38,3 +38,22 @@
   <p>This is my first website</p>
 </div>
 ```
+
+除了使用单词，还可以使用不同的格式，如RGB
+``` HTML
+<div id="wrapper" style="color: paleturquoise">
+  <h1 style="color: RGB(111,111,111);">Hello World!</h1>
+  <p>This is my first website</p>
+</div>
+```
+
+## font-family
+`font-family`的作用是设定显示的字体组，如果某文字无法以A字体显示，那么会自动尝试之后的字体
+
+``` CSS
+body{
+  font-family: Arial, Helvetica, sans-serif;
+}
+```
+上面的三个字体是最为常用的字体，也是比较推荐的默认设置
+
