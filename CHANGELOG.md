@@ -5,6 +5,7 @@
 - 新增font-family的相关内容
 - 新增font-size的相关内容
 - 新增font-weight的相关内容
+- 新增font-style和text-align的相关内容
 
 ## [2026-01-01]
 - 新增HTML中head标签的基础内容
