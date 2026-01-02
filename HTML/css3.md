@@ -76,3 +76,18 @@ body{
 
 如果想要使用默认值，则可以使用`medium`
 
+## font-weight
+`font-weight`的作用是设置字体的粗细
+
+这个属性有以下关键字可选`normal`、`bold`、`bolder`、`lighter`
+
+或者更加建议的是直接使用数值
+
+常见的数值为：400（默认），700（粗体），300（细体）
+
+``` CSS
+#wrapper p {
+  font-weight: 200;
+}
+```
+在上面这个例子便将字体的粗细设置成200
