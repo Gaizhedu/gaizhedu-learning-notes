@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2026-01-02]
+- 新增属性color的笔记内容
+- 新增font-family的相关内容
+- 新增font-size的相关内容
+- 新增font-weight的相关内容
+
 ## [2026-01-01]
 - 新增HTML中head标签的基础内容
 - 新增HTML中有关标题，段落，图片，列表等内容
