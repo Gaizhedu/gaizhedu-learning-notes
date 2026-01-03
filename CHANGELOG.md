@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2026-01-03]
+- 新增text-decoration的相关内容
+- 新增text-transform的相关内容
+- 新增line-height的相关内容
+
 ## [2026-01-02]
 - 新增属性color的笔记内容
 - 新增font-family的相关内容
