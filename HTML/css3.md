@@ -117,3 +117,45 @@ body{
 如果想要设定默认的话可以使用`start`，这个的作用是设定对齐方向是当前书写方向的起始边
 
 同理`end`则设定为当前书写方向的结束边
+
+## text-decoration
+`text-decoration`的作用是设置文本的各种线，例如删除线，下划线，上划线等
+
+使用的格式如下：
+``` CSS
+text-decoration: 线的类型 线的样式 线的颜色;
+```
+
+一些常见的关键字如下：
+
+线的类型：`none`默认，无线条，`underline`下划线，`overline`上划线，`line-through`上划线
+
+线的样式：`solid`实线，`double`双线，`dotted`点线，`dashed`虚线，`wavy`波浪线
+
+第三个线的颜色同上文的`color`标签，可以使用十六进制，或者是RGB等关键字
+
+举一个具体例子：
+
+``` CSS
+#wrapper .sentence {
+  color: #99CAFE;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: underline overline solid #90CCCC ;
+}
+```
+在上面这个例子中，我们设定了该文本的下划线为上划线和下划线两种形式，并且均为实线类型，颜色为`#90CCCC`
+
+此外，如果不想这样直接设置，也可以分别设置其子属性：
+
+``` CSS
+#wrapper .sentence {
+  color: #99CAFE;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration-line: underline overline;
+  text-decoration-style: solid;
+  text-decoration-color: #90CCCC;
+}
+```
+分别设置子属性可以使得操作更加精细
