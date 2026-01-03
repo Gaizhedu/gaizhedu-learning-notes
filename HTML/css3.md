@@ -159,3 +159,21 @@ text-decoration: 线的类型 线的样式 线的颜色;
 }
 ```
 分别设置子属性可以使得操作更加精细
+
+## text-transform
+`text-transform`属性的作用是设置文本的大小写，可以通过不同的关键字来设定不同的类型
+
+常见的关键字有`capitalize`（首字母大写），`uppercase`（全部大写），`lowercase`（全部小写）
+
+默认为`none`
+
+需要注意的点是，设置这个属性后并不会影响原文本，只是渲染上发生了改变，原文本并不会发生改变
+
+``` CSS
+#wrapper h1 {
+  color: #767676;
+  text-align: center;
+  font-style: italic;
+  text-transform: uppercase;
+}
+```
