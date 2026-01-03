@@ -177,3 +177,17 @@ text-decoration: 线的类型 线的样式 线的颜色;
   text-transform: uppercase;
 }
 ```
+
+## line-height
+`line-height`的作用是调整行与行之间的间隔，调整时可以通过多种方式调整
+
+需要特别注意的一点是，调整行高不仅影响文字上下间距，还影响了行框的高度
+
+``` CSS
+#wrapper p {
+  font-size: 1.25rem;
+  text-align: left;
+  line-height: 1.2;
+}
+```
+在上面的例子中，我们将行高设置为1.2，也就是`font-size`的1.2倍
