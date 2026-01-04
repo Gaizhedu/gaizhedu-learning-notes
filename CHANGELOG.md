@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2026-01-04]
+- 新增有关letter-spacing的相关内容
+- 新增有关word-spacing的相关内容
+- 新增有关white-space的相关内容
+
 ## [2026-01-03]
 - 新增text-decoration的相关内容
 - 新增text-transform的相关内容
