@@ -191,3 +191,15 @@ text-decoration: 线的类型 线的样式 线的颜色;
 }
 ```
 在上面的例子中，我们将行高设置为1.2，也就是`font-size`的1.2倍
+
+## letter-spacing
+`letter-spacing`的作用是调整这段文字中各个字符之间的间隔
+
+这个参数可以设置为整数，也可以为负数，如果为负数则可以实现文本重叠的效果
+
+``` CSS
+#wrapper .sentence2{
+  letter-spacing: 20px;
+}
+```
+上面的例子设置文本间隔为20像素（实际上很宽了）
