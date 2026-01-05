@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2026-01-05]
+- 新增text-indent的相关内容
+- 新增文字阴影的相关内容
+
 ## [2026-01-04]
 - 新增有关letter-spacing的相关内容
 - 新增有关word-spacing的相关内容
