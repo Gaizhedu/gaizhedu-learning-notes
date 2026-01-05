@@ -257,3 +257,30 @@ text-decoration: 线的类型 线的样式 线的颜色;
 ```
 
 需要注意的一点是，`text-indent`只作用于块级元素的**第一行文本**，对于内嵌元素是无效的
+
+## text-shadow
+`text-shadow`的作用是给文本添加文字阴影
+
+格式如下
+``` CSS
+text-shadow: h-offset v-offset blur-radius color;
+```
+`h-offset`代表该阴影的水平偏移量，如果为0意味着在水平方向上与原来的文本是重叠的
+
+`v-offset`代表该阴影的垂直偏移量，如果为0意味着在垂直方向上与原来的文本是重叠的
+
+`blur-radius`代表该阴影的模糊半径，数值越大越模糊，该参数可选填，默认为0
+
+`color`代表该阴影的颜色，该参数选填，默认继承`currentColor`
+
+其中`h-offset`和`v-offset`为必填项
+
+这个参数支持多重阴影：
+``` CSS
+h1 {
+  text-shadow:
+    0 0 5px white,
+    0 0 10px yellow,
+    0 0 15px orange;
+}
+```
