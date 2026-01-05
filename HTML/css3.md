@@ -244,3 +244,16 @@ text-decoration: 线的类型 线的样式 线的颜色;
   white-space: pre-wrap;
 }
 ``` 
+
+## text-indent
+`text-indent`的作用为控制首行缩进，让第一行文本向右偏移一段距离
+
+允许使用负值，如果为负值则向左偏移
+
+``` CSS
+#wrapper p {
+  text-indent: 2em;
+}
+```
+
+需要注意的一点是，`text-indent`只作用于块级元素的**第一行文本**，对于内嵌元素是无效的
