@@ -284,3 +284,8 @@ h1 {
     0 0 15px orange;
 }
 ```
+
+## width / height
+`width`和`height`代表盒模型的宽和高
+
+通过设置这两个属性可以控制盒元素的大小
