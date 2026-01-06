@@ -289,3 +289,17 @@ h1 {
 `width`和`height`代表盒模型的宽和高
 
 通过设置这两个属性可以控制盒元素的大小
+
+其基本语法如下：
+
+``` CSS
+width: length | percentage | auto | min-content | max-content | fit-content |
+```
+
+其中，`length`代表当前元素的长度，可以使用绝对长度或者是相对长度
+
+`percentage`代表相对于包含块的宽度或高度
+
+`min-content`和`max-content`代表元素可能最大尺寸
+
+`fit-content`代表根据可用空间自适应，不超过指定的值，也不小于所需最小值
