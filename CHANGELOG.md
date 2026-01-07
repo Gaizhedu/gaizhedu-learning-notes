@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2026-01-07]
+- 新增width的相关内容
+- 新增background-color的相关内容
+
 ## [2026-01-06]
 - 新增width的相关内容
 
