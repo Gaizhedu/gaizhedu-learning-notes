@@ -305,3 +305,10 @@ width: length | percentage | auto | min-content | max-content | fit-content |
 `fit-content`代表根据可用空间自适应，不超过指定的值，也不小于所需最小值
 
 `height`同理
+
+## background-color
+`background-color`的作用是设定背景的颜色
+
+可以通过关键词或者十六进制来设定颜色
+
+具体内容可以参照`color`属性
