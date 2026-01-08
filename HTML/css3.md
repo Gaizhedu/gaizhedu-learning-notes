@@ -312,3 +312,20 @@ width: length | percentage | auto | min-content | max-content | fit-content |
 可以通过关键词或者十六进制来设定颜色
 
 具体内容可以参照`color`属性
+
+## background-image
+`background-image`的作用是设置背景图
+
+基本的语法为
+
+``` CSS
+background-image: url();
+```
+
+其中圆括号内的内容可以为绝对路径，也可以为相对路径
+
+CSS3支持一个元素设置多个背景图像，两个链接之间使用逗号分割即可
+
+``` CSS
+background-image: url(),url();
+```
