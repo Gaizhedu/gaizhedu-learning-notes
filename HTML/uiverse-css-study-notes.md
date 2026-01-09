@@ -48,3 +48,18 @@ button:active {
  transform: translateY(0);
 }
 ```
+
+### 介绍
+`appearance`的作用是：控制元素默认外观的样式是否应用，一般用于表单控件（例如这里的button）
+
+这个属性可以让元素看起来像原生UI控件
+
+`background-color: transparent;`，`background-color`用于设置背景颜色，此处为`transparent`，也就是透明的效果
+
+`border`和`border-radius`均为设置边框的作用，`border-radius`为设置边框圆角半径
+
+`box-sizing: border-box;`此处设定了一个盒模型，这个盒模型与默认的盒模型（content-box）不太一样，在传统的盒模型中，如果该盒模型尺寸为20px，边框为1px，那么总的大小为(20 + 1 x 2)px，此时如果想要精准设定尺寸为20px就会显得不太方便
+
+那么`border-box`又是怎么样呢？这个盒模型会将总的大小设置为规定的尺寸，也就是说，如果想要为20px的大小，那么就算有边框，总尺寸依旧为20px
+
+`cursor: pointer;`的作用是，当鼠标光标放到该元素上时，将显示为手的光标（注意，有该属性并不意味着可以点击！）
