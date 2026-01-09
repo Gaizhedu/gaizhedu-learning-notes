@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2026-01-09]
+- 新增button的相关属性内容
+
 ## [2026-01-08]
 - 新增background-image的相关内容
 
