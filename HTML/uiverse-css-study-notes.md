@@ -63,3 +63,19 @@ button:active {
 那么`border-box`又是怎么样呢？这个盒模型会将总的大小设置为规定的尺寸，也就是说，如果想要为20px的大小，那么就算有边框，总尺寸依旧为20px
 
 `cursor: pointer;`的作用是，当鼠标光标放到该元素上时，将显示为手的光标（注意，有该属性并不意味着可以点击！）
+
+`display: inline-block;`的作用是让其有`block`和`inline`的特点
+
+`block`独占一行，可以设置行高，`inline`不可换行，但是不能设置行高
+
+`inline-block`则为不换行，并且可以设置行高
+
+一般用于设定导航栏中
+
+`margin: 0`意味着该元素与其他元素之间的间隔为0，有四个子属性，可以分别设置：`margin-top`（上），`margin-right`（右），`margin-bottom`（下），`margin-left`（左）
+
+`min-height: 3.75em;`和`min-width: 0;`的作用均为设置最小的大小
+
+`padding: 1em 2.3em;`意味着元素内边距的大小
+
+第一个`1em`为上下内边距，第二个`2.3em`为左右内边距
