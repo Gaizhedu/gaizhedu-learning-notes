@@ -85,3 +85,10 @@ button:active {
 `text-decoration: none;`的作用是移除文字的装饰线
 
 什么是装饰线，简单来说就是下划线，上划线，以及链接中用于注明的蓝色线条
+
+``` CSS
+ transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+```
+在上面定义了transition属性的内容，实际内容为控制所有动画时间为300ms，并且速度为贝塞尔曲线
+
+`user-select: none;`的作用是禁止用户选中元素的文本，常见的用处是提升用户的体验
