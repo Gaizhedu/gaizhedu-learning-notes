@@ -92,3 +92,9 @@ button:active {
 在上面定义了transition属性的内容，实际内容为控制所有动画时间为300ms，并且速度为贝塞尔曲线
 
 `user-select: none;`的作用是禁止用户选中元素的文本，常见的用处是提升用户的体验
+
+`-webkit-user-select: none;`是一种兼容性的写法，用于那些基于`Webkit`的浏览器，等价于`user-select: none;`
+
+`touch-action: manipulation;`的作用主要用于移动设备上
+
+此处的作用是说明该元素只支持点击，拖拽等基本操作
