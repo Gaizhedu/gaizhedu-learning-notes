@@ -98,3 +98,9 @@ button:active {
 `touch-action: manipulation;`的作用主要用于移动设备上
 
 此处的作用是说明该元素只支持点击，拖拽等基本操作
+
+`will-change: transform;`的作用是告诉浏览器将要启动`transform`变化，让其提前做好准备
+
+接下来来到`disabled`选择器的内容
+
+`pointer-events`的作用是完全禁用鼠标或者触摸的效果
