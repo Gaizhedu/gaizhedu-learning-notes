@@ -200,3 +200,5 @@ button:active {
 接下来看到CSS
 
 首先第一个`group`，`display: flex;`将元素设置为一个块级的弹性盒子容器，`line-height`设置了行高，`align-items: center;`对齐容器内的所有子元素在交叉轴上的位置，`position: relative;`将元素间的位置设定为相对位置，`max-width: 190px;`设置元素的最大宽度为190像素
+
+接下来是input的内容，此处为输入框内的输入内容，用于显示输入的文字
