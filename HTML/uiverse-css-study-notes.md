@@ -202,3 +202,11 @@ button:active {
 首先第一个`group`，`display: flex;`将元素设置为一个块级的弹性盒子容器，`line-height`设置了行高，`align-items: center;`对齐容器内的所有子元素在交叉轴上的位置，`position: relative;`将元素间的位置设定为相对位置，`max-width: 190px;`设置元素的最大宽度为190像素
 
 接下来是input的内容，此处为输入框内的输入内容，用于显示输入的文字
+
+此处部分属性在之前的button中已经有说明，这里只会补充部分内容
+
+`cursor: text;`，上文的按钮为`cursor: pointer;`，这里的`text`则代表当光标放在该元素上时，变为可以输入文本的光标样式，这里来提醒用户可以输入
+
+`z-index: 0;`的意思是控制定位元素的层叠顺序，数字越大，那么元素在视觉就越靠前，默认的值为0
+
+需要注意的一点是，如果`position`为`static`，那么这个属性无效
