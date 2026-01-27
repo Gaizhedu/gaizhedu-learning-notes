@@ -1,5 +1,9 @@
 # CHANGELOG
 
+
+## [2026-01-27]
+- 新增LangChain的相关内容
+
 ## [2026-01-26]
 - 新增LangChain的相关内容
 
