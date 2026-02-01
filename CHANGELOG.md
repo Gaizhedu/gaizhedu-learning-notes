@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2026-02-01]
+- 新增System Prompt的相关内容
+
 ## [2026-01-31]
 - 新增大模型开发的相关内容
   * 介绍了Prompt和Temperature的相关内容
