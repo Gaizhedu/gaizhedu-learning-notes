@@ -138,3 +138,13 @@ Temperature的选取不是固定的，需要根据具体的任务来选择具体
 比如说想要搭建个人知识库助手，那么Temperature一般设置成0，这样可以规避一些模型的幻觉问题
 
 但如果说是为了生成一些创意的文本，那么Temperature可以设定较高的数值
+
+## 2.1.3 System Prompt
+
+System Prompt是随着ChatGPT API开放并逐步得到使用的一个新兴概念，但是它并不会在大模型训练中得到体现，而是大模型服务方为提升用户体验所设置的一种策略
+
+具体来说，你在使用ChatGPT API的时候，你可以设置两种Prompt
+
+一种是System Prompt，该种Prompt内容会在整个对话过程中持久地影响模型的回复，相比于不同Prompt具有更高的重要性
+
+另一种是User Prompt，也就是我们平时所提到的Prompt，需要模型做出回复的输入
