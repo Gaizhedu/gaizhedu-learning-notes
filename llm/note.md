@@ -148,3 +148,95 @@ System Prompt是随着ChatGPT API开放并逐步得到使用的一个新兴概�
 一种是System Prompt，该种Prompt内容会在整个对话过程中持久地影响模型的回复，相比于不同Prompt具有更高的重要性
 
 另一种是User Prompt，也就是我们平时所提到的Prompt，需要模型做出回复的输入
+
+## 2.2 使用LLM API
+
+使用LLM API来调用大模型
+
+
+
+### 2.2.4 使用智谱GLM
+
+接下来介绍如何使用智谱GLM的API
+
+此处建议使用SDK进行调用以获得更好的编程体验
+
+首先是配置秘钥信息：
+
+需要将`API key`设置到`.env`文件中的`ZHIPUAI_API_KEY`参数
+
+然后运行以下代码来加载配置信息
+
+``` Python
+import os
+
+from dotenv import load_dotenv, find_dotenv
+
+# 读取本地/项目的环境变量。
+
+# find_dotenv() 寻找并定位 .env 文件的路径
+# load_dotenv() 读取该 .env 文件，并将其中的环境变量加载到当前的运行环境中  
+# 如果你设置的是全局的环境变量，这行代码则没有任何作用。
+_ = load_dotenv(find_dotenv())
+
+```
+
+智谱的调用传参与其他类似，需要传入一个`messages`列表，这个列表中包括了`role`和`prompt`此处封装如下的`get_completion`函数，方便后续使用
+
+``` Py
+from zhipuai import ZhipuAI
+
+client = ZhipuAI(
+    api_key=os.environ["ZHIPUAI_API_KEY"]
+)
+
+def gen_glm_params(prompt):
+    '''
+    构造 GLM 模型请求参数 messages
+
+    请求参数：
+        prompt: 对应的用户提示词
+    '''
+    messages = [{"role": "user", "content": prompt}]
+    return messages
+
+
+def get_completion(prompt, model="glm-4-plus", temperature=0.95):
+    '''
+    获取 GLM 模型调用结果
+
+    请求参数：
+        prompt: 对应的提示词
+        model: 调用的模型，默认为 glm-4，也可以按需选择 glm-3-turbo 等其他模型
+        temperature: 模型输出的温度系数，控制输出的随机程度，取值范围是 0.0-1.0。温度系数越低，输出内容越一致。
+    '''
+
+    messages = gen_glm_params(prompt)
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        temperature=temperature
+    )
+    if len(response.choices) > 0:
+        return response.choices[0].message.content
+    return "generate answer error"
+
+```
+
+之后调用`get_completion("你好")`
+
+接下来介绍传入的参数：
+
+`messages(list)`：调用对话模型的时候，将该信息列表作为提示输入给模型，格式如下：`{"role": "user", "content": "你好"}`
+
+如果总长度超过模型最长输入限制后会自动截断
+
+`temperature(float)`：采样的温度，取值范围为`(0.0,1.0)`，不能等于0，默认为0.95
+
+`top_p(float)`：温度采样的另一种方式，称为核采样，取值范围为：`(0.0, 1.0)`，开区间，默认为0.7
+
+模型考虑具有top_p概率质量tokens的结果（？），如0.1则意味着模型解码器只考虑从前10%概率的候选集中取tokens
+
+`request_id(string)`：用于区分每次请求的唯一标识，如果用户端不传时平台会默认生成
+
+一般根据实际的应用场景来调整`top_p`和`temperature`，但不要同时调整两个参数
