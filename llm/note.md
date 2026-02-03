@@ -240,3 +240,19 @@ def get_completion(prompt, model="glm-4-plus", temperature=0.95):
 `request_id(string)`：用于区分每次请求的唯一标识，如果用户端不传时平台会默认生成
 
 一般根据实际的应用场景来调整`top_p`和`temperature`，但不要同时调整两个参数
+
+## 2.3 Prompt Engineering
+
+什么是Prompt呢？简单来说就是用户与大模型交互输入的代称
+
+我们给大模型的输入称为Prompt
+
+而大模型返回的输出一般称为Completion
+
+一般来讲，一个好的Prompt设计会极大地决定了LLM的能力上限和下限
+
+#### 如何设计一个好的Prompt
+
+如何设计出一个好的Prompt来充分发挥LLM的性能？在了解这个之前需要知道设计Prompt的两个关键原则：**编写清晰、具体的指令和基于模型充分思考的时间**
+
+首先第一点，Prompt需要清晰明确表达需求，需要提供充足的上下文，这里的目的是让语言模型能够理解我们的意图
