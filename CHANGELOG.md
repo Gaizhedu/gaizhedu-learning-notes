@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2026-02-03]
+- 新增Prompt Engineering的相关内容
+
 ## [2026-02-02]
 - 新增智谱GLM的相关内容
 
