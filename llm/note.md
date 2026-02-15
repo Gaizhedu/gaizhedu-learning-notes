@@ -355,3 +355,26 @@ print(response)
 
 为了构建本地知识库，我们需要对多种存储类型的本地文档进行处理
 
+### 3.3.2 数据读取
+
+对于PDF文档的读取，我们可以使用`PyMuPDFLoader`来读取，其结果会包含PDF及其页面的详细元数据，并且，每一页都会返回一个文档
+
+如果需要加载文档，则可以使用到`PyMuPDFLoader`的函数load来进行加载
+
+文档加载后存储在pages变量中：
+
+例如
+
+``` Python
+loader = PyMuPDFLoader("../data_base/knowledge_db/pumkin_book/pumpkin_book.pdf")
+
+pdf_pages = loader.load()
+```
+
+此时pages变量便是`pdf_pages`
+
+这个变量的类型是List，打印这个变量的长度便可以知道pdf有多少页
+
+pages中的每一个元素都为一个文档，文档变量类型中包含了两个元素
+
+第一个是`page_content`代表了文档的内容，第二个是`meta_data`，是文档的相关描述性数据
