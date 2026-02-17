@@ -378,3 +378,18 @@ pdf_pages = loader.load()
 pages中的每一个元素都为一个文档，文档变量类型中包含了两个元素
 
 第一个是`page_content`代表了文档的内容，第二个是`meta_data`，是文档的相关描述性数据
+
+### 3.3.3 数据清洗
+
+一般而言，我们希望我们的知识库里面的数据尽量是有序的，优质的，因此我们需要删除低质量的文本数据
+
+例如，一些PDF文件在读取后会添加换行符\n，这些是会影响体验的，所以要删掉
+
+``` python
+import re
+pattern = re.compile(r'[^\u4e00-\u9fff](\n)[^\u4e00-\u9fff]', re.DOTALL)
+pdf_page.page_content = re.sub(pattern, lambda match: match.group(0).replace('\n', ''), pdf_page.page_content)
+print(pdf_page.page_content)
+```
+
+上文便是删除的一种办法
