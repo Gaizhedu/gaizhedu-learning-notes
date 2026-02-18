@@ -393,3 +393,25 @@ print(pdf_page.page_content)
 ```
 
 上文便是删除的一种办法
+
+如果需要批量删除，可以使用`replace`方法
+
+用法如下：
+
+``` Python
+pdf_page.page_content = pdf_page.page_content.replace('原文本', '替换文本')
+```
+
+### 3.3.4 文档分割
+
+由于单个文档的长度往往会超过模型支持的上下文，所以在搭建向量知识库的过程中，常常需要对文档进行分割，将单个文档按长度或者固定规则分割成若干个Chunk
+
+在检索的时候，会以Chunk作为检索的元单位，也就是每次检索到k个chunk作为模型可以参考来回答用户问题的知识
+
+这个k我们可以自由设定
+
+在Langchain中，文本分割器根据`chunk_size`和`chunk_overlap`进行分割
+
+- chunk_size 指每个块包含的字符或 Token （如单词、句子等）的数量
+
+- chunk_overlap 指两个块之间共享的字符数量，用于保持上下文的连贯性，避免分割丢失上下文信息
