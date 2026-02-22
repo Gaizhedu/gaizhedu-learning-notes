@@ -413,5 +413,14 @@ pdf_page.page_content = pdf_page.page_content.replace('原文本', '替换文本
 在Langchain中，文本分割器根据`chunk_size`和`chunk_overlap`进行分割
 
 - chunk_size 指每个块包含的字符或 Token （如单词、句子等）的数量
-
 - chunk_overlap 指两个块之间共享的字符数量，用于保持上下文的连贯性，避免分割丢失上下文信息
+
+在Langchain中，提供了很多种文档分割方式
+
+常见的有
+
+- RecursiveCharacterTextSplitter(): 按字符串分割文本，递归地尝试按不同的分隔符进行分割文本。
+
+- TokenTextSplitter(): 按token来分割文本。
+
+- NLTKTextSplitter(): 使用 NLTK（自然语言工具包）按句子分割文本。
