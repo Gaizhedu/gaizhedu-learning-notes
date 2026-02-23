@@ -424,3 +424,18 @@ pdf_page.page_content = pdf_page.page_content.replace('原文本', '替换文本
 - TokenTextSplitter(): 按token来分割文本。
 
 - NLTKTextSplitter(): 使用 NLTK（自然语言工具包）按句子分割文本。
+
+## 3.4 搭建并使用向量数据库
+
+### 3.4.2 构建Chroma向量库
+
+Langchain集成了多个不同的向量存储库
+
+使用Chroma的原因是因为轻量，以及数据存储在内存的原因，这使得其非常容易启动和开始使用
+
+
+
+### 3.4.3 向量搜索
+
+Chroma的相似度搜索使用的是余弦距离
+
